@@ -7,7 +7,7 @@ class Board:
         self.backbones = backbones
 
     def apppendRow(self, row):
-        self.board.extend(row.split())
+        self.board.append(list(row[:-1]))
 
     def addRouter(self, router):
         self.routers.append(router)
@@ -15,10 +15,29 @@ class Board:
     def addBackBone(self, backbone):
         self.backbones.append(backbone)
 
-    def getPossibleRouters(self):
+    def getPossibleRouters(self, h, w):
         from utils import getAdjacentCoords
+        possibleCoords = set()
         for backbone in self.backbones:
-            print(getAdjacentCoords(backbone))
+            possibleCoords.update(getAdjacentCoords(backbone, h, w))
+
+        notAWall = lambda coord: self.board[coord[0]][coord[1]] != "#"
+        notARouter = lambda coord: coord not in self.routers
+        return (coord for coord in possibleCoords if notAWall(coord) and notARouter(coord))
+    
+    def __str__(self):
+        res = ""
+        for x in range(len(self.board)): # For each row
+            for y in range(len(self.board[x])): # For each cell
+                if ((x, y) in self.routers):
+                    res += "r"
+                elif ((x, y) in self.backbones):
+                    res += "b"
+                else:
+                    res += self.board[x][y]
+            res += "\n"
+
+        return res
 
 
     def toImage(self, scale=1):
@@ -35,6 +54,3 @@ class Board:
             for s in range(scale):
                 img.append(row)
         return img
-
-    def __str__(self):
-        return  "\n".join(self.board)

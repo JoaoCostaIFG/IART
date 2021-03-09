@@ -63,8 +63,9 @@ def importSolver(filename):
 
 solver = importSolver("input/simple.in")
 solver.dump()
-print(solver.board)
-# board = Board(solver.board, [(1, 2), (4, 5)], [(1, 2), (5, 5)])
-# board.getPossibleRouters()
+board = Board(solver.board.board, [], [(1, 2), (5, 5)])
+print(list(board.getPossibleRouters(solver.h, solver.w)))
+print(board)
+print(board.board)
 # solver.toImage("out.png", 100)
 # node.genNeighbours("asd")
