@@ -2,44 +2,24 @@
 
 
 class Board:
-    def __init__(self, board=[], routers=[], backbones=[]):
+    def __init__(self, h, w, r, board=[]):
+        self.h = h
+        self.w = w
+        self.r = r
+
         self.board = board
-        self.routers = routers
-        self.backbones = backbones
+        self.backbone = [0, 0]
 
     def apppendRow(self, row):
         self.board.append(list(row[:-1]))
 
-    def addRouter(self, router):
-        self.routers.append(router)
-
-    def addBackBone(self, backbone):
-        self.backbones.append(backbone)
-
-    def getPossibleRouters(self, h, w):
-        from utils import getAdjacentCoords
-
-        possibleCoords = set()
-        for backbone in self.backbones:
-            possibleCoords.update(getAdjacentCoords(backbone, h, w))
-
-        notAWall = lambda coord: self.board[coord[0]][coord[1]] != "#"
-        notARouter = lambda coord: coord not in self.routers
-        return (
-            coord for coord in possibleCoords if notAWall(coord) and notARouter(coord)
-        )
+    def setBackbone(self, br, bc):
+        self.backbone = [br, bc]
 
     def __str__(self):
-        res = ""
-        for x in range(len(self.board)):  # For each row
-            for y in range(len(self.board[x])):  # For each cell
-                if (x, y) in self.routers:
-                    res += "r"
-                elif (x, y) in self.backbones:
-                    res += "b"
-                else:
-                    res += self.board[x][y]
-            res += "\n"
+        res = "Board {}x{}. Router range is {}. Backbone at {}".format(
+            self.h, self.w, self.r, self.backbone
+        )
 
         return res
 

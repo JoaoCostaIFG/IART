@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 
-# import png
+import png
+
 from board import Board
 from node import Node
 
 
 class Solver:
     def __init__(self, h, w, r):
-        self.h = h
-        self.w = w
-        self.r = r
-
-        self.board = Board()
+        self.board = Board(h, w, r)
         #  self.board = [None] * (h * w)
 
         self.pb = self.pr = self.b = 0
-        self.backbone = [0, 0]
 
     def setPrices(self, pb, pr, b):
         self.pb = pb
@@ -23,19 +19,10 @@ class Solver:
         self.b = b
 
     def setBackbone(self, br, bc):
-        self.backbone = [br, bc]
+        self.board.setBackbone(br, bc)
 
-    def dump(self):
-        print(
-            "Board {}x{}. Router range is {}. Backbone at {}".format(
-                self.h, self.w, self.r, self.backbone
-            )
-        )
-        print(
-            "Router price is {}. Backbone price is {}. Max budget is {}".format(
-                self.pr, self.pb, self.b
-            )
-        )
+    def genNode(self, routers=[], backbones=[]):
+        return Node(self.board, routers, backbones)
 
     def toImage(self, filename, scale=1):
         img = self.board.toImage(scale)
@@ -43,8 +30,13 @@ class Solver:
         # TODO
         #  img = [[ord(c) for c in row] for row in self.board]
         with open(filename, "wb+") as f:
-            w = png.Writer(self.w * scale, self.h * scale, greyscale=False)
+            w = png.Writer(self.board.w * scale, self.board.h * scale, greyscale=False)
             w.write(f, img)
+
+    def __str__(self):
+        return "Router price is {}. Backbone price is {}. Max budget is {}\n".format(
+            self.pr, self.pb, self.b
+        ) + str(self.board)
 
 
 def importSolver(filename):
@@ -56,20 +48,18 @@ def importSolver(filename):
         # read br and bc (intial backbone coordinates)
         solver.setBackbone(*map(int, f.readline().split()))
         # read board
-        for i in range(solver.h):
+        for i in range(solver.board.h):
             solver.board.apppendRow(f.readline())
     return solver
 
 
 solver = importSolver("../input/simple.in")
-solver.dump()
-board = Board(solver.board.board, [], [(1, 2), (5, 5)])
-print(list(board.getPossibleRouters(solver.h, solver.w)))
-print(board)
-print(board.board)
-# solver.toImage("out.png", 100)
-# node.genNeighbours("asd")
+print(solver)
+node = solver.genNode([], [(1, 2), (5, 5)])
+print(list(node.getPossibleRouters()))
+# router
+node.addRouter((1, 1))
+print(node.getValue())
+print(node)
 
-solver.board.addRouter([1, 1])
-n = Node(solver.board)
-print(n.getValue(solver.r, solver.w, solver.h))
+# solver.toImage("out.png", 100)
