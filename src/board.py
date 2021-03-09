@@ -23,7 +23,16 @@ class Board:
 
         notAWall = lambda coord: self.board[coord[0]][coord[1]] != "#"
         notARouter = lambda coord: coord not in self.routers
+
         return (coord for coord in possibleCoords if notAWall(coord) and notARouter(coord))
+
+    def getPossibleBackbones(self, h, w):
+        from utils import getAdjacentCoords
+        possibleCoords = set()
+        for backbone in self.backbones:
+            possibleCoords.update(getAdjacentCoords(backbone, h, w))
+
+        return (coord for coord in possibleCoords)
     
     def __str__(self):
         res = ""
