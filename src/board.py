@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 class Board:
     def __init__(self, board=[], routers=[], backbones=[]):
         self.board = board
@@ -17,9 +18,9 @@ class Board:
 
     def getPossibleRouters(self):
         from utils import getAdjacentCoords
+
         for backbone in self.backbones:
             print(getAdjacentCoords(backbone))
-
 
     def toImage(self, scale=1):
         img = []
@@ -37,4 +38,4 @@ class Board:
         return img
 
     def __str__(self):
-        return  "\n".join(self.board)
+        return "\n".join(self.board)
