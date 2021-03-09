@@ -61,7 +61,7 @@ def importSolver(filename):
     return solver
 
 
-solver = importSolver("input/simple.in")
+solver = importSolver("../input/simple.in")
 solver.dump()
 board = Board(solver.board.board, [], [(1, 2), (5, 5)])
 print(list(board.getPossibleRouters(solver.h, solver.w)))
@@ -69,3 +69,7 @@ print(list(board.getPossibleBackbones(solver.h, solver.w)))
 print(board)
 # solver.toImage("out.png", 100)
 # node.genNeighbours("asd")
+
+solver.board.addRouter([1, 1])
+n = Node(solver.board)
+print(n.getValue(solver.r, solver.w, solver.h))

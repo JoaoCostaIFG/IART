@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 class Board:
     def __init__(self, board=[], routers=[], backbones=[]):
         self.board = board
@@ -17,6 +18,7 @@ class Board:
 
     def getPossibleRouters(self, h, w):
         from utils import getAdjacentCoords
+
         possibleCoords = set()
         for backbone in self.backbones:
             possibleCoords.update(getAdjacentCoords(backbone, h, w))
@@ -33,21 +35,20 @@ class Board:
             possibleCoords.update(getAdjacentCoords(backbone, h, w))
 
         return (coord for coord in possibleCoords)
-    
+
     def __str__(self):
         res = ""
-        for x in range(len(self.board)): # For each row
-            for y in range(len(self.board[x])): # For each cell
-                if ((x, y) in self.routers):
+        for x in range(len(self.board)):  # For each row
+            for y in range(len(self.board[x])):  # For each cell
+                if (x, y) in self.routers:
                     res += "r"
-                elif ((x, y) in self.backbones):
+                elif (x, y) in self.backbones:
                     res += "b"
                 else:
                     res += self.board[x][y]
             res += "\n"
 
         return res
-
 
     def toImage(self, scale=1):
         img = []
