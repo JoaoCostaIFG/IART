@@ -1,7 +1,7 @@
 def getAdjacentCoords(Coord, maxX=0, maxY=0):
     X, Y = Coord
     checkBoundary = lambda X, Y: (X >= 0 and X < maxX and Y >= 0 and Y< maxY)
-    res = []
+    res = set()
 
     offsets = ((-1, -1), (-1, 0), (-1, 1),
                (0, -1),           (0, 1),
@@ -10,6 +10,6 @@ def getAdjacentCoords(Coord, maxX=0, maxY=0):
         currX = X + offsetX
         currY = Y + offsetY
         if (checkBoundary(currX, currY)):
-            res.append([currX, currY])
+            res.add((currX, currY))
     
     return res
