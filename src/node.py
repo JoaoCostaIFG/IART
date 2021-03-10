@@ -45,19 +45,34 @@ class Node:
         print("Nada")
 
     def getValue(self):
+        board = self.board.board
+        r = self.board.r
+        self.covered = set()
         val = 0
 
-        for router in self.routers:
-            rowi = max(0, router[0] - self.board.r)
-            coli = max(0, router[1] - self.board.r)
-            rowf = min(self.board.h, router[0] + self.board.r + 1)
-            colf = min(self.board.w, router[1] + self.board.r + 1)
-            for row in range(rowi, rowf):
-                for col in range(coli, colf):
-                    if self.board.board[row][col] == ".":
+        for row in range(0, self.board.h):
+            for col in range(0, self.board.w):
+                if board[row][col] != ".":
+                    continue
+                for router in self.routers:
+                    has_wall = False
+                    if abs(router[0] - row) > r or abs(router[1] - col) > r:
+                        continue  # go check next router
+                    for wall in self.board.walls:
+                        if (
+                            min(row, router[0]) <= wall[0]
+                            and wall[0] <= max(row, router[0])
+                            and min(col, router[1]) <= wall[1]
+                            and wall[1] <= max(col, router[1])
+                        ):
+                            has_wall = True
+                            break
+                    if not has_wall:
                         val += 1
+                        self.covered.add((row, col))
 
-        return val
+        print("covered:", self.covered)
+        return len(self.covered)
 
     def __str__(self):
         res = ""
@@ -66,6 +81,8 @@ class Node:
             for y in range(self.board.w):  # For each cell
                 if (x, y) in self.routers:
                     res += "R"
+                elif (x, y) in self.covered:
+                    res += "C"
                 elif (x, y) in self.backbones:
                     res += "b"
                 else:

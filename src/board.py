@@ -2,16 +2,22 @@
 
 
 class Board:
-    def __init__(self, h, w, r, board=[]):
+    def __init__(self, h, w, r):
         self.h = h
         self.w = w
         self.r = r
 
-        self.board = board
+        self.board = []
         self.backbone = [0, 0]
+        self.walls = set()
 
-    def apppendRow(self, row):
-        self.board.append(list(row[:-1]))
+    def setBoard(self, board):
+        self.board = board
+
+        for row in range(self.h):
+            for col in range(self.w):
+                if self.board[row][col] == "#":
+                    self.walls.add((row, col))
 
     def setBackbone(self, br, bc):
         self.backbone = [br, bc]

@@ -9,8 +9,6 @@ from node import Node
 class Solver:
     def __init__(self, h, w, r):
         self.board = Board(h, w, r)
-        #  self.board = [None] * (h * w)
-
         self.pb = self.pr = self.b = 0
 
     def setPrices(self, pb, pr, b):
@@ -48,8 +46,7 @@ def importSolver(filename):
         # read br and bc (intial backbone coordinates)
         solver.setBackbone(*map(int, f.readline().split()))
         # read board
-        for i in range(solver.board.h):
-            solver.board.apppendRow(f.readline())
+        solver.board.setBoard([list(c) for c in f.read().split()])
     return solver
 
 
@@ -58,8 +55,8 @@ print(solver)
 node = solver.genNode([], [(1, 2), (5, 5)])
 print(list(node.getPossibleRouters()))
 # router
-node.addRouter((1, 1))
+node.addRouter((5, 8))
 print(node.getValue())
 print(node)
 
-# solver.toImage("out.png", 100)
+# solver.toImage("../out.png", 100)
