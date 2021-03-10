@@ -54,7 +54,6 @@ class Node:
                 son = Node(self.board, routers, self.backbones)
                 # self.board.available_pos.remove(router)
                 yield son
-        
 
     def getValue(self):
         if not self.need_calc:
