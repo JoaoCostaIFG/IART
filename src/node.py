@@ -47,8 +47,9 @@ class Node:
         # Get random router to add to son
         for pos in self.board.available_pos:
             if pos not in self.routers:
-                router = pos
-                son = Node(self.board, [router], self.backbones)
+                routers = self.routers.copy()
+                routers.append(pos)
+                son = Node(self.board, routers, self.backbones)
                 # self.board.available_pos.remove(router)
                 yield son
         

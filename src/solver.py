@@ -22,28 +22,33 @@ class Solver:
     def genNode(self, routers=[], backbones=[]):
         return Node(self.board, routers, backbones)
 
-    def HillClimbing(self):
+    def hillClimbing(self):
         current = self.genNode()  # initial node
 
         while True:
             neighbors = current.genNeighbours()
             found_better = False
             for neighbor in neighbors:
-                if neighbor.getValue() > current.getValue():
+                if (len(neighbor.routers) * self.pr <= self.b and
+                        neighbor.getValue() > current.getValue()):  # (ಠ¿ಠ)
                     found_better = True
                     current = neighbor
                     break
 
             if not found_better:
                 return current
+            else:
+                print("son covered =", current.getValue())
+                print(current.covered, end="\n")
 
-    def SteepestDescent(self):
-        current = self.genNode()  # initial node
+    def steepestDescent(self):
+        current = self.genNode() # initial node
 
         while True:
             neighbors = current.genNeighbours()
             best_neighbor = max(neighbors)
-            if best_neighbor.getValue() <= current.getValue():
+            if not (len(best_neighbor.routers) * self.pr <= self.b and
+                    best_neighbor.getValue() > current.getValue()):  # (ಠ¿ಠ)
                 return current
             current = best_neighbor
 
@@ -53,7 +58,8 @@ class Solver:
         # TODO
         #  img = [[ord(c) for c in row] for row in self.board]
         with open(filename, "wb+") as f:
-            w = png.Writer(self.board.w * scale, self.board.h * scale, greyscale=False)
+            w = png.Writer(self.board.w * scale,
+                           self.board.h * scale, greyscale=False)
             w.write(f, img)
 
     def __str__(self):
@@ -77,26 +83,7 @@ def importSolver(filename):
 
 solver = importSolver("../input/simple.in")
 print(solver)
-node = solver.genNode([], [(1, 2), (5, 5)])
-# print(list(node.getPossibleRouters()))
-# router
-node.addRouter((5, 8))
-# print(node.getValue())
-print(node)
-
-
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router
-
-son = list(node.genNeighbours())[0]
-
-print("son covered =", son.getValue())
-print(son.covered, end="\n")
-
-print("father covered =", node.getValue())
-print(node.covered, end="\n")
-
-union = node.covered.union(son.covered)
-print("res covered =", len(union))
-print(union, end="\n")
+solver.hillClimbing()
