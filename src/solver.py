@@ -36,6 +36,16 @@ class Solver:
             self.pr, self.pb, self.b
         ) + str(self.board)
 
+    def hillClimbing(self):
+        current = genNode() #initial node
+
+        while true:
+          neighbors = current.genNeighbours()
+          best_neighbor = max(neighbors)
+          if best_neighbor.getValue() <= current.getValue():
+            return current 
+          current = best_neighbor
+
 
 def importSolver(filename):
     with open(filename, "r") as f:
