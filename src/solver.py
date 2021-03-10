@@ -37,16 +37,16 @@ class Solver:
 
             if not found_better:
                 return current
-            else:
-                print("son covered =", current.getValue())
-                print(current.covered, end="\n")
+            #else:
+                #print("son covered =", current.getValue())
+                #print(current.covered, end="\n")
 
     def steepestDescent(self):
         current = self.genNode() # initial node
 
         while True:
             neighbors = current.genNeighbours()
-            best_neighbor = max(neighbors)
+            best_neighbor = max(neighbors, key=lambda node: node.getValue())
             if not (len(best_neighbor.routers) * self.pr <= self.b and
                     best_neighbor.getValue() > current.getValue()):  # (ಠ¿ಠ)
                 return current
@@ -86,4 +86,7 @@ print(solver)
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router
-solver.hillClimbing()
+nodeHill = solver.hillClimbing()
+nodeSteep = solver.steepestDescent()
+print(nodeHill)
+print(nodeSteep)
