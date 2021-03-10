@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import png
+# import png
 
 from board import Board
 from node import Node
@@ -53,10 +53,25 @@ def importSolver(filename):
 solver = importSolver("../input/simple.in")
 print(solver)
 node = solver.genNode([], [(1, 2), (5, 5)])
-print(list(node.getPossibleRouters()))
+# print(list(node.getPossibleRouters()))
 # router
 node.addRouter((5, 8))
-print(node.getValue())
+# print(node.getValue())
 print(node)
 
+
 # solver.toImage("../out.png", 100)
+
+# Create Node with new router
+
+son = list(node.genNeighbours())[0]
+
+print("son covered =", son.getValue())
+print(son.covered, end="\n")
+
+print("father covered =", node.getValue())
+print(node.covered, end="\n")
+
+union = node.covered.union(son.covered)
+print("res covered =", len(union))
+print(union, end="\n")

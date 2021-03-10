@@ -10,6 +10,7 @@ class Board:
         self.board = []
         self.backbone = [0, 0]
         self.walls = set()
+        self.available_pos = set()
 
     def setBoard(self, board):
         self.board = board
@@ -18,6 +19,9 @@ class Board:
             for col in range(self.w):
                 if self.board[row][col] == "#":
                     self.walls.add((row, col))
+                elif self.board[row][col] == ".":
+                    self.available_pos.add((row, col))
+
 
     def setBackbone(self, br, bc):
         self.backbone = [br, bc]

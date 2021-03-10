@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from utils import getAdjacentCoords
+from random import randrange
 
 
 class Node:
@@ -8,6 +9,7 @@ class Node:
         self.board = board
         self.routers = routers
         self.backbones = backbones
+        self.covered = set()
 
     def addRouter(self, router):
         self.routers.append(router)
@@ -41,14 +43,20 @@ class Node:
 
         return (coord for coord in possibleCoords)
 
-    def genNeighbours(self, board):
-        print("Nada")
+    def genNeighbours(self):
+        # Get random router to add to son
+        for pos in self.board.available_pos:
+            if pos not in self.routers:
+                router = pos
+                son = Node(self.board, [router], self.backbones)
+                # self.board.available_pos.remove(router)
+                yield son
+        
 
     def getValue(self):
         board = self.board.board
         r = self.board.r
         self.covered = set()
-        val = 0
 
         for row in range(0, self.board.h):
             for col in range(0, self.board.w):
@@ -68,10 +76,8 @@ class Node:
                             has_wall = True
                             break
                     if not has_wall:
-                        val += 1
                         self.covered.add((row, col))
 
-        print("covered:", self.covered)
         return len(self.covered)
 
     def __str__(self):
