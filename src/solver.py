@@ -22,6 +22,31 @@ class Solver:
     def genNode(self, routers=[], backbones=[]):
         return Node(self.board, routers, backbones)
 
+    def HillClimbing(self):
+        current = self.genNode()  # initial node
+
+        while True:
+            neighbors = current.genNeighbours()
+            found_better = False
+            for neighbor in neighbors:
+                if neighbor.getValue() > current.getValue():
+                    found_better = True
+                    current = neighbor
+                    break
+
+            if not found_better:
+                return current
+
+    def SteepestDescent(self):
+        current = self.genNode()  # initial node
+
+        while True:
+            neighbors = current.genNeighbours()
+            best_neighbor = max(neighbors)
+            if best_neighbor.getValue() <= current.getValue():
+                return current
+            current = best_neighbor
+
     def toImage(self, filename, scale=1):
         img = self.board.toImage(scale)
 
@@ -35,16 +60,6 @@ class Solver:
         return "Router price is {}. Backbone price is {}. Max budget is {}\n".format(
             self.pr, self.pb, self.b
         ) + str(self.board)
-
-    def hillClimbing(self):
-        current = genNode() #initial node
-
-        while true:
-          neighbors = current.genNeighbours()
-          best_neighbor = max(neighbors)
-          if best_neighbor.getValue() <= current.getValue():
-            return current 
-          current = best_neighbor
 
 
 def importSolver(filename):
