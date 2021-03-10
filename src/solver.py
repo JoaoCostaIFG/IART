@@ -9,7 +9,7 @@ from node import Node
 class Solver:
     def __init__(self, h, w, r):
         self.board = Board(h, w, r)
-        self.pb = self.pr = self.b = 0
+        self.pb = self.pr = self.b = self.steps = 0
 
     def setPrices(self, pb, pr, b):
         self.pb = pb
@@ -24,31 +24,35 @@ class Solver:
 
     def hillClimbing(self):
         current = self.genNode()  # initial node
+        args = (self.pr, self.pb, self.b)
+        self.steps = 0
 
         while True:
+            self.steps += 1
             neighbors = current.genNeighbours()
             found_better = False
             for neighbor in neighbors:
-                if (len(neighbor.routers) * self.pr <= self.b and
-                        neighbor.getValue() > current.getValue()):  # (ಠ¿ಠ)
+                if neighbor.getValue(*args) > current.getValue(*args):
                     found_better = True
                     current = neighbor
                     break
 
             if not found_better:
                 return current
-            #else:
+            # else:
                 #print("son covered =", current.getValue())
                 #print(current.covered, end="\n")
 
     def steepestDescent(self):
-        current = self.genNode() # initial node
+        current = self.genNode()  # initial node
+        args = (self.pr, self.pb, self.b)
+        self.steps = 0
 
         while True:
+            self.steps += 1
             neighbors = current.genNeighbours()
-            best_neighbor = max(neighbors, key=lambda node: node.getValue())
-            if not (len(best_neighbor.routers) * self.pr <= self.b and
-                    best_neighbor.getValue() > current.getValue()):  # (ಠ¿ಠ)
+            best_neighbor = max(neighbors, key=lambda node: node.getValue(*args))
+            if best_neighbor.getValue(*args) <= current.getValue(*args):  # (ಠ¿ಠ)
                 return current
             current = best_neighbor
 
@@ -63,8 +67,8 @@ class Solver:
             w.write(f, img)
 
     def __str__(self):
-        return "Router price is {}. Backbone price is {}. Max budget is {}\n".format(
-            self.pr, self.pb, self.b
+        return "Router price is {}. Backbone price is {}. Max budget is {}. Steps is {}\n".format(
+            self.pr, self.pb, self.b, self.steps
         ) + str(self.board)
 
 
@@ -87,6 +91,8 @@ print(solver)
 
 # Create Node with new router
 nodeHill = solver.hillClimbing()
-nodeSteep = solver.steepestDescent()
+print(solver)
 print(nodeHill)
+nodeSteep = solver.steepestDescent()
+print(solver)
 print(nodeSteep)

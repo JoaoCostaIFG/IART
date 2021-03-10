@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from MinimumSpanningTree import Graph
 from utils import getAdjacentCoords
 from random import randrange
 
@@ -10,6 +11,7 @@ class Node:
         self.routers = routers
         self.backbones = backbones
 
+        self.val = 0
         self.need_calc = True
         self.covered = set()
 
@@ -45,7 +47,7 @@ class Node:
 
         return (coord for coord in possibleCoords)
 
-    def genNeighbours(self):
+    def genNeighbours(self): # ¿⸮?¿⸮?¿¿¿¿¿¿⸮⸮⸮⸮¿⸮⸮⸮
         # Get random router to add to son
         for pos in self.board.available_pos:
             if pos not in self.routers:
@@ -54,10 +56,14 @@ class Node:
                 son = Node(self.board, routers, self.backbones)
                 # self.board.available_pos.remove(router)
                 yield son
+    
+    def getCost(self, pr, pb):
+        graph = Graph(self.board.backbone, self.routers)
+        return graph.getBackboneLen() * pb + len(self.routers) * pr
 
-    def getValue(self):
+    def getValue(self, pr, pb, b):
         if not self.need_calc:
-            return len(self.covered)
+            return self.val
 
         board = self.board.board
         r = self.board.r
@@ -84,17 +90,24 @@ class Node:
                         self.covered.add((row, col))
 
         self.need_calc = False
-        return len(self.covered)
+        if (self.getCost(pr, pb) > b):
+            self.val = 0
+        else:
+            self.val = len(self.covered)
+
+        return self.val
 
     def __str__(self):
-        res = ""
+        res = "Value is {}\n".format(self.val)
 
         for x in range(self.board.h):  # For each row
             for y in range(self.board.w):  # For each cell
-                if (x, y) in self.routers:
+                if (x, y) == self.board.backbone:
+                    res += "B"
+                elif (x, y) in self.routers:
                     res += "R"
                 elif (x, y) in self.covered:
-                    res += "C"
+                    res += ":"
                 elif (x, y) in self.backbones:
                     res += "b"
                 else:

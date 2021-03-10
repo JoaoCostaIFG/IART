@@ -8,7 +8,7 @@ class Board:
         self.r = r
 
         self.board = []
-        self.backbone = [0, 0]
+        self.backbone = (0, 0)
         self.walls = set()
         self.available_pos = set()
 
@@ -24,7 +24,7 @@ class Board:
 
 
     def setBackbone(self, br, bc):
-        self.backbone = [br, bc]
+        self.backbone = (br, bc)
 
     def __str__(self):
         res = "Board {}x{}. Router range is {}. Backbone at {}".format(
@@ -38,7 +38,9 @@ class Board:
         for r in range(self.h):
             row = ()
             for c in range(self.w):
-                if self.board[r][c] == ".":
+                if (r, c) == self.backbone:
+                    row += (0x30, 0x0, 0x17) * scale
+                elif self.board[r][c] == ".":
                     row += (0x14, 0x69, 0xC7) * scale
                 elif self.board[r][c] == "#":
                     row += (0xFF, 0xE1, 0x00) * scale

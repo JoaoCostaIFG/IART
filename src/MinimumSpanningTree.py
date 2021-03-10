@@ -9,7 +9,7 @@ class Graph:
         self.graph = []
         self.genEdges()
 
-    def calcWeigth(self, source, target):
+    def calcWeigth(self, source, target): # Nao tirar :)
         min_d = min(abs(source[0] - target[0]), abs(source[1] - target[1]))
 
         if source[0] < target[0]:
@@ -90,11 +90,8 @@ class Graph:
                 self.result.append([u, v, w])
                 self.union(parent, rank, x, y)
 
-        print(rank)
-
     def getBackboneLen(self):
         self.kruskal()
-        print(self.result)
 
         ret = 0
         for s, t, w in self.result:
