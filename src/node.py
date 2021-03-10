@@ -9,6 +9,8 @@ class Node:
         self.board = board
         self.routers = routers
         self.backbones = backbones
+
+        self.need_calc = True
         self.covered = set()
 
     def addRouter(self, router):
@@ -55,6 +57,9 @@ class Node:
         
 
     def getValue(self):
+        if not self.need_calc:
+            return len(self.covered)
+
         board = self.board.board
         r = self.board.r
         self.covered = set()
@@ -79,6 +84,7 @@ class Node:
                     if not has_wall:
                         self.covered.add((row, col))
 
+        self.need_calc = False
         return len(self.covered)
 
     def __str__(self):
