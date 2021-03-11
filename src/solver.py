@@ -22,9 +22,13 @@ class Solver:
     def genNode(self, routers=[], backbones=[]):
         return Node(self.board, routers, backbones)
 
+    def isBetterSol(self, neighbor, current):
+        return neighbor.getValue(self.pr, self.pb, self.b) > current.getValue(
+            self.pr, self.pb, self.b
+        )
+
     def hillClimbing(self):
         current = self.genNode()  # initial node
-        args = (self.pr, self.pb, self.b)
         self.steps = 0
 
         while True:
@@ -32,27 +36,25 @@ class Solver:
             neighbors = current.genNeighbours()
             found_better = False
             for neighbor in neighbors:
-                if neighbor.getValue(*args) > current.getValue(*args):
+                if self.isBetterSol(neighbor, current):
                     found_better = True
                     current = neighbor
                     break
 
             if not found_better:
                 return current
-            # else:
-                #print("son covered =", current.getValue())
-                #print(current.covered, end="\n")
 
     def steepestDescent(self):
         current = self.genNode()  # initial node
-        args = (self.pr, self.pb, self.b)
         self.steps = 0
 
         while True:
             self.steps += 1
             neighbors = current.genNeighbours()
-            best_neighbor = max(neighbors, key=lambda node: node.getValue(*args))
-            if best_neighbor.getValue(*args) <= current.getValue(*args):  # (ಠ¿ಠ)
+            best_neighbor = max(
+                neighbors, key=lambda node: node.getValue(self.pr, self.pb, self.b)
+            )
+            if not self.isBetterSol(best_neighbor, current):
                 return current
             current = best_neighbor
 
@@ -62,14 +64,15 @@ class Solver:
         # TODO
         #  img = [[ord(c) for c in row] for row in self.board]
         with open(filename, "wb+") as f:
-            w = png.Writer(self.board.w * scale,
-                           self.board.h * scale, greyscale=False)
+            w = png.Writer(self.board.w * scale, self.board.h * scale, greyscale=False)
             w.write(f, img)
 
     def __str__(self):
         return "Router price is {}. Backbone price is {}. Max budget is {}. Steps is {}\n".format(
             self.pr, self.pb, self.b, self.steps
-        ) + str(self.board)
+        ) + str(
+            self.board
+        )
 
 
 def importSolver(filename):
@@ -86,7 +89,7 @@ def importSolver(filename):
 
 
 solver = importSolver("../input/simple.in")
-print(solver)
+#  solver = importSolver("../input/charleston_road.in")
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router

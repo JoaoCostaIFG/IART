@@ -9,20 +9,21 @@ class Graph:
         self.graph = []
         self.genEdges()
 
-    def calcWeigth(self, source, target): # Nao tirar :)
-        min_d = min(abs(source[0] - target[0]), abs(source[1] - target[1]))
-
-        if source[0] < target[0]:
-            x = source[0] + min_d
-        else:
-            x = source[0] - min_d
-
-        if source[1] < target[1]:
-            y = source[1] + min_d
-        else:
-            y = source[1] - min_d
-
-        return min_d + abs(x - target[0]) + abs(y - target[1]) - 1
+    def calcWeigth(self, source, target):
+        # OLD VERSION
+        #  min_d = min(abs(source[0] - target[0]), abs(source[1] - target[1]))
+        #  if source[0] < target[0]:
+        #  x = source[0] + min_d
+        #  else:
+        #  x = source[0] - min_d
+        #  if source[1] < target[1]:
+        #  y = source[1] + min_d
+        #  else:
+        #  y = source[1] - min_d
+        #  return min_d + abs(x - target[0]) + abs(y - target[1]) - 1
+        # NEW VERSION
+        # https://en.wikipedia.org/wiki/Chebyshev_distance
+        return max(abs(source[0] - target[0]), abs(source[1] - target[1])) - 1
 
     # function to generate Edges
     def genEdges(self):
