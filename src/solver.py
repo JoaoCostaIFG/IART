@@ -66,7 +66,7 @@ class Solver:
                 return current
             current = best_neighbor
     
-    def simulatedAnnealing(self):
+    def simulatedAnnealing(self): 
         current = self.genNode()
         self.steps = 0 # K is our steps in our implementation
         Mk = 10 # Number of iterations for each temperature
