@@ -39,14 +39,6 @@ class Node:
             coord for coord in possibleCoords if notAWall(coord) and notARouter(coord)
         )
 
-    # TODO not used currently
-    def getPossibleBackbones(self, h, w):
-        possibleCoords = set()
-        for backbone in self.backbones:
-            possibleCoords.update(getAdjacentCoords(backbone, h, w))
-
-        return (coord for coord in possibleCoords)
-
     # TODO remove not in routers by removing router from possible coords on selection
     def genNeighbours(self):
         # Get random router to add to son
