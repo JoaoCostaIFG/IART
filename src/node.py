@@ -2,7 +2,6 @@
 
 from MinimumSpanningTree import Graph
 from utils import getAdjacentCoords
-from random import randrange
 
 
 class Node:
@@ -47,7 +46,7 @@ class Node:
 
         return (coord for coord in possibleCoords)
 
-    def genNeighbours(self): # ¿⸮?¿⸮?¿¿¿¿¿¿⸮⸮⸮⸮¿⸮⸮⸮
+    def genNeighbours(self):  # ¿⸮?¿⸮?¿¿¿¿¿¿⸮⸮⸮⸮¿⸮⸮⸮
         # Get random router to add to son
         for pos in self.board.available_pos:
             if pos not in self.routers:
@@ -56,12 +55,12 @@ class Node:
                 son = Node(self.board, routers, self.backbones)
                 # self.board.available_pos.remove(router)
                 yield son
-    
+
     def getCost(self, pr, pb):
         graph = Graph(self.board.backbone, self.routers)
         return graph.getBackboneLen() * pb + len(self.routers) * pr
 
-    def getValue(self, pr, pb, b):
+    def getValue(self, pr=0, pb=0, b=0):
         if not self.need_calc:
             return self.val
 
@@ -90,7 +89,7 @@ class Node:
                         self.covered.add((row, col))
 
         self.need_calc = False
-        if (self.getCost(pr, pb) > b):
+        if self.getCost(pr, pb) > b:
             self.val = 0
         else:
             self.val = len(self.covered)

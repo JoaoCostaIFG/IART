@@ -33,7 +33,7 @@ class Solver:
 
         while True:
             self.steps += 1
-            neighbors = current.genNeighbours()
+            neighbors = current.genNeighbours()  # neighbor generator
             found_better = False
             for neighbor in neighbors:
                 if self.isBetterSol(neighbor, current):
@@ -41,6 +41,7 @@ class Solver:
                     current = neighbor
                     break
 
+            print("Steps:", self.steps, "Val:", current.getValue())
             if not found_better:
                 return current
 
@@ -85,11 +86,12 @@ def importSolver(filename):
         solver.setBackbone(*map(int, f.readline().split()))
         # read board
         solver.board.setBoard([list(c) for c in f.read().split()])
+        print("Finished importing map")
     return solver
 
 
-solver = importSolver("../input/simple.in")
-#  solver = importSolver("../input/charleston_road.in")
+#  solver = importSolver("../input/simple.in")
+solver = importSolver("../input/charleston_road.in")
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router
