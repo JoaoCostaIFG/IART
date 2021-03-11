@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 
 from MinimumSpanningTree import Graph
-from utils import getAdjacentCoords
-from random import choices
 
 
 class Node:
-    def __init__(self, board, routers=[], backbones=[]):
+    def __init__(self, board, node=None, new_router=None):
         self.board = board
-        self.routers = routers
-        self.backbones = backbones
-
-        self.val = 0
         self.need_calc = True
+        self.val = 0
         self.covered = set()
+
+        self.parent = node
+        self.router = new_router
+
+        if self.parent:
+            self.routers = self.parent.routers
+            self.backbones = self.parent.backbones
+        else:
+            self.need_calc = False  # is the root => value 0
+            self.routers = []
+            self.backbones = []
 
     def addRouter(self, router):
         self.routers.append(router)
@@ -21,72 +27,60 @@ class Node:
     def addBackBone(self, backbone):
         self.backbones.append(backbone)
 
-    def getPossibleRouters(self):
-        def notAWall(coord):
-            return self.board.board[coord[0]][coord[1]] != "#"
-
-        def notARouter(coord):
-            return coord not in self.routers
-
-        possibleCoords = set()
-        for backbone in self.backbones:
-            possibleCoords.update(
-                getAdjacentCoords(backbone, self.board.h, self.board.w)
-            )
-
-        # notAWall = lambda coord: self.board[coord[0]][coord[1]] != "#"
-        # notARouter = lambda coord: coord not in self.routers
-        return (
-            coord for coord in possibleCoords if notAWall(coord) and notARouter(coord)
-        )
-
-    # TODO remove not in routers by removing router from possible coords on selection
-    def genNeighbours(self, random=False):
+    def genNeighbours(self):
         # Get random router to add to son
-        selected_pos = self.board.available_pos
-        if (random):
-            selected_pos = choices(list(self.board.available_pos), k=len(self.board.available_pos))
+        available_pos = self.board.available_pos
 
-        for pos in selected_pos:
-            if pos not in self.routers:
-                routers = self.routers.copy()
-                routers.append(pos)
-                son = Node(self.board, routers, self.backbones)
-                # self.board.available_pos.remove(router)
-                yield son
+        # TODO remove not in routers by removing router from possible coords on selection
+        for pos in available_pos:
+            son = Node(self.board, self, pos)
+            yield son
 
     def getCost(self, pr, pb):
+        # need pop to avoid side effects
+        self.routers.append(self.router)
         graph = Graph(self.board.backbone, self.routers)
-        return graph.getBackboneLen() * pb + len(self.routers) * pr
+        self.routers.pop()
+
+        return graph.getBackboneLen() * pb + (len(self.parent.routers) + 1) * pr
 
     # TODO vaue will need to use set union
     def getValue(self, pr=0, pb=0, b=0):
         if not self.need_calc:
             return self.val
 
-        board = self.board.board
-        r = self.board.r
-        self.covered = set()
+        #  self.covered = set()
 
-        for row in range(0, self.board.h):
-            for col in range(0, self.board.w):
-                if board[row][col] != ".":
+        # router range
+        # TODO circle
+        rowi = max(0, self.router[0] - self.board.r)
+        coli = max(0, self.router[1] - self.board.r)
+        rowf = min(self.board.h, self.router[0] + self.board.r + 1)
+        colf = min(self.board.w, self.router[1] + self.board.r + 1)
+        for row in range(rowi, rowf):
+            for col in range(coli, colf):
+                if self.board.board[row][col] != ".":  # check if is available pos
                     continue
-                for router in self.routers:
-                    has_wall = False
-                    if abs(router[0] - row) > r or abs(router[1] - col) > r:
-                        continue  # go check next router
-                    for wall in self.board.walls:
-                        if (
-                            min(row, router[0]) <= wall[0]
-                            and wall[0] <= max(row, router[0])
-                            and min(col, router[1]) <= wall[1]
-                            and wall[1] <= max(col, router[1])
-                        ):
-                            has_wall = True
-                            break
-                    if not has_wall:
-                        self.covered.add((row, col))
+                # check if is inside range
+                if (
+                    abs(self.router[0] - row) > self.board.r
+                    or abs(self.router[1] - col) > self.board.r
+                ):
+                    continue
+
+                has_wall = False
+                for wall in self.board.walls:
+                    # TODO maybe filter walls by range too
+                    if (
+                        min(row, self.router[0]) <= wall[0]
+                        and wall[0] <= max(row, self.router[0])
+                        and min(col, self.router[1]) <= wall[1]
+                        and wall[1] <= max(col, self.router[1])
+                    ):
+                        has_wall = True
+                        break
+                if not has_wall:
+                    self.covered.add((row, col))
 
         self.need_calc = False
         cost = self.getCost(pr, pb)
@@ -94,9 +88,18 @@ class Node:
             self.val = 0
         else:
             # score = 1000 * target + (B - (backbones * pb + routers * pr))
-            self.val = len(self.covered) * 1000 + (b - cost)
+            self.val = (len(self.parent.covered) + len(self.covered)) * 1000 + (
+                b - cost
+            )
 
         return self.val
+
+    def commit(self):
+        self.routers.append(self.router)
+        self.covered = self.parent.covered.union(self.covered)
+        # TODO maybe keep index somehow
+        # TODO maybe iterating from the end makes the runtime faster
+        self.board.available_pos.remove(self.router)
 
     def __str__(self):
         res = "Value is {}\n".format(self.val)

@@ -5,11 +5,12 @@
 from board import Board
 from node import Node
 from random import randint
-from math import e
+from math import e as neper_num
 
 
 class Solver:
     def __init__(self, h, w, r):
+        self.steps = 0
         self.board = Board(h, w, r)
         self.pb = self.pr = self.b = self.steps = 0
 
@@ -26,8 +27,10 @@ class Solver:
         cable_range = (self.b - self.pr) / self.pb
         self.board.setBoardInfo(info, cable_range)
 
-    def genNode(self, routers=[], backbones=[]):
-        return Node(self.board, routers, backbones)
+    def genRootNode(self):
+        node = Node(self.board)
+        node.val = self.b
+        return node
 
     def isBetterSol(self, neighbor, current):
         return neighbor.getValue(self.pr, self.pb, self.b) > current.getValue(
@@ -35,8 +38,7 @@ class Solver:
         )
 
     def hillClimbing(self):
-        current = self.genNode()  # initial node
-        self.steps = 0
+        current = self.genRootNode()  # initial node
 
         while True:
             self.steps += 1
@@ -46,15 +48,18 @@ class Solver:
                 if self.isBetterSol(neighbor, current):
                     found_better = True
                     current = neighbor
+                    current.commit()  # update info of new chosen node
                     break
+                else:
+                    # remove rejected nodes (they won't ever help)
+                    self.board.available_pos.remove(neighbor.router)
 
             print("Steps:", self.steps, "Val:", current.getValue())
             if not found_better:
                 return current
 
     def steepestDescent(self):
-        current = self.genNode()  # initial node
-        self.steps = 0
+        current = self.genRootNode()  # initial node
 
         while True:
             self.steps += 1
@@ -62,33 +67,38 @@ class Solver:
             best_neighbor = max(
                 neighbors, key=lambda node: node.getValue(self.pr, self.pb, self.b)
             )
+            print("Steps:", self.steps, "Val:", current.getValue())
             if not self.isBetterSol(best_neighbor, current):
                 return current
             current = best_neighbor
-    
-    def simulatedAnnealing(self): 
-        current = self.genNode()
-        self.steps = 0 # K is our steps in our implementation
-        Mk = 10 # Number of iterations for each temperature
-        tk = 1000 # Cooling schedule
+            current.commit()  # update info of new chosen node
 
-        while self.steps < 5: # Stopping criterion que decidi arbitrariamente, TODO Mudar
+    def simulatedAnnealing(self, tk=1000):
+        # K is our self.steps in our implementation
+        # tk cooling schedule
+        Mk = 10  # number of iterations for each temperature
+        current = self.genRootNode()
+
+        # Stopping criterion que decidi arbitrariamente, TODO Mudar
+        while self.steps < 5:
             m = 0
-            print("Here")
-            neighbours = current.genNeighbours(True)
+            neighbours = current.genNeighbours()
             while m < Mk:
-                s = next(neighbours)
-                sValue = s.getValue(self.pr, self.pb, self.b) 
+                s = next(neighbours)  # IMP THIS CAN THROW
+
+                sValue = s.getValue(self.pr, self.pb, self.b)
                 currentValue = current.getValue(self.pr, self.pb, self.b)
                 if sValue > currentValue:
                     current = s
+                    current.commit()  # update info of new chosen node
                 else:
                     delta = sValue - currentValue
                     Ɛ = randint(0, 1)
-                    if Ɛ <= e ** (- delta / tk):
+                    if Ɛ <= neper_num ** (-delta / tk):
                         current = s
+                        current.commit()  # update info of new chosen node
                 m += 1
-            self.steps +=1
+            self.steps += 1
         return current
 
     def toImage(self, filename, scale=1):
@@ -123,16 +133,16 @@ def importSolver(filename):
 
 
 solver = importSolver("../input/simple.in")
-# solver = importSolver("../input/charleston_road.in")
+#  solver = importSolver("../input/charleston_road.in")
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router
-nodeHill = solver.hillClimbing()
-print(solver)
-print(nodeHill)
-nodeSteep = solver.steepestDescent()
-print(solver)
-print(nodeSteep)
+#  nodeHill = solver.hillClimbing()
+#  print(solver)
+#  print(nodeHill)
+#  nodeSteep = solver.steepestDescent()
+#  print(solver)
+#  print(nodeSteep)
 nodeAnnealing = solver.simulatedAnnealing()
 print(solver)
-print(nodeSteep)
+print(nodeAnnealing)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from math import sqrt
+from random import shuffle
 
 
 class Board:
@@ -12,7 +12,7 @@ class Board:
         self.board = []
         self.backbone = (0, 0)
         self.walls = set()
-        self.available_pos = set()
+        self.available_pos = []
 
     def setBoardInfo(self, info, cable_range):
         self.board = info
@@ -37,10 +37,14 @@ class Board:
         # +1 because python range's interval is open on the right hand side
         rowf = min(self.h, self.backbone[0] + cable_range + 1)
         colf = min(self.w, self.backbone[1] + cable_range + 1)
-        for row in range(rowi, rowf):
-            for col in range(coli, colf):
-                if self.board[row][col] == ".":
-                    self.available_pos.add((row, col))
+        self.available_pos = [
+            (row, col)
+            for row in range(rowi, rowf)
+            for col in range(coli, colf)
+            if self.board[row][col] == "."
+        ]
+        # shuffle available positions in order to get random
+        shuffle(self.available_pos)
 
     def setBackbone(self, br, bc):
         self.backbone = (br, bc)
