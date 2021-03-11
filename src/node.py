@@ -2,6 +2,7 @@
 
 from MinimumSpanningTree import Graph
 from utils import getAdjacentCoords
+from random import choices
 
 
 class Node:
@@ -40,9 +41,13 @@ class Node:
         )
 
     # TODO remove not in routers by removing router from possible coords on selection
-    def genNeighbours(self):
+    def genNeighbours(self, random=False):
         # Get random router to add to son
-        for pos in self.board.available_pos:
+        selected_pos = self.board.available_pos
+        if (random):
+            selected_pos = choices(list(self.board.available_pos), k=len(self.board.available_pos))
+
+        for pos in selected_pos:
             if pos not in self.routers:
                 routers = self.routers.copy()
                 routers.append(pos)

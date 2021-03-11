@@ -4,6 +4,8 @@
 
 from board import Board
 from node import Node
+from random import randint
+from math import e
 
 
 class Solver:
@@ -63,6 +65,31 @@ class Solver:
             if not self.isBetterSol(best_neighbor, current):
                 return current
             current = best_neighbor
+    
+    def simulatedAnnealing(self):
+        current = self.genNode()
+        self.steps = 0 # K is our steps in our implementation
+        Mk = 10 # Number of iterations for each temperature
+        tk = 1000 # Cooling schedule
+
+        while self.steps < 5: # Stopping criterion que decidi arbitrariamente, TODO Mudar
+            m = 0
+            print("Here")
+            neighbours = current.genNeighbours(True)
+            while m < Mk:
+                s = next(neighbours)
+                sValue = s.getValue(self.pr, self.pb, self.b) 
+                currentValue = current.getValue(self.pr, self.pb, self.b)
+                if sValue > currentValue:
+                    current = s
+                else:
+                    delta = sValue - currentValue
+                    Ɛ = randint(0, 1)
+                    if Ɛ <= e ** (- delta / tk):
+                        current = s
+                m += 1
+            self.steps +=1
+        return current
 
     def toImage(self, filename, scale=1):
         img = self.board.toImage(scale)
@@ -95,8 +122,8 @@ def importSolver(filename):
     return solver
 
 
-#  solver = importSolver("../input/simple.in")
-solver = importSolver("../input/charleston_road.in")
+solver = importSolver("../input/simple.in")
+# solver = importSolver("../input/charleston_road.in")
 # solver.toImage("../out.png", 100)
 
 # Create Node with new router
@@ -104,5 +131,8 @@ nodeHill = solver.hillClimbing()
 print(solver)
 print(nodeHill)
 nodeSteep = solver.steepestDescent()
+print(solver)
+print(nodeSteep)
+nodeAnnealing = solver.simulatedAnnealing()
 print(solver)
 print(nodeSteep)
