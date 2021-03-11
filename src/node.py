@@ -92,10 +92,12 @@ class Node:
                         self.covered.add((row, col))
 
         self.need_calc = False
-        if self.getCost(pr, pb) > b:
+        cost = self.getCost(pr, pb)
+        if cost > b:
             self.val = 0
         else:
-            self.val = len(self.covered)
+            # score = 1000 * target + (B - (backbones * pb + routers * pr))
+            self.val = len(self.covered) * 1000 + (b - cost)
 
         return self.val
 
