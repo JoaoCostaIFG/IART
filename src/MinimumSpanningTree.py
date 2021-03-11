@@ -28,18 +28,20 @@ class Graph:
 
     # function to generate Edges
     def genEdges(self):
-        # root is always node 0
-        self.graph = [
-            (0, i + 1, self.calcWeigth(self.root, self.vertices[i]))
-            for i in range(len(self.vertices))
-        ] + [
-            (i + 1, j + 1, self.calcWeigth(self.vertices[i], self.vertices[j]))
-            for i in range(len(self.vertices))
-            for j in range(i + 1, len(self.vertices))
-        ]
-
         # sort all the edges in non-decreasing order of their weight.
-        self.graph = sorted(self.graph, key=itemgetter(2))
+        # root is always node 0
+        self.graph = sorted(
+            [
+                (0, i + 1, self.calcWeigth(self.root, self.vertices[i]))
+                for i in range(len(self.vertices))
+            ]
+            + [
+                (i + 1, j + 1, self.calcWeigth(self.vertices[i], self.vertices[j]))
+                for i in range(len(self.vertices))
+                for j in range(i + 1, len(self.vertices))
+            ],
+            key=itemgetter(2),
+        )
 
     # find set of an element i (uses path compression technique)
     def find(self, parent, i):

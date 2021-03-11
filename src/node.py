@@ -39,6 +39,7 @@ class Node:
             coord for coord in possibleCoords if notAWall(coord) and notARouter(coord)
         )
 
+    # TODO not used currently
     def getPossibleBackbones(self, h, w):
         possibleCoords = set()
         for backbone in self.backbones:
@@ -46,7 +47,8 @@ class Node:
 
         return (coord for coord in possibleCoords)
 
-    def genNeighbours(self):  # ¿⸮?¿⸮?¿¿¿¿¿¿⸮⸮⸮⸮¿⸮⸮⸮
+    # TODO remove not in routers by removing router from possible coords on selection
+    def genNeighbours(self):
         # Get random router to add to son
         for pos in self.board.available_pos:
             if pos not in self.routers:
@@ -60,6 +62,7 @@ class Node:
         graph = Graph(self.board.backbone, self.routers)
         return graph.getBackboneLen() * pb + len(self.routers) * pr
 
+    # TODO vaue will need to use set union
     def getValue(self, pr=0, pb=0, b=0):
         if not self.need_calc:
             return self.val

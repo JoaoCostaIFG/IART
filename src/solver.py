@@ -19,6 +19,11 @@ class Solver:
     def setBackbone(self, br, bc):
         self.board.setBackbone(br, bc)
 
+    def setBoardInfo(self, info):
+        # max range at which a router can be placed and still be in budget
+        cable_range = (self.b - self.pr) / self.pb
+        self.board.setBoardInfo(info, cable_range)
+
     def genNode(self, routers=[], backbones=[]):
         return Node(self.board, routers, backbones)
 
@@ -85,7 +90,7 @@ def importSolver(filename):
         # read br and bc (intial backbone coordinates)
         solver.setBackbone(*map(int, f.readline().split()))
         # read board
-        solver.board.setBoard([list(c) for c in f.read().split()])
+        solver.setBoardInfo([list(c) for c in f.read().split()])
         print("Finished importing map")
     return solver
 

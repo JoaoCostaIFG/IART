@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from math import sqrt
+
 
 class Board:
     def __init__(self, h, w, r):
@@ -12,16 +14,33 @@ class Board:
         self.walls = set()
         self.available_pos = set()
 
-    def setBoard(self, board):
-        self.board = board
+    def setBoardInfo(self, info, cable_range):
+        self.board = info
 
-        for row in range(self.h):
-            for col in range(self.w):
+        # the range to check for walls is bigger walls is bigger
+        wall_range = round(cable_range + self.r / 2)  # TODO use circle
+        # maximum range from initial backbone
+        rowi = max(0, self.backbone[0] - wall_range)
+        coli = max(0, self.backbone[1] - wall_range)
+        # +1 because python range's interval is open on the right hand side
+        rowf = min(self.h, self.backbone[0] + wall_range + 1)
+        colf = min(self.w, self.backbone[1] + wall_range + 1)
+        for row in range(rowi, rowf):
+            for col in range(coli, colf):
                 if self.board[row][col] == "#":
                     self.walls.add((row, col))
-                elif self.board[row][col] == ".":
-                    self.available_pos.add((row, col))
 
+        cable_range = round(cable_range)
+        # maximum range from initial backbone
+        rowi = max(0, self.backbone[0] - cable_range)
+        coli = max(0, self.backbone[1] - cable_range)
+        # +1 because python range's interval is open on the right hand side
+        rowf = min(self.h, self.backbone[0] + cable_range + 1)
+        colf = min(self.w, self.backbone[1] + cable_range + 1)
+        for row in range(rowi, rowf):
+            for col in range(coli, colf):
+                if self.board[row][col] == ".":
+                    self.available_pos.add((row, col))
 
     def setBackbone(self, br, bc):
         self.backbone = (br, bc)
