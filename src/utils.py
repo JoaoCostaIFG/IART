@@ -34,12 +34,13 @@ def getCoordsBetween(p1, p2):
 
     res = []
     print(mind, maxd)
+    # Main Diagonal
     for i in range(1, mind):
         res.append((x1 + i * signalx, y1 + i * signaly))
-    if (inc_row):
+    if (inc_row): # Row Major
         for i in range(mind, maxd):
             res.append((x1 + mind * signalx, y1 + i * signaly))
-    else:
+    else: # Column major
         for i in range(mind, maxd):
             res.append((x1 + i * signalx, y1 + mind * signaly))
 
