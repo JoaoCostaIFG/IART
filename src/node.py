@@ -18,10 +18,12 @@ class Node:
             self.routers = self.parent.routers
             self.backbones = self.parent.backbones
             self.covered.add(new_router)  # routers are always covered
-        else:
+            self.graph = self.parent.graph
+        else:  # has no parent (grandparent)
             self.need_calc = False  # is the root => value 0
             self.routers = []
             self.backbones = []
+            self.graph = Graph(self.board.backbone, self.routers)
 
     def addRouter(self, router):
         self.need_calc = True
@@ -45,11 +47,13 @@ class Node:
             return self.cost
 
         # need pop to avoid side effects
-        self.routers.append(self.router)
-        graph = Graph(self.board.backbone, self.routers)
-        self.routers.pop()
+        #  self.routers.append(self.router)
+        #  graph = Graph(self.board.backbone, self.routers)
+        #  self.routers.pop()
 
-        self.cost = graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
+        self.graph.addVertex(self.router)
+        # +1 because we didn't append the current router to the list
+        self.cost = self.graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
         return self.cost
 
     # TODO vaue will need to use set union
@@ -101,6 +105,7 @@ class Node:
         self.need_calc = False
         return self.val
 
+    # call when it has been decided that this is the best vertex for the next step
     def commit(self):
         self.routers.append(self.router)
         self.covered = self.parent.covered.union(self.covered)
@@ -108,9 +113,14 @@ class Node:
         # TODO maybe iterating from the end makes the runtime faster
         self.board.available_pos.remove(self.router)
 
+    # call to cleanup the side effects of evaluating this vertex
+    # (when it wasn't the chosen one)
+    def cleanup(self):
+        self.graph.rmVertex()
+
     def __str__(self):
-        res = "Value is {}. There are {} cells covered and the budget spent was {}\n".format(
-            self.val, len(self.covered), self.cost
+        res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
+            self.val, len(self.covered), len(self.routers), self.cost
         )
 
         for x in range(self.board.h):  # For each row
