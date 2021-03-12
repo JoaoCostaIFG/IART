@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from MinimumSpanningTree import Graph
+from utils import getCoordsBetween
 
 
 class Node:
@@ -19,11 +20,13 @@ class Node:
             self.routers = self.parent.routers
             self.backbones = self.parent.backbones
             self.covered.add(new_router)  # routers are always covered
-        else:
+            self.graph = self.parent.graph
+        else:  # has no parent (grandparent)
             self.need_calc = False  # is the root => value 0
             self.need_calcBackbone = False
             self.routers = []
             self.backbones = []
+            self.graph = Graph(self.board.backbone, self.routers)
 
     def addRouter(self, router):
         self.need_calc = True
@@ -47,11 +50,13 @@ class Node:
             return self.cost
 
         # need pop to avoid side effects
-        self.routers.append(self.router)
-        graph = Graph(self.board.backbone, self.routers)
-        self.routers.pop()
+        #  self.routers.append(self.router)
+        #  graph = Graph(self.board.backbone, self.routers)
+        #  self.routers.pop()
 
-        self.cost = graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
+        self.graph.addVertex(self.router)
+        # +1 because we didn't append the current router to the list
+        self.cost = self.graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
         return self.cost
 
     # TODO vaue will need to use set union
@@ -103,6 +108,7 @@ class Node:
         self.need_calc = False
         return self.val
 
+    # call when it has been decided that this is the best vertex for the next step
     def commit(self):
         self.routers.append(self.router)
         self.covered = self.parent.covered.union(self.covered)
@@ -111,11 +117,31 @@ class Node:
         self.board.available_pos.remove(self.router)
 
     def calcBackbone(self):
-        self.need_calcBackbone = True
+        self.need_calcBackbone = False
+        self.backbones = set()
+        for (r1, r2, _) in self.graph.result:
+            if (r1 == 0):
+                router1 = self.board.backbone
+            else:
+                router1 = self.routers[r1 - 1]
+
+            if (r2 == 0):
+                router2 = self.board.backbone
+            else:
+                router2 = self.routers[r2 - 1]
+
+            coords = tuple(getCoordsBetween(router1, router2))
+            self.backbones.update(coords)
+
+
+    # call to cleanup the side effects of evaluating this vertex
+    # (when it wasn't the chosen one)
+    def cleanup(self):
+        self.graph.rmVertex()
 
     def __str__(self):
-        res = "Value is {}. There are {} cells covered and the budget spent was {}\n".format(
-            self.val, len(self.covered), self.cost
+        res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
+            self.val, len(self.covered), len(self.routers), self.cost
         )
 
         if (self.need_calcBackbone):
@@ -127,10 +153,10 @@ class Node:
                     res += "B"
                 elif (x, y) in self.routers:
                     res += "R"
-                elif (x, y) in self.covered:
-                    res += ":"
                 elif (x, y) in self.backbones:
                     res += "b"
+                elif (x, y) in self.covered:
+                    res += ":"
                 else:
                     res += self.board.board[x][y]
             res += "\n"
