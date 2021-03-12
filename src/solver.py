@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# import png
+import png
 
 from board import Board
 from node import Node
@@ -120,8 +120,11 @@ class Solver:
 
         return current
 
-    def toImage(self, filename, scale=1):
-        img = self.board.toImage(scale)
+    def toImage(self, filename, scale=1, node=None):
+        if node:
+            img = node.toImage(scale)
+        else:
+            img = self.board.toImage(scale)
 
         # TODO
         #  img = [[ord(c) for c in row] for row in self.board]
@@ -151,12 +154,10 @@ def importSolver(filename):
     return solver
 
 
-#  solver = importSolver("../input/simple.in")
-solver = importSolver("../input/charleston_road.in")
-#  solver = importSolver("../input/rue_de_londres.in")
-#  solver.toImage("../out.png", 100)
+# solver = importSolver("../input/simple.in")
+#  solver = importSolver("../input/charleston_road.in")
+solver = importSolver("../input/rue_de_londres.in")
 
-# Create Node with new router
 #  nodeHill = solver.hillClimbing()
 #  print(solver)
 #  print(nodeHill)
@@ -165,9 +166,10 @@ solver = importSolver("../input/charleston_road.in")
 #  print(solver)
 #  print(nodeSteep)
 
-nodeAnnealing = solver.simulatedAnnealing(100000, 300)
+nodeAnnealing = solver.simulatedAnnealing(100000, 500)
 print(solver)
 print(nodeAnnealing)
+solver.toImage("../out.png", 4, nodeAnnealing)
 
 #  nodeHill.graph.kruskal(True)
 #  print(nodeHill.graph.result)

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 from MinimumSpanningTree import Graph
+from utils import getCoordsBetween
 
 
 class Node:
     def __init__(self, board, node=None, new_router=None):
         self.board = board
         self.need_calc = True
+        self.need_calcBackbone = True
         self.val = 0
         self.cost = 0
         self.covered = set()
@@ -21,6 +23,7 @@ class Node:
             self.graph = self.parent.graph
         else:  # has no parent (grandparent)
             self.need_calc = False  # is the root => value 0
+            self.need_calcBackbone = False
             self.routers = []
             self.backbones = []
             self.graph = Graph(self.board.backbone, self.routers)
@@ -113,6 +116,23 @@ class Node:
         # TODO maybe iterating from the end makes the runtime faster
         self.board.available_pos.remove(self.router)
 
+    def calcBackbone(self):
+        self.need_calcBackbone = False
+        self.backbones = set()
+        for (r1, r2, _) in self.graph.result:
+            if r1 == 0:
+                router1 = self.board.backbone
+            else:
+                router1 = self.routers[r1 - 1]
+
+            if r2 == 0:
+                router2 = self.board.backbone
+            else:
+                router2 = self.routers[r2 - 1]
+
+            coords = tuple(getCoordsBetween(router1, router2))
+            self.backbones.update(coords)
+
     # call to cleanup the side effects of evaluating this vertex
     # (when it wasn't the chosen one)
     def cleanup(self):
@@ -123,18 +143,47 @@ class Node:
             self.val, len(self.covered), len(self.routers), self.cost
         )
 
+        if self.need_calcBackbone:
+            self.calcBackbone()
+
         for x in range(self.board.h):  # For each row
             for y in range(self.board.w):  # For each cell
                 if (x, y) == self.board.backbone:
                     res += "B"
                 elif (x, y) in self.routers:
                     res += "R"
-                elif (x, y) in self.covered:
-                    res += ":"
                 elif (x, y) in self.backbones:
                     res += "b"
+                elif (x, y) in self.covered:
+                    res += ":"
                 else:
                     res += self.board.board[x][y]
             res += "\n"
 
         return res
+
+    def toImage(self, scale=1):
+        if self.need_calcBackbone:
+            self.calcBackbone()
+
+        img = []
+        for r in range(self.board.h):
+            row = ()
+            for c in range(self.board.w):
+                if (r, c) == self.board.backbone:  # initial backbone
+                    row += (0xFF, 0x73, 0xFD) * scale
+                elif (r, c) in self.routers:  # routers
+                    row += (0xB7, 0xFF, 0x73) * scale
+                elif (r, c) in self.backbones:  # backbones
+                    row += (0xFF, 0x73, 0xB7) * scale
+                elif (r, c) in self.covered:  # covered
+                    row += (0xFF, 0x96, 0x73) * scale
+                elif self.board.board[r][c] == ".":  # not covered
+                    row += (0x75, 0x73, 0xFF) * scale
+                elif self.board.board[r][c] == "#":  # wall
+                    row += (0xFF, 0xDE, 0x73) * scale
+                elif self.board.board[r][c] == "-":  # void
+                    row += (0x17, 0x17, 0x17) * scale
+            for s in range(scale):
+                img.append(row)
+        return img
