@@ -7,6 +7,7 @@ class Node:
     def __init__(self, board, node=None, new_router=None):
         self.board = board
         self.need_calc = True
+        self.need_calcBackbone = True
         self.val = 0
         self.cost = 0
         self.covered = set()
@@ -20,6 +21,7 @@ class Node:
             self.covered.add(new_router)  # routers are always covered
         else:
             self.need_calc = False  # is the root => value 0
+            self.need_calcBackbone = False
             self.routers = []
             self.backbones = []
 
@@ -108,10 +110,16 @@ class Node:
         # TODO maybe iterating from the end makes the runtime faster
         self.board.available_pos.remove(self.router)
 
+    def calcBackbone(self):
+        self.need_calcBackbone = True
+
     def __str__(self):
         res = "Value is {}. There are {} cells covered and the budget spent was {}\n".format(
             self.val, len(self.covered), self.cost
         )
+
+        if (self.need_calcBackbone):
+            self.calcBackbone()
 
         for x in range(self.board.h):  # For each row
             for y in range(self.board.w):  # For each cell

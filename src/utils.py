@@ -14,3 +14,33 @@ def getAdjacentCoords(Coord, maxX=0, maxY=0):
             res.add((currX, currY))
 
     return res
+
+
+def getCoordsBetween(p1, p2):
+    (x1, y1) = p1
+    (x2, y2) = p2
+    dx = x2 - x1
+    signalx = 1 if dx >= 0 else -1
+    dy = y2 - y1
+    signaly = 1 if dy >= 0 else -1
+    if (abs(dx) > abs(dy)):
+        inc_row = False
+        maxd = abs(dx)
+        mind = abs(dy)
+    else:
+        inc_row = True
+        maxd = abs(dy)
+        mind = abs(dx)
+
+    res = []
+    print(mind, maxd)
+    for i in range(1, mind):
+        res.append((x1 + i * signalx, y1 + i * signaly))
+    if (inc_row):
+        for i in range(mind, maxd):
+            res.append((x1 + mind * signalx, y1 + i * signaly))
+    else:
+        for i in range(mind, maxd):
+            res.append((x1 + i * signalx, y1 + mind * signaly))
+
+    return res
