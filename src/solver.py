@@ -61,15 +61,23 @@ class Solver:
             if not found_better:
                 return current
 
+    def steepestDescentMax(self, node):
+        neighbors = node.genNeighbours()
+        best_neighbor = next(neighbors)  # This can throw
+
+        #  for neighbor in neighbors:
+        #  if self.isBetterSol(neighbor, best_neighbor)
+
+        #  max(
+        #  neighbors, key=lambda node: node.getValue(self.pr, self.pb, self.b)
+        #  )
+
     def steepestDescent(self):
         current = self.genRootNode()  # initial node
 
         while True:
             self.steps += 1
-            neighbors = current.genNeighbours()
-            best_neighbor = max(
-                neighbors, key=lambda node: node.getValue(self.pr, self.pb, self.b)
-            )
+            best_neighbor = self.steepestDescentMax(current)
             if not self.isBetterSol(best_neighbor, current):
                 return current
             current = best_neighbor
@@ -149,17 +157,17 @@ solver = importSolver("../input/charleston_road.in")
 #  solver.toImage("../out.png", 100)
 
 # Create Node with new router
-nodeHill = solver.hillClimbing()
-print(solver)
-print(nodeHill)
+#  nodeHill = solver.hillClimbing()
+#  print(solver)
+#  print(nodeHill)
 
 #  nodeSteep = solver.steepestDescent()
 #  print(solver)
 #  print(nodeSteep)
 
-#  nodeAnnealing = solver.simulatedAnnealing(100000, 300)
-#  print(solver)
-#  print(nodeAnnealing)
+nodeAnnealing = solver.simulatedAnnealing(100000, 300)
+print(solver)
+print(nodeAnnealing)
 
 #  nodeHill.graph.kruskal(True)
 #  print(nodeHill.graph.result)
