@@ -28,14 +28,6 @@ class Node:
             self.backbones = []
             self.graph = Graph(self.board.backbone, self.routers)
 
-    def addRouter(self, router):
-        self.need_calc = True
-        self.routers.append(router)
-
-    def addBackBone(self, backbone):
-        self.need_calc = True
-        self.backbones.append(backbone)
-
     def genNeighbours(self):
         # Get random router to add to son
         available_pos = self.board.available_pos
@@ -49,18 +41,15 @@ class Node:
         if not self.need_calc:
             return self.cost
 
-        # need pop to avoid side effects
-        #  self.routers.append(self.router)
-        #  graph = Graph(self.board.backbone, self.routers)
-        #  self.routers.pop()
-
         self.graph.addVertex(self.router)
         # +1 because we didn't append the current router to the list
         self.cost = self.graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
         return self.cost
 
     # TODO vaue will need to use set union
-    def getValue(self, pr, pb, b):
+    def getValue(self, pr, pb, b, force=False):
+        if force:
+            self.need_calc = True
         if not self.need_calc:
             return self.val
 
@@ -109,12 +98,18 @@ class Node:
         return self.val
 
     # call when it has been decided that this is the best vertex for the next step
+    # e.g.: for printing or finding its neighbours
     def commit(self):
         self.routers.append(self.router)
         self.covered = self.parent.covered.union(self.covered)
         # TODO maybe keep index somehow
         # TODO maybe iterating from the end makes the runtime faster
         self.board.available_pos.remove(self.router)
+
+    # call to cleanup the side effects of evaluating this vertex
+    # (when it wasn't the chosen one)
+    def cleanup(self):
+        self.graph.rmVertex()
 
     def calcBackbone(self):
         self.need_calcBackbone = False
@@ -132,11 +127,6 @@ class Node:
 
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
-
-    # call to cleanup the side effects of evaluating this vertex
-    # (when it wasn't the chosen one)
-    def cleanup(self):
-        self.graph.rmVertex()
 
     def __str__(self):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(

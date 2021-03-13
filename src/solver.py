@@ -63,25 +63,37 @@ class Solver:
 
     def steepestDescentMax(self, node):
         neighbors = node.genNeighbours()
-        best_neighbor = next(neighbors)  # This can throw
+        best_neighbor = next(neighbors)  # TODO this can throw
 
-        #  for neighbor in neighbors:
-        #  if self.isBetterSol(neighbor, best_neighbor)
+        best_neighbor.getValue(self.pr, self.pb, self.b)
+        best_neighbor.cleanup()  # cleanup to check others
 
-        #  max(
-        #  neighbors, key=lambda node: node.getValue(self.pr, self.pb, self.b)
-        #  )
+        for neighbor in neighbors:
+            is_better = False
+            if self.isBetterSol(neighbor, best_neighbor):
+                is_better = True
+            neighbor.cleanup()  # cleanup previous best
+            if is_better:
+                best_neighbor = neighbor
+
+        return best_neighbor
 
     def steepestDescent(self):
         current = self.genRootNode()  # initial node
 
         while True:
+            #  print(current.routers, current.router, current.getValue(self.pr, self.pb, self.b))
             self.steps += 1
             best_neighbor = self.steepestDescentMax(current)
             if not self.isBetterSol(best_neighbor, current):
+                # no need to cleanup (already performed that operation)
                 return current
+
+            # we have a new best, but need to recalculate him to save the new graph
+            # so we force recalculation
+            best_neighbor.getValue(self.pr, self.pb, self.b, True)
+            best_neighbor.commit()
             current = best_neighbor
-            current.commit()  # update info of new chosen node
 
     # returns the annealing schedule
     def temperature(self, init_temp, frac):
@@ -93,7 +105,7 @@ class Solver:
         current = self.genRootNode()
         neighbours = current.genNeighbours()
 
-        for k in range(kmax):
+        for self.steps in range(kmax):
             neighbor = next(neighbours)
             was_chosen = False
 
@@ -133,10 +145,11 @@ class Solver:
             w.write(f, img)
 
     def __str__(self):
-        return "Router price is {}. Backbone price is {}. Max budget is {}. Steps is {}\n".format(
-            self.pr, self.pb, self.b, self.steps
-        ) + str(
-            self.board
+        return (
+            "Router price: {}\nBackbone price: {}\nMax budget: {}\nSteps taken: {}".format(
+                self.pr, self.pb, self.b, self.steps
+            )
+            + self.board
         )
 
 
@@ -154,24 +167,15 @@ def importSolver(filename):
     return solver
 
 
-# solver = importSolver("../input/simple.in")
-#  solver = importSolver("../input/charleston_road.in")
-solver = importSolver("../input/rue_de_londres.in")
+#  solver = importSolver("../input/simple.in")
+solver = importSolver("../input/charleston_road.in")
+#  solver = importSolver("../input/rue_de_londres.in")
 
-#  nodeHill = solver.hillClimbing()
-#  print(solver)
-#  print(nodeHill)
+node = solver.hillClimbing()
+#  node = solver.steepestDescent()
+#  node = solver.simulatedAnnealing()
+#  node = solver.simulatedAnnealing(100000, 500)
 
-#  nodeSteep = solver.steepestDescent()
-#  print(solver)
-#  print(nodeSteep)
-
-nodeAnnealing = solver.simulatedAnnealing(100000, 500)
 print(solver)
-print(nodeAnnealing)
-solver.toImage("../out.png", 4, nodeAnnealing)
-
-#  nodeHill.graph.kruskal(True)
-#  print(nodeHill.graph.result)
-#  print(len(nodeHill.graph.result))
-#  print(nodeHill.graph.getBackboneLen())
+print(node)
+solver.toImage("../out.png", 4, node)
