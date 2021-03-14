@@ -4,6 +4,10 @@ from random import shuffle
 
 
 class Board:
+    pb = 0
+    pr = 0
+    b = 0
+
     def __init__(self, h, w, r):
         self.h = h
         self.w = w
@@ -13,6 +17,9 @@ class Board:
         self.backbone = (0, 0)
         self.walls = set()
         self.available_pos = []
+
+    def setBackbone(self, br, bc):
+        self.backbone = (br, bc)
 
     def setBoardInfo(self, info, cable_range):
         self.board = info
@@ -43,11 +50,26 @@ class Board:
             for col in range(coli, colf)
             if self.board[row][col] == "."
         ]
-        # shuffle available positions in order to get random
+        # shuffle available positions
         shuffle(self.available_pos)
 
-    def setBackbone(self, br, bc):
-        self.backbone = (br, bc)
+    def updateAvailablePos(self, routers, maxdist):
+        new_available_pos = set()
+        for pos in self.available_pos:
+            dist = (
+                max(abs(pos[0] - self.backbone[0]), abs(pos[1] - self.backbone[1])) - 1
+            )
+            if dist <= maxdist:
+                new_available_pos.add(pos)
+                continue
+            for router in routers:
+                dist = max(abs(pos[0] - router[0]), abs(pos[1] - router[1])) - 1
+                if dist <= maxdist:
+                    new_available_pos.add(pos)
+                    break
+
+        self.available_pos = new_available_pos
+        return len(self.available_pos) - len(new_available_pos)
 
     def __str__(self):
         res = "Board {}x{}. Router range is {}. Backbone at {}".format(

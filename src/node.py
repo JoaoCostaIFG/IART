@@ -2,6 +2,7 @@
 
 from MinimumSpanningTree import Graph
 from utils import getCoordsBetween
+from board import Board
 
 
 class Node:
@@ -37,17 +38,17 @@ class Node:
             son = Node(self.board, self, pos)
             yield son
 
-    def getCost(self, pr, pb):
+    def getCost(self):
         if not self.need_calc:
             return self.cost
 
         self.graph.addVertex(self.router)
         # +1 because we didn't append the current router to the list
-        self.cost = self.graph.getBackboneLen() * pb + (len(self.routers) + 1) * pr
+        self.cost = self.graph.getBackboneLen() * Board.pb + (len(self.routers) + 1) * Board.pr
         return self.cost
 
     # TODO vaue will need to use set union
-    def getValue(self, pr, pb, b, force=False):
+    def getValue(self, force=False):
         if force:
             self.need_calc = True
         if not self.need_calc:
@@ -63,35 +64,28 @@ class Node:
             for col in range(coli, colf):
                 if self.board.board[row][col] != ".":  # check if is available pos
                     continue
-                # check if is inside range
-                if (
-                    abs(self.router[0] - row) > self.board.r
-                    or abs(self.router[1] - col) > self.board.r
-                ):
-                    continue
 
                 has_wall = False
-                for wall in self.board.walls:
-                    # TODO maybe filter walls by range too
-                    if (
-                        min(row, self.router[0]) <= wall[0]
-                        and wall[0] <= max(row, self.router[0])
-                        and min(col, self.router[1]) <= wall[1]
-                        and wall[1] <= max(col, self.router[1])
-                    ):
-                        has_wall = True
-                        break
+                top = min(row, self.router[0])
+                bot = max(row, self.router[0])
+                left = min(col, self.router[1])
+                right = min(col, self.router[1])
+                for crow in range(top, bot + 1):
+                    for ccol in range(left, right + 1):
+                        if (crow, ccol) in self.board.walls:
+                            has_wall = True
+                            break
                 if not has_wall:
                     self.covered.add((row, col))
 
-        cost = self.getCost(pr, pb)
-        if cost > b:
+        cost = self.getCost()
+        if cost > Board.b:
             self.val = 0
         else:
             # score = 1000 * target + (B - (backbones * pb + routers * pr))
             # TODO could already save this (mem tradeof)
             self.val = (len(self.parent.covered.union(self.covered))) * 1000 + (
-                b - cost
+                Board.b - cost
             )
 
         self.need_calc = False
