@@ -44,10 +44,11 @@ class Node:
 
         self.graph.addVertex(self.router)
         # +1 because we didn't append the current router to the list
-        self.cost = self.graph.getBackboneLen() * Board.pb + (len(self.routers) + 1) * Board.pr
+        self.cost = (
+            self.graph.getBackboneLen() * Board.pb + (len(self.routers) + 1) * Board.pr
+        )
         return self.cost
 
-    # TODO vaue will need to use set union
     def getValue(self, force=False):
         if force:
             self.need_calc = True
@@ -95,7 +96,7 @@ class Node:
     # e.g.: for printing or finding its neighbours
     def commit(self):
         self.routers.append(self.router)
-        self.covered = self.parent.covered.union(self.covered)
+        self.covered.update(self.parent.covered)
         # TODO maybe keep index somehow
         # TODO maybe iterating from the end makes the runtime faster
         self.board.available_pos.remove(self.router)
