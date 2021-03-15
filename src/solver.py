@@ -170,9 +170,9 @@ def importSolver(filename):
 
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")
-    solver = importSolver("../input/charleston_road.in")
+    #  solver = importSolver("../input/charleston_road.in")
     #  solver = importSolver("../input/rue_de_londres.in")
-    #  solver = importSolver("../input/opera.in")
+    solver = importSolver("../input/opera.in")
     #  solver = importSolver("../input/lets_go_higher.in")
 
     node = solver.hillClimbing()
@@ -183,4 +183,4 @@ if __name__ == "__main__":
     print(solver)
     print(node)
     #  print(node.__str__(True))
-    #  solver.toImage("../out.png", 4, node)
+    solver.toImage("../out.png", 4, node)

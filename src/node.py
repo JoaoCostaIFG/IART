@@ -70,7 +70,7 @@ class Node:
                 top = min(row, self.router[0])
                 bot = max(row, self.router[0])
                 left = min(col, self.router[1])
-                right = min(col, self.router[1])
+                right = max(col, self.router[1])
                 for crow in range(top, bot + 1):
                     for ccol in range(left, right + 1):
                         if (crow, ccol) in self.board.walls:
