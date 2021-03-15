@@ -123,7 +123,7 @@ class Node:
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
 
-    def __str__(self):
+    def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
             self.val, len(self.covered), len(self.routers), self.cost
         )
@@ -131,19 +131,20 @@ class Node:
         if self.need_calcBackbone:
             self.calcBackbone()
 
-        for x in range(self.board.h):  # For each row
-            for y in range(self.board.w):  # For each cell
-                if (x, y) == self.board.backbone:
-                    res += "B"
-                elif (x, y) in self.routers:
-                    res += "R"
-                elif (x, y) in self.backbones:
-                    res += "b"
-                elif (x, y) in self.covered:
-                    res += ":"
-                else:
-                    res += self.board.board[x][y]
-            res += "\n"
+        if draw_in_terminal:
+            for x in range(self.board.h):  # For each row
+                for y in range(self.board.w):  # For each cell
+                    if (x, y) == self.board.backbone:
+                        res += "B"
+                    elif (x, y) in self.routers:
+                        res += "R"
+                    elif (x, y) in self.backbones:
+                        res += "b"
+                    elif (x, y) in self.covered:
+                        res += ":"
+                    else:
+                        res += self.board.board[x][y]
+                res += "\n"
 
         return res
 

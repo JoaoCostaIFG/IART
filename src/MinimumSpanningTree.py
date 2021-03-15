@@ -8,7 +8,6 @@ class Graph:
         self.root = root
         self.vertices = vertices
         self.V = len(self.vertices) + 1  # vertice number (+1 for the root node)
-        self.needsUpdate = True
 
         self.prev_result = []
         self.result = []  # the latest result of running of the MST
@@ -34,8 +33,6 @@ class Graph:
             ],
             key=itemgetter(2),
         )
-
-        self.needsUpdate = False
 
     # find set of an element i (uses path compression technique)
     def find(self, parent, i):
@@ -64,7 +61,7 @@ class Graph:
         self.prev_result = self.result
         self.result = []
 
-        if self.needsUpdate or force:
+        if force:  # force a redraw
             self.genEdges()
 
         # create V subsets with single elements
@@ -93,9 +90,6 @@ class Graph:
     # this will be used for an incremental tree (re)generation
     #
     def addVertex(self, v):
-        if self.needsUpdate:
-            self.genEdges()
-
         self.graph = sorted(
             self.result
             + [(self.V, 0, self.calcWeigth(self.root, v))]
@@ -107,12 +101,12 @@ class Graph:
         )
 
         self.V += 1
-        self.needsUpdate = False
 
     def rmVertex(self):
-        self.result = self.prev_result.copy()
+        # TODO why copy? the problem wasn't here
+        # here we recover the previous (stable) state of the graph
+        self.result = self.prev_result  # .copy()
         self.V -= 1
-        self.needsUpdate = True
 
     def getBackboneLen(self):
         self.kruskal()
@@ -159,4 +153,3 @@ if __name__ == "__main__":
     g.rmVertex()
     g.kruskal()
     print(g)
-

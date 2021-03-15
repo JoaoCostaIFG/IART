@@ -32,6 +32,9 @@ class Solver:
         node.val = Board.b
         return node
 
+    def stopCondition(self, current, cells_to_cover):
+        return len(current.covered) < cells_to_cover and Board.b - current.getCost() > Board.pr
+
     def isBetterSol(self, neighbor, current):
         return neighbor.getValue() > current.getValue()
 
@@ -39,7 +42,7 @@ class Solver:
         current = self.genRootNode()  # initial node
         cells_to_cover = len(self.board.available_pos)
 
-        while len(current.covered) < cells_to_cover:
+        while self.stopCondition(current, cells_to_cover):
             self.steps += 1
             neighbors = current.genNeighbours()  # neighbor generator
             found_better = False
@@ -81,8 +84,9 @@ class Solver:
 
     def steepestDescent(self):
         current = self.genRootNode()  # initial node
+        cells_to_cover = len(self.board.available_pos)
 
-        while True:
+        while self.stopCondition(current, cells_to_cover):
             self.steps += 1
             best_neighbor = self.steepestDescentMax(current)
             if not self.isBetterSol(best_neighbor, current):
@@ -94,6 +98,8 @@ class Solver:
             best_neighbor.getValue(True)
             best_neighbor.commit()
             current = best_neighbor
+
+        return current
 
     # returns the annealing schedule
     def temperature(self, init_temp, frac):
@@ -165,7 +171,9 @@ def importSolver(filename):
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")
     solver = importSolver("../input/charleston_road.in")
-    #  solver = importSolver("../input/rue_de_londrescells_to_coverin")
+    #  solver = importSolver("../input/rue_de_londres.in")
+    #  solver = importSolver("../input/opera.in")
+    #  solver = importSolver("../input/lets_go_higher.in")
 
     node = solver.hillClimbing()
     #  node = solver.steepestDescent()
@@ -174,4 +182,5 @@ if __name__ == "__main__":
 
     print(solver)
     print(node)
-    # solver.toImage("../out.png", 4, node)
+    #  print(node.__str__(True))
+    #  solver.toImage("../out.png", 4, node)
