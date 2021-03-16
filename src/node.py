@@ -3,6 +3,7 @@
 from MinimumSpanningTree import Graph
 from utils import getCoordsBetween
 from board import Board
+from random import choice
 
 
 class Node:
@@ -38,39 +39,45 @@ class Node:
             son = Node(self.board, self, pos)
             yield son
 
-    def getCost(self):
+    def getCost(self, force=False):
         if not self.need_calc:
             return self.cost
 
         self.graph.addVertex(self.router)
         # +1 because we didn't append the current router to the list
         self.cost = (
-            self.graph.getBackboneLen() * Board.pb + (len(self.routers) + 1) * Board.pr
+            self.graph.getBackboneLen(force) * Board.pb + (len(self.routers) + 1) * Board.pr
         )
         return self.cost
 
-    def getValue(self, force=False):
-        if force:
-            self.need_calc = True
+    def getCostAll(self, force=False):
         if not self.need_calc:
-            return self.val
+            return self.cost
 
-        # router range
+        for router in self.routers:
+            self.graph.addVertex(router)
+        # +1 because we didn't append the current router to the list
+        self.cost = (
+            self.graph.getBackboneLen(force) * Board.pb + (len(self.routers) + 1) * Board.pr
+        )
+        return self.cost
+
+    def getRouterCovered(self, router):
         # TODO circle
-        rowi = max(0, self.router[0] - self.board.r)
-        coli = max(0, self.router[1] - self.board.r)
-        rowf = min(self.board.h, self.router[0] + self.board.r + 1)
-        colf = min(self.board.w, self.router[1] + self.board.r + 1)
+        rowi = max(0, router[0] - self.board.r)
+        coli = max(0, router[1] - self.board.r)
+        rowf = min(self.board.h, router[0] + self.board.r + 1)
+        colf = min(self.board.w, router[1] + self.board.r + 1)
         for row in range(rowi, rowf):
             for col in range(coli, colf):
                 if self.board.board[row][col] != ".":  # check if is available pos
                     continue
 
                 has_wall = False
-                top = min(row, self.router[0])
-                bot = max(row, self.router[0])
-                left = min(col, self.router[1])
-                right = max(col, self.router[1])
+                top = min(row, router[0])
+                bot = max(row, router[0])
+                left = min(col, router[1])
+                right = max(col, router[1])
                 for crow in range(top, bot + 1):
                     for ccol in range(left, right + 1):
                         if (crow, ccol) in self.board.walls:
@@ -79,7 +86,39 @@ class Node:
                 if not has_wall:
                     self.covered.add((row, col))
 
-        cost = self.getCost()
+
+    def getValueAll(self, force=False):
+        if force:
+            self.need_calc = True
+        if not self.need_calc:
+            return self.val
+
+        for router in self.routers:
+            self.getRouterCovered(router)
+        cost = self.getCostAll(force)
+
+        if cost > Board.b:
+            self.val = 0
+        else:
+            # score = 1000 * target + (B - (backbones * pb + routers * pr))
+            # TODO could already save this (mem tradeof)
+            self.val = (len(self.covered)) * 1000 + (
+                Board.b - cost
+            )
+
+        self.need_calc = False
+        return self.val
+
+    def getValue(self, force=False):
+        if force:
+            self.need_calc = True
+        if not self.need_calc:
+            return self.val
+
+        # router range
+
+        self.getRouterCovered(self.router)
+        cost = self.getCost(force)
         if cost > Board.b:
             self.val = 0
         else:
@@ -122,6 +161,20 @@ class Node:
 
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
+
+
+    def reproduce(self, node):
+        child = Node(self.board) # We assume that node1 and node2 are in the same board
+        for i in range(0, len(self.routers), 2): # even
+            child.routers.append(self.routers[i])
+        for i in range(1, len(node.routers), 2): # odd
+            child.routers.append(node.routers[i])
+        child.getValueAll(True)
+        return child
+    
+    def mutate(self):
+        neighbours = self.genNeighbours()
+        self = choice(list(neighbours))
 
     def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(

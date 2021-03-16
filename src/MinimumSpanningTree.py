@@ -33,6 +33,7 @@ class Graph:
             ],
             key=itemgetter(2),
         )
+        self.V = len(self.vertices) + 1  # vertice number (+1 for the root node)
 
     # find set of an element i (uses path compression technique)
     def find(self, parent, i):
@@ -108,8 +109,8 @@ class Graph:
         self.result = self.prev_result  # .copy()
         self.V -= 1
 
-    def getBackboneLen(self):
-        self.kruskal()
+    def getBackboneLen(self, force=False):
+        self.kruskal(force)
 
         ret = 0
         for s, t, w in self.result:

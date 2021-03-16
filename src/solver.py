@@ -4,8 +4,8 @@ import png
 
 from board import Board
 from node import Node
-from math import exp
-from random import random
+from math import exp, floor
+from random import random, choices, randint
 
 
 class Solver:
@@ -134,6 +134,44 @@ class Solver:
 
         return current
 
+    def generatePopulation(self, nPop):
+        maxBudgetRouters = floor(Board.b / Board.pr)
+        maxRouters = min(len(self.board.available_pos), maxBudgetRouters)
+
+        res = []
+        for i in range(nPop):
+            node = Node(self.board)
+            NRouters = randint(0, maxRouters)
+            gennedRouters = choices(self.board.available_pos, k=NRouters)
+            node.routers = gennedRouters
+            node.need_calcBackbone = True
+            node.getValueAll(True)
+            # yield node
+            res.append(node)
+        return res
+
+    def geneticAlgorithm(self, nPop=10, it=3, mutateProb=20):
+        population = self.generatePopulation(nPop)
+        weights = [node.getValue() for node in population]
+        for i in range(it): # TODO Maybe change to time constraint?
+            new_population = []
+            new_weights = []
+            print(weights)
+            for j in range(len(population)):
+                node1 = choices(population, weights=weights).pop()
+                node2 = choices(population, weights=weights).pop()
+                child = node1.reproduce(node2)
+                if (random() < mutateProb):
+                    child.mutate()
+                new_population.append(child)
+                new_weights.append(child.getValue())
+            population = new_population
+            weights = new_weights
+        return max(population, key=lambda node: node.getValue())
+
+
+
+
     def toImage(self, filename, scale=1, node=None):
         if node:
             img = node.toImage(scale)
@@ -171,11 +209,11 @@ def importSolver(filename):
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")
     #  solver = importSolver("../input/charleston_road.in")
-    #  solver = importSolver("../input/rue_de_londres.in")
-    solver = importSolver("../input/opera.in")
+    solver = importSolver("../input/rue_de_londres.in")
+    #  solver = importSolver("../input/opera.in")
     #  solver = importSolver("../input/lets_go_higher.in")
 
-    node = solver.hillClimbing()
+    node = solver.geneticAlgorithm()
     #  node = solver.steepestDescent()
     #  node = solver.simulatedAnnealing()
     #  node = solver.simulatedAnnealing(100000, 500)
@@ -183,4 +221,4 @@ if __name__ == "__main__":
     print(solver)
     print(node)
     #  print(node.__str__(True))
-    solver.toImage("../out.png", 4, node)
+    #  solver.toImage("../out.png", 4, node)
