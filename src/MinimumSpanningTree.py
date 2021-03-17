@@ -24,7 +24,7 @@ class Graph:
         # root is always node 0
         self.graph = sorted(
             [
-                (i + 1, j + 1, self.calcWeigth(self[i], self[j]))
+                (i, j, self.calcWeigth(self[i], self[j]))
                 for i in range(self.V)
                 for j in range(i + 1, self.V)
             ],
@@ -146,8 +146,8 @@ class Graph:
         self.result = self.prev_result
         self.V -= 1
 
-    def getBackboneLen(self):
-        self.kruskal()
+    def getBackboneLen(self, force=False):
+        self.kruskal(force)
 
         ret = 0
         for s, t, w in self.result:
