@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from random import random
 from MinimumSpanningTree import Graph
 from utils import getCoordsBetween
 from board import Board
@@ -30,13 +31,18 @@ class Node:
             self.graph = Graph(self.board.backbone, self.routers)
 
     def genNeighbours(self):
-        # Get random router to add to son
-        available_pos = self.board.available_pos
+        # ADD operator
+        # prioritize positions that are outside the range of the current routers
+        for pos in self.board.available_pos:
+            if pos not in self.covered:
+                son = Node(self.board, self, pos)
+                yield son
 
-        # TODO remove not in routers by removing router from possible coords on selection
-        for pos in available_pos:
-            son = Node(self.board, self, pos)
-            yield son
+        # remaining positions
+        for pos in self.board.available_pos:
+            if pos in self.covered:
+                son = Node(self.board, self, pos)
+                yield son
 
     def getCost(self):
         if not self.need_calc:
@@ -104,7 +110,7 @@ class Node:
     # call to cleanup the side effects of evaluating this vertex
     # (when it wasn't the chosen one)
     def cleanup(self):
-        self.graph.rmVertex()
+        self.graph.goBack()
 
     def calcBackbone(self):
         self.need_calcBackbone = False

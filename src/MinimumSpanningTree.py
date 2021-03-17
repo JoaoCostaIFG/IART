@@ -7,7 +7,6 @@ class Graph:
     def __init__(self, root, vertices):
         self.root = root
         self.vertices = vertices
-        self.V = len(self.vertices) + 1  # vertice number (+1 for the root node)
 
         self.prev_result = []
         self.result = []  # the latest result of running of the MST
@@ -19,17 +18,15 @@ class Graph:
 
     # function to generate Edges
     def genEdges(self):
+        self.V = len(self.vertices) + 1  # vertice number (+1 for the root node)
+
         # sort all the edges in non-decreasing order of their weight.
         # root is always node 0
         self.graph = sorted(
             [
-                (0, i + 1, self.calcWeigth(self.root, self.vertices[i]))
-                for i in range(len(self.vertices))
-            ]
-            + [
-                (i + 1, j + 1, self.calcWeigth(self.vertices[i], self.vertices[j]))
-                for i in range(len(self.vertices))
-                for j in range(i + 1, len(self.vertices))
+                (i + 1, j + 1, self.calcWeigth(self[i], self[j]))
+                for i in range(self.V)
+                for j in range(i + 1, self.V)
             ],
             key=itemgetter(2),
         )
@@ -85,6 +82,23 @@ class Graph:
                 self.result.append((u, v, w))
                 self.union(parent, rank, x, y)
 
+    def getInd(self, v):
+        for i in range(self.V):
+            if self[i] == v:
+                return i
+        return -1
+
+    def __getitem__(self, key):
+        if key == 0:
+            return self.root
+        return self.vertices[key - 1]
+
+    def __str__(self):
+        ret = ""
+        for u, v, w in self.result:
+            ret += "{} -- {} == {}\n".format(u, v, w)
+        return ret
+
     #
     # FOR OUR PROBLEM
     # this will be used for an incremental tree (re)generation
@@ -92,20 +106,44 @@ class Graph:
     def addVertex(self, v):
         self.graph = sorted(
             self.result
-            + [(self.V, 0, self.calcWeigth(self.root, v))]
-            + [
-                (self.V, i + 1, self.calcWeigth(v, self.vertices[i]))
-                for i in range(len(self.vertices))
-            ],
+            + [(self.V, i, self.calcWeigth(v, self[i])) for i in range(self.V)],
             key=itemgetter(2),
         )
 
         self.V += 1
 
-    def rmVertex(self):
-        # TODO why copy? the problem wasn't here
+    def rmVertex(self, v):
+        ## WARNING WIP
+        v_ind = self.getInd(v)
+
+        # save the graph entries we can keep
+        # and the indices of the vertices that will need to be worked on
+        to_keep = []
+        to_update = set()
+        for s, t, w in self.result:
+            if s == v_ind:
+                to_update.add(t)
+            elif t == v_ind:
+                to_update.add(s)
+            else:
+                to_keep.append((s, t, w))
+
+        # TODO every index bigger than v_ind needs to be decreased
+
+        self.V -= 1
+
+        new_dists = [
+            (i, ind, self.calcWeigth(self[ind], self[i]))
+            for i in range(self.V)
+            for ind in to_update
+            if i != ind and i != v_ind
+        ]
+
+        self.graph = sorted(to_keep + new_dists, key=itemgetter(2))
+
+    def goBack(self):
         # here we recover the previous (stable) state of the graph
-        self.result = self.prev_result  # .copy()
+        self.result = self.prev_result
         self.V -= 1
 
     def getBackboneLen(self):
@@ -115,12 +153,12 @@ class Graph:
         for s, t, w in self.result:
             ret += w  # current evaluation node weight
 
-        to_visit = {0}
+        to_visit = {0}  # start visit on root
         visited = set()
         while len(to_visit) != 0:
             next_node = to_visit.pop()
             visited.add(next_node)
-            visited_someone = False
+            visited_someone = False  # nodes that visit others (parents) need a backbone
             for s, t, w in self.result:
                 if s == next_node and t not in visited:
                     visited_someone = True
@@ -131,25 +169,30 @@ class Graph:
             if visited_someone:
                 ret += 1
 
-        return ret - 1  # init backbone don't need a backbone
-
-    def __str__(self):
-        ret = ""
-        for u, v, w in self.result:
-            ret += "{} -- {} == {}\n".format(u, v, w)
-        return ret
+        return ret - 1  # init backbone doesn't need a backbone on top
 
 
 # around 300 random points test
 if __name__ == "__main__":
-    g = Graph((0, 0), [(5, 5), (9, 3)])
+    g = Graph((0, 0), [(1, 1), (5, 5), (9, 3)])
     g.kruskal()
     print(g)
 
     g.addVertex((2, 2))
     g.kruskal()
     print(g)
+    g.vertices.append((2, 2))
 
-    g.rmVertex()
+    g.rmVertex((1, 1))
+    g.vertices.remove((1, 1))
     g.kruskal()
     print(g)
+
+    # Test 2
+    #  g = Graph((0, 0), [(1, 1), (2, 2), (5, 5), (9, 3)])
+    #  g.kruskal()
+    #  print(g)
+
+    #  g.rmVertex((1, 1))
+    #  g.kruskal()
+    #  print(g)

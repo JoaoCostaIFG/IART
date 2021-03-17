@@ -33,10 +33,17 @@ class Solver:
         return node
 
     def stopCondition(self, current, cells_to_cover):
-        return len(current.covered) < cells_to_cover and Board.b - current.getCost() > Board.pr
+        return (
+            len(current.covered) < cells_to_cover
+            and Board.b - current.getCost() > Board.pr
+        )
 
     def isBetterSol(self, neighbor, current):
         return neighbor.getValue() > current.getValue()
+
+    # TODO hill climb where acceptance passes through a probability
+    # if we don't find better solutions for a while (e.g.: 100 iters), we choose
+    # the last best
 
     def hillClimbing(self):
         current = self.genRootNode()  # initial node
@@ -56,11 +63,14 @@ class Solver:
                 else:
                     # remove rejected nodes (they won't ever help)
                     neighbor.cleanup()  # cleanup the unused node
-                    self.board.available_pos.remove(neighbor.router)
+                    #  self.board.available_pos.remove(neighbor.router)
             neighbors.close()
 
             if not found_better:
                 return current
+
+            if self.steps % 100 == 0:
+                print("Step:", self.steps, "Budget:", Board.b - current.getCost())
 
         return current
 
@@ -104,25 +114,25 @@ class Solver:
     # returns the annealing schedule
     def temperature(self, init_temp, frac):
         #  if Ɛ <= neper_num ** (-delta / tk):
-        return init_temp * frac
+        return float(init_temp) * (1 - frac)
 
-    def simulatedAnnealing(self, init_temp=1000.0, kmax=5):
+    def simulatedAnnealing(self, init_temp=1000.0, kmax=1000):
         # K is our self.steps in our implementation
         current = self.genRootNode()
         neighbours = current.genNeighbours()
 
         for self.steps in range(kmax):
             neighbor = next(neighbours)
-            was_chosen = False
+            t = self.temperature(init_temp, float(self.steps + 1) / kmax)
 
+            was_chosen = False
             if current.getValue() < neighbor.getValue():
                 was_chosen = True
-            elif Board.b - neighbor.getCost() >= 0:
-                # solution is feasible
+            elif Board.b - neighbor.getCost() >= 0:  # solution is feasible
+                # delta needs to be negative because we're maximizing
                 delta = neighbor.getValue() - current.getValue()
-                t = self.temperature(init_temp, float(self.steps + 1) / kmax)
-                Ɛ = exp(-delta / t)
-                if random() < Ɛ:
+                e = exp(delta / t)  # P function
+                if random() <= e:
                     was_chosen = True
 
             if was_chosen:
@@ -169,18 +179,17 @@ def importSolver(filename):
 
 
 if __name__ == "__main__":
-    #  solver = importSolver("../input/simple.in")
+    solver = importSolver("../input/simple.in")
     #  solver = importSolver("../input/charleston_road.in")
     #  solver = importSolver("../input/rue_de_londres.in")
-    solver = importSolver("../input/opera.in")
+    #  solver = importSolver("../input/opera.in")
     #  solver = importSolver("../input/lets_go_higher.in")
 
     node = solver.hillClimbing()
     #  node = solver.steepestDescent()
     #  node = solver.simulatedAnnealing()
-    #  node = solver.simulatedAnnealing(100000, 500)
 
     print(solver)
-    print(node)
-    #  print(node.__str__(True))
+    #  print(node)
+    print(node.__str__(True))
     solver.toImage("../out.png", 4, node)
