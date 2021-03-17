@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-import png
-
-from board import Board
-from node import Node
+import src.png as png
+from src.board import Board
+from src.node import Node
 from math import exp, floor
 from random import random, choices, randint
 
@@ -215,7 +214,6 @@ def importSolver(filename):
         solver.setBoardInfo([list(c) for c in f.read().split()])
         print("Finished importing map")
     return solver
-
 
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")

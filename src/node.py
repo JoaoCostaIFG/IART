@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from random import random
-from MinimumSpanningTree import Graph
-from utils import getCoordsBetween
-from board import Board
+from src.MinimumSpanningTree import Graph
+from src.utils import getCoordsBetween
+from src.board import Board
 from random import choice
 
 
