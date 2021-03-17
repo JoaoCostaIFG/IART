@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-import png
-
-from board import Board
-from node import Node
+# import png
+from src.board import Board
+from src.node import Node
 from math import exp, floor
 from random import random, choices, randint
 
@@ -214,20 +213,3 @@ def importSolver(filename):
         print("Finished importing map")
     return solver
 
-
-if __name__ == "__main__":
-    solver = importSolver("../input/simple.in")
-    #  solver = importSolver("../input/charleston_road.in")
-    #  solver = importSolver("../input/rue_de_londres.in")
-    #  solver = importSolver("../input/opera.in")
-    #  solver = importSolver("../input/lets_go_higher.in")
-
-    #  node = solver.hillClimbing()
-    #  node = solver.steepestDescent()
-    #  node = solver.simulatedAnnealing()
-    node = solver.geneticAlgorithm()
-
-    print(solver)
-    #  print(node)
-    print(node.__str__(True))
-    solver.toImage("../out.png", 4, node)
