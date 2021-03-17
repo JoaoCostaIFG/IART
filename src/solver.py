@@ -111,9 +111,9 @@ class Solver:
 
         return current
 
-    # returns the annealing schedule
+    # returns the current temperature of the system based on the
+    # initial temperature the fraction of the iterations performed
     def temperature(self, init_temp, frac):
-        #  if Ɛ <= neper_num ** (-delta / tk):
         return float(init_temp) * (1 - frac)
 
     def simulatedAnnealing(self, init_temp=1000.0, kmax=1000):
@@ -156,15 +156,16 @@ class Solver:
             node.routers = gennedRouters
             node.graph.vertices = gennedRouters  # IMP routers and vertices are the same
             node.need_calcBackbone = True
-            node.getValueAll(True)
+            node.getValue(True, True)
             # yield node
             res.append(node)
 
         return res
 
-    def geneticAlgorithm(self, nPop=100, it=10, mutateProb=0.2):
+    def geneticAlgorithm(self, nPop=10, it=10, mutateProb=0.2):
         population = self.generatePopulation(nPop)
         weights = [node.getValue() for node in population]
+
         for i in range(it):  # TODO Maybe change to time constraint?
             new_population = []
             new_weights = []
@@ -181,14 +182,15 @@ class Solver:
 
         return max(population, key=lambda node: node.getValue())
 
+    # scale is how many pixels the side of one 1 board cell takes in the output image
+    # if a node is given, the solution represented by that node will be drawn
+    # outputs the result to a file in the given path
     def toImage(self, filename, scale=1, node=None):
         if node:
             img = node.toImage(scale)
         else:
             img = self.board.toImage(scale)
 
-        # TODO
-        #  img = [[ord(c) for c in row] for row in self.board]
         with open(filename, "wb+") as f:
             w = png.Writer(self.board.w * scale, self.board.h * scale, greyscale=False)
             w.write(f, img)
@@ -216,8 +218,8 @@ def importSolver(filename):
 
 
 if __name__ == "__main__":
-    solver = importSolver("../input/simple.in")
-    #  solver = importSolver("../input/charleston_road.in")
+    #  solver = importSolver("../input/simple.in")
+    solver = importSolver("../input/charleston_road.in")
     #  solver = importSolver("../input/rue_de_londres.in")
     #  solver = importSolver("../input/opera.in")
     #  solver = importSolver("../input/lets_go_higher.in")
@@ -228,6 +230,6 @@ if __name__ == "__main__":
     node = solver.geneticAlgorithm()
 
     print(solver)
-    #  print(node)
-    print(node.__str__(True))
-    solver.toImage("../out.png", 4, node)
+    print(node)
+    #  print(node.__str__(True))
+    #  solver.toImage("../out.png", 4, node)

@@ -8,10 +8,9 @@ from random import choice
 
 
 class Node:
+    # pass a parent node (if any) and a new router that will be added to the solution
     def __init__(self, board, node=None, new_router=None):
         self.board = board
-        self.need_calc = True
-        self.need_calcBackbone = True
         self.val = 0
         self.cost = 0
         self.covered = set()
@@ -20,6 +19,9 @@ class Node:
         self.router = new_router
 
         if self.parent:
+            self.need_calc = True
+            self.need_calcBackbone = True
+
             self.routers = self.parent.routers
             self.backbones = self.parent.backbones
             self.covered.add(new_router)  # routers are always covered
@@ -27,6 +29,7 @@ class Node:
         else:  # has no parent (grandparent)
             self.need_calc = False  # is the root => value 0
             self.need_calcBackbone = False
+
             self.routers = []
             self.backbones = []
             self.graph = Graph(self.board.backbone, self.routers)
@@ -45,22 +48,28 @@ class Node:
                 son = Node(self.board, self, pos)
                 yield son
 
-    def getCost(self, force=False):
+    def reproduce(self, node):
+        child = Node(self.board)  # We assume that node1 and node2 are in the same board
+        for i in range(0, len(self.routers), 2):  # even
+            child.routers.append(self.routers[i])
+        for i in range(1, len(node.routers), 2):  # odd
+            child.routers.append(node.routers[i])
+
+        child.need_calcBackbone = True
+        child.getValue(True, True)
+
+        return child
+
+    def mutate(self):
+        neighbours = self.genNeighbours()
+        self = choice(list(neighbours))
+
+    def getCost(self, force=False, redo=False):
         if not self.need_calc:
             return self.cost
 
-        self.graph.addVertex(self.router)
-        # +1 because we didn't append the current router to the list
-        self.cost = (
-            self.graph.getBackboneLen(force) * Board.pb
-            + (len(self.routers) + 1) * Board.pr
-        )
-        return self.cost
-
-    def getCostAll(self, force=False):
-        if not self.need_calc:
-            return self.cost
-
+        if not redo:
+            self.graph.addVertex(self.router)
         # +1 because we didn't append the current router to the list
         self.cost = (
             self.graph.getBackboneLen(force) * Board.pb
@@ -91,45 +100,26 @@ class Node:
                 if not has_wall:
                     self.covered.add((row, col))
 
-    def getValueAll(self, force=False):
-        if force:
-            self.need_calc = True
-        if not self.need_calc:
-            return self.val
-
-        for router in self.routers:
-            self.getRouterCovered(router)
-        cost = self.getCostAll(force)
-
-        if cost > Board.b:
-            self.val = 0
-        else:
-            # score = 1000 * target + (B - (backbones * pb + routers * pr))
-            # TODO could already save this (mem tradeof)
-            self.val = (len(self.covered)) * 1000 + (Board.b - cost)
-
-        self.need_calc = False
-        return self.val
-
-    def getValue(self, force=False):
+    def getValue(self, force=False, redo=False):
         if force:
             self.need_calc = True
         if not self.need_calc:
             return self.val
 
         # router range
-
-        self.getRouterCovered(self.router)
-        cost = self.getCost(force)
-        if cost > Board.b:
-            self.val = 0
+        if redo:
+            for router in self.routers:
+                self.getRouterCovered(router)
+            cov_cnt = len(self.covered)
         else:
-            # score = 1000 * target + (B - (backbones * pb + routers * pr))
-            # TODO could already save this (mem tradeof)
-            self.val = (len(self.parent.covered.union(self.covered))) * 1000 + (
-                Board.b - cost
-            )
+            self.getRouterCovered(self.router)
+            cov_cnt = len(self.parent.covered.union(self.covered))
 
+        cost = self.getCost(force, redo)
+
+        # score is 0 if it is over budget
+        # otherwise, score = 1000 * target + (B - (backbones * pb + routers * pr))
+        self.val = 0 if cost > Board.b else cov_cnt * 1000 + (Board.b - cost)
         self.need_calc = False
         return self.val
 
@@ -146,22 +136,6 @@ class Node:
     # (when it wasn't the chosen one)
     def cleanup(self):
         self.graph.goBack()
-
-    def reproduce(self, node):
-        child = Node(self.board)  # We assume that node1 and node2 are in the same board
-        for i in range(0, len(self.routers), 2):  # even
-            child.routers.append(self.routers[i])
-        for i in range(1, len(node.routers), 2):  # odd
-            child.routers.append(node.routers[i])
-
-        child.need_calcBackbone = True
-        child.getValueAll(True)
-
-        return child
-
-    def mutate(self):
-        neighbours = self.genNeighbours()
-        self = choice(list(neighbours))
 
     def calcBackbone(self):
         self.need_calcBackbone = False
@@ -180,9 +154,38 @@ class Node:
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
 
+    # scale is how many pixels the side of one 1 board cell takes in the output image
+    # returns a RGB pixel grid
+    def toImage(self, scale=1):
+        if self.need_calcBackbone:
+            self.calcBackbone()
+
+        img = []
+        for r in range(self.board.h):
+            row = ()
+            for c in range(self.board.w):
+                if (r, c) == self.board.backbone:  # initial backbone
+                    next_pixel = (0xFF, 0x73, 0xFD)
+                elif (r, c) in self.routers:  # routers
+                    next_pixel = (0xB7, 0xFF, 0x73)
+                elif (r, c) in self.backbones:  # backbones
+                    next_pixel = (0xFF, 0x73, 0xB7)
+                elif (r, c) in self.covered:  # covered
+                    next_pixel = (0xFF, 0x96, 0x73)
+                elif self.board.board[r][c] == ".":  # not covered
+                    next_pixel = (0x75, 0x73, 0xFF)
+                elif self.board.board[r][c] == "#":  # wall
+                    next_pixel = (0xFF, 0xDE, 0x73)
+                else:  # void
+                    next_pixel = (0x17, 0x17, 0x17)
+                row += next_pixel * scale
+            for s in range(scale):
+                img.append(row)
+        return img
+
     def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
-            self.val, len(self.covered), len(self.routers), self.cost
+            self.getValue(), len(self.covered), len(self.routers), self.cost
         )
 
         if draw_in_terminal:
@@ -204,29 +207,3 @@ class Node:
                 res += "\n"
 
         return res
-
-    def toImage(self, scale=1):
-        if self.need_calcBackbone:
-            self.calcBackbone()
-
-        img = []
-        for r in range(self.board.h):
-            row = ()
-            for c in range(self.board.w):
-                if (r, c) == self.board.backbone:  # initial backbone
-                    row += (0xFF, 0x73, 0xFD) * scale
-                elif (r, c) in self.routers:  # routers
-                    row += (0xB7, 0xFF, 0x73) * scale
-                elif (r, c) in self.backbones:  # backbones
-                    row += (0xFF, 0x73, 0xB7) * scale
-                elif (r, c) in self.covered:  # covered
-                    row += (0xFF, 0x96, 0x73) * scale
-                elif self.board.board[r][c] == ".":  # not covered
-                    row += (0x75, 0x73, 0xFF) * scale
-                elif self.board.board[r][c] == "#":  # wall
-                    row += (0xFF, 0xDE, 0x73) * scale
-                elif self.board.board[r][c] == "-":  # void
-                    row += (0x17, 0x17, 0x17) * scale
-            for s in range(scale):
-                img.append(row)
-        return img
