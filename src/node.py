@@ -147,6 +147,22 @@ class Node:
     def cleanup(self):
         self.graph.goBack()
 
+    def reproduce(self, node):
+        child = Node(self.board)  # We assume that node1 and node2 are in the same board
+        for i in range(0, len(self.routers), 2):  # even
+            child.routers.append(self.routers[i])
+        for i in range(1, len(node.routers), 2):  # odd
+            child.routers.append(node.routers[i])
+
+        child.need_calcBackbone = True
+        child.getValueAll(True)
+
+        return child
+
+    def mutate(self):
+        neighbours = self.genNeighbours()
+        self = choice(list(neighbours))
+
     def calcBackbone(self):
         self.need_calcBackbone = False
         self.backbones = set()
@@ -164,28 +180,15 @@ class Node:
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
 
-    def reproduce(self, node):
-        child = Node(self.board)  # We assume that node1 and node2 are in the same board
-        for i in range(0, len(self.routers), 2):  # even
-            child.routers.append(self.routers[i])
-        for i in range(1, len(node.routers), 2):  # odd
-            child.routers.append(node.routers[i])
-        child.getValueAll(True)
-        return child
-
-    def mutate(self):
-        neighbours = self.genNeighbours()
-        self = choice(list(neighbours))
-
     def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
             self.val, len(self.covered), len(self.routers), self.cost
         )
 
-        if self.need_calcBackbone:
-            self.calcBackbone()
-
         if draw_in_terminal:
+            if self.need_calcBackbone:
+                self.calcBackbone()
+
             for x in range(self.board.h):  # For each row
                 for y in range(self.board.w):  # For each cell
                     if (x, y) == self.board.backbone:

@@ -159,6 +159,7 @@ class Solver:
             node.getValueAll(True)
             # yield node
             res.append(node)
+
         return res
 
     def geneticAlgorithm(self, nPop=100, it=10, mutateProb=0.2):
@@ -167,7 +168,6 @@ class Solver:
         for i in range(it):  # TODO Maybe change to time constraint?
             new_population = []
             new_weights = []
-            print(weights)
             for j in range(len(population)):
                 node1 = choices(population, weights=weights).pop()
                 node2 = choices(population, weights=weights).pop()
@@ -178,6 +178,7 @@ class Solver:
                 new_weights.append(child.getValue())
             population = new_population
             weights = new_weights
+
         return max(population, key=lambda node: node.getValue())
 
     def toImage(self, filename, scale=1, node=None):
