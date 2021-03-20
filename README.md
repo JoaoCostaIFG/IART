@@ -1,10 +1,37 @@
 # IART
 
+## Running
+
+To run the code execute the [main python script](./main.py). This script launches
+an interactive menu that will let you choose a file from the input, the algorithm
+to run and whether to output the result to an image. At the end of the run,
+the status will be displayed in the terminal.
+
+### Example run
+
+- Part 1
+
+[Example run pt.1](./static/example_run1.png)
+
+- Part 2
+
+[Example run pt.2](./static/example_run2.png)
+
+- Part 3
+
+[Example run pt.3](./static/example_run3.png)
+
+- File output
+
+[Example output](./static/example_output.png)
+
 ## Dependencies
 
-[PyPNG](https://github.com/drj11/pypng)
+These dependencies come with the repository and don't need to be pre-installed.
 
-## Details
+- [PyPNG](https://github.com/drj11/pypng)
+
+## Problem description
 
 ### Building
 
@@ -53,7 +80,7 @@ R = 3
 - Connecting a cell to the backbone costs **Pb**
 - The maximum budget is **B**
 
-## Input
+## Input files description
 
 - First line
   - (1 <= **H** <= 1000) - number of rows on the grid
