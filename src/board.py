@@ -21,6 +21,7 @@ class Board:
     def setBackbone(self, br, bc):
         self.backbone = (br, bc)
 
+    # save the board information in more convenient structures
     def setBoardInfo(self, info, cable_range):
         self.board = info
 
@@ -53,6 +54,8 @@ class Board:
         # shuffle available positions
         shuffle(self.available_pos)
 
+    # filter from the available positions set the positions that
+    # aren't reachable with our current budget
     def updateAvailablePos(self, routers, maxdist):
         new_available_pos = set()
         for pos in self.available_pos:

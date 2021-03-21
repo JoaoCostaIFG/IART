@@ -47,6 +47,7 @@ class Node:
                 son = Node(self.board, self, pos)
                 yield son
 
+    # reproduce two solutions (for genetic algorithm)
     def reproduce(self, node):
         child = Node(self.board)  # We assume that node1 and node2 are in the same board
         for i in range(0, len(self.routers), 2):  # even
@@ -59,10 +60,17 @@ class Node:
 
         return child
 
+    # generate a new mutation (for genetic algorithm)
     def mutate(self):
         neighbours = self.genNeighbours()
         self = choice(list(neighbours))
 
+    # get the cost of a solution
+    # the cost is given by (R * Pr + Bb * Pb), where:
+    # - R is the number of placed routers,
+    # - Pr is the price of a router,
+    # - Bb is the numbers of placed backbones (besides the initial one),
+    # - Pb is the price of each backbone.
     def getCost(self, force=False, redo=False):
         if not self.need_calc:
             return self.cost
@@ -76,6 +84,7 @@ class Node:
         )
         return self.cost
 
+    # calculates and saves the cells covered by the given router
     def getRouterCovered(self, router):
         rowi = max(0, router[0] - self.board.r)
         coli = max(0, router[1] - self.board.r)
@@ -99,6 +108,10 @@ class Node:
                 if not has_wall:
                     self.covered.add((row, col))
 
+    # calculates the value of a solution
+    # If cost is higher than the budget, B, the value of the solution is 0.
+    # Otherwise, the value of a node follows the formula C * 1000 + (B - Cost),
+    # where C is the numbered of cells covered by at least one router.
     def getValue(self, force=False, redo=False):
         if force:
             self.need_calc = True
@@ -136,6 +149,7 @@ class Node:
     def cleanup(self):
         self.graph.goBack()
 
+    # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
         self.need_calcBackbone = False
         self.backbones = set()
@@ -153,6 +167,11 @@ class Node:
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
 
+    # outputs the solution to a file according to the specification
+    # - First line: The number of cells connected the backbone
+    # - N next lines: the coordinates of these cells
+    # - Next line: number of routers to be placed
+    # - M next lines: the coordinates of these routers
     def toFile(self, filename):
         if self.need_calcBackbone:
             self.calcBackbone()
@@ -194,6 +213,7 @@ class Node:
                 img.append(row)
         return img
 
+    # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
             self.getValue(), len(self.covered), len(self.routers), self.cost

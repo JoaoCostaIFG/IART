@@ -40,7 +40,8 @@ class Solver:
     def isBetterSol(self, neighbor, current):
         return neighbor.getValue() > current.getValue()
 
-    # TODO hill climb where acceptance passes through a probability
+    # TODO idea
+    # hill climb where acceptance passes through a probability
     # if we don't find better solutions for a while (e.g.: 100 iters), we choose
     # the last best
 
@@ -214,6 +215,7 @@ def importSolver(filename):
         solver.setBoardInfo([list(c) for c in f.read().split()])
         print("Finished importing map")
     return solver
+
 
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")

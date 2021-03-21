@@ -104,6 +104,8 @@ class Graph:
     # this will be used for an incremental tree (re)generation
     #
     def addVertex(self, v):
+        # when calculating the minimum spanning tree of the tree with an extra vertex,
+        # we can keep the old minimum spanning tree and add the edges for the new vertex
         self.graph = sorted(
             self.result
             + [(self.V, i, self.calcWeigth(v, self[i])) for i in range(self.V)],
