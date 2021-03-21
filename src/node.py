@@ -153,6 +153,18 @@ class Node:
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
 
+    def toFile(self, filename):
+        if self.need_calcBackbone:
+            self.calcBackbone()
+
+        with open(filename, "w+") as f:
+            f.write(str(len(self.backbones)) + "\n")
+            for r, c in self.backbones:
+                f.write(str(r) + " " + str(c) + "\n")
+            f.write(str(len(self.routers)) + "\n")
+            for r, c in self.routers:
+                f.write(str(r) + " " + str(c) + "\n")
+
     # scale is how many pixels the side of one 1 board cell takes in the output image
     # returns a RGB pixel grid
     def toImage(self, scale=1):

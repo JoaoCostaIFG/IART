@@ -75,3 +75,11 @@ if __name__ == "__main__":
         if image[-4:-2] != ".png":  # append '.png' to the file name if not present
             image += ".png"
         solver.toImage(image, 4, node)
+
+    print("\n\nDo you want to export the solution to a file?", end=" ")
+    if getYorN():
+        print("Type the name of the file to export:", end=" ")
+        filename = input()
+        if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
+            filename += ".txt"
+        node.toFile(filename)
