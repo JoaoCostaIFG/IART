@@ -57,7 +57,14 @@ class Solver:
             if not found_better:
                 return current
 
-            print("Step:", self.steps, "Budget:", Board.b - current.getCost())
+            print(
+                "Step:",
+                self.steps,
+                "Budget:",
+                Board.b - current.getCost(),
+                "Val:",
+                current.getValue(),
+            )
 
         return current
 
