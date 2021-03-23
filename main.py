@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from os import listdir, path
+from src.solver import importSolver
 
 
 def getInt(upper, lower=0, str="Please select a valid option"):
@@ -22,10 +23,10 @@ def getYorN():
     return answer == "y"
 
 
-def selectOption(l):
-    for i in range(len(l)):
-        print(str(i) + " - " + l[i])
-    return getInt(len(l))
+def selectOption(op_list):
+    for i in range(len(op_list)):
+        print(str(i) + " - " + op_list[i])
+    return getInt(len(op_list))
 
 
 def selectInputFile():
@@ -44,14 +45,14 @@ def selectAlgorithm():
     return algorithms[selectOption(algorithms)]
 
 
-from src.solver import importSolver
-
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
     solver = importSolver("input/charleston_road_small.in")
 
-    node = solver.hillClimbing()
+    #  node = solver.hillClimbing()
+    #  node = solver.steepestDescent()
+    node = solver.simulatedAnnealing()
     print(solver)
     print(node.__str__(True))
     solver.toImage("out.png", 4, node)

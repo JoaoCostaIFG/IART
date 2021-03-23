@@ -38,23 +38,22 @@ class Node:
 
     # generate a new mutation (for genetic algorithm)
     def mutate(self):
-        #  indices = [i in for i in range(len(self.routers))]
-        #  shuffle(indices)
-
         cov_found = 0
         for pos in self.board.getRandomPos():
             if pos in self.routers:  # no repeated routers
                 continue
 
+            chance = random()
+
             if pos in self.covered:
-                if random() <= 0.1 or cov_found <= len(self.covered):
+                if chance <= 0.1 or cov_found <= len(self.covered):
                     i = randint(0, len(self.routers) - 1)
                     new_routers = self.routers.copy()
                     new_routers[i] = pos
                     yield Node(self.board, new_routers)
             else:
                 cov_found += 1
-                if random() <= 0.9:
+                if chance <= 0.9:
                     i = randint(0, len(self.routers) - 1)
                     new_routers = self.routers.copy()
                     new_routers[i] = pos
@@ -99,7 +98,9 @@ class Node:
         for router in self.routers:
             self.graph.addVertex(router)
             # +1 to cutof because of the new router
-            new_cost = self.graph.getBackboneLen() * Board.pb + (self.cutof + 1) * Board.pr
+            new_cost = (
+                self.graph.getBackboneLen() * Board.pb + (self.cutof + 1) * Board.pr
+            )
             if new_cost > Board.b:  # no budget for this => stop
                 self.graph.popVertex()
                 break
@@ -146,6 +147,21 @@ class Node:
     # compares the value of 2 solutions
     def __gt__(self, other):
         return self.getValue() > other.getValue()
+
+    def __le__(self, other):
+        return not self.getValue() > other.getValue()
+
+    def __lt__(self, other):
+        return self.getValue() < other.getValue()
+
+    def __ge__(self, other):
+        return not self.getValue() < other.getValue()
+
+    def __eq__(self, other):
+        return self.getValue() == other.getValue()
+
+    def __ne__(self, other):
+        return not self.getValue() == other.getValue()
 
     # outputs the solution to a file according to the specification
     # - First line: The number of cells connected the backbone

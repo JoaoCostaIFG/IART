@@ -37,14 +37,10 @@ class Solver:
 
         return Node(self.board, pseudoSol)
 
-    def stopCondition(self, current, cells_to_cover):
-        return len(current.covered) < cells_to_cover
-
-    def hillClimbing(self):
+    def hillClimbing(self, max_iter=200):
         current = self.genRootNode()  # initial node
-        cells_to_cover = len(self.board.available_pos)
 
-        while self.stopCondition(current, cells_to_cover):
+        while self.steps <= max_iter:
             self.steps += 1
             found_better = False
 
@@ -69,39 +65,33 @@ class Solver:
         return current
 
     def steepestDescentMax(self, node):
-        neighbors = node.genNeighbours()
+        neighbors = node.mutate()
         best_neighbor = next(neighbors)  # TODO this can throw
 
-        best_neighbor.getValue()
-        best_neighbor.cleanup()  # cleanup to check others
-
         for neighbor in neighbors:
-            is_better = False
-            if self.isBetterSol(neighbor, best_neighbor):
-                is_better = True
-            neighbor.cleanup()  # cleanup previous best
-            if is_better:
+            if neighbor > best_neighbor:
                 best_neighbor = neighbor
-        neighbors.close()
 
         return best_neighbor
 
-    def steepestDescent(self):
+    def steepestDescent(self, max_iter=50):
         current = self.genRootNode()  # initial node
-        cells_to_cover = len(self.board.available_pos)
 
-        while self.stopCondition(current, cells_to_cover):
+        while self.steps <= max_iter:
             self.steps += 1
             best_neighbor = self.steepestDescentMax(current)
-            if not self.isBetterSol(best_neighbor, current):
-                # no need to cleanup (already performed that operation)
+            if best_neighbor <= current:
                 return current
-
-            # we have a new best, but need to recalculate him to save the new graph
-            # so we force recalculation
-            best_neighbor.getValue(True)
-            best_neighbor.commit()
             current = best_neighbor
+
+            print(
+                "Step:",
+                self.steps,
+                "Budget:",
+                Board.b - current.getCost(),
+                "Val:",
+                current.getValue(),
+            )
 
         return current
 
