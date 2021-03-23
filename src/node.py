@@ -112,6 +112,7 @@ class Node:
             self.graph.addVertex(router)
             new_cost = self.graph.getBackboneLen() * Board.pb + self.cutof * Board.pr
             if new_cost > Board.b:  # no more routers pls
+                self.graph.popVertex()
                 break
 
             self.getRouterCovered(router)
@@ -123,8 +124,11 @@ class Node:
         self.val = len(self.covered) * 1000 + (Board.b - self.cost)
         self.need_calc = False
 
-        print(self.val, self.cutof, router[0:self.cutof])
+        print(self.val)
         return self.val
+
+    def getSol(self):
+        return self.routers[0:self.cutof]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -161,8 +165,8 @@ class Node:
             f.write(str(len(self.backbones)) + "\n")
             for r, c in self.backbones:
                 f.write(str(r) + " " + str(c) + "\n")
-            f.write(str(len(self.routers)) + "\n")
-            for r, c in self.routers:
+            f.write(str(self.cutof) + "\n")
+            for r, c in self.getSol():
                 f.write(str(r) + " " + str(c) + "\n")
 
     # scale is how many pixels the side of one 1 board cell takes in the output image
@@ -177,7 +181,7 @@ class Node:
             for c in range(self.board.w):
                 if (r, c) == self.board.backbone:  # initial backbone
                     next_pixel = (0xFF, 0x73, 0xFD)
-                elif (r, c) in self.routers:  # routers
+                elif (r, c) in self.getSol():  # routers
                     next_pixel = (0xB7, 0xFF, 0x73)
                 elif (r, c) in self.backbones:  # backbones
                     next_pixel = (0xFF, 0x73, 0xB7)
@@ -197,7 +201,7 @@ class Node:
     # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
         res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
-            self.getValue(), len(self.covered), len(self.routers), self.cost
+            self.getValue(), len(self.covered), self.cutof, self.cost
         )
 
         if draw_in_terminal:
@@ -208,7 +212,7 @@ class Node:
                 for y in range(self.board.w):  # For each cell
                     if (x, y) == self.board.backbone:
                         res += "B"
-                    elif (x, y) in self.routers:
+                    elif (x, y) in self.getSol():
                         res += "R"
                     elif (x, y) in self.backbones:
                         res += "b"

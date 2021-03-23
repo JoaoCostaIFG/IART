@@ -8,6 +8,7 @@ class Graph:
         self.root = root
         self.vertices = vertices
         self.result = []  # the latest result of running of the MST
+        self.prev_result = []
         self.genEdges()
 
     def calcWeigth(self, source, target):
@@ -52,6 +53,7 @@ class Graph:
             rank[xroot] += 1
 
     def kruskal(self):
+        self.prev_result = self.result
         self.result = []
 
         # create V subsets with single elements
@@ -89,6 +91,11 @@ class Graph:
         )
 
         self.vertices.append(v)
+
+    def popVertex(self):
+        self.result = self.prev_result
+        if len(self.vertices) > 0:
+            self.vertices.pop()
 
     def getBackboneLen(self):
         self.kruskal()
