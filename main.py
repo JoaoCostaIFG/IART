@@ -48,7 +48,7 @@ def selectAlgorithm():
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
-    solver = importSolver("input/charleston_road_small.in")
+    solver = importSolver("input/charleston_road.in")
 
     #  node = solver.hillClimbing()
     #  node = solver.steepestDescent()

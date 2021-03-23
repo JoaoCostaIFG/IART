@@ -97,34 +97,41 @@ class Solver:
 
     # returns the current temperature of the system based on the
     # initial temperature the fraction of the iterations performed
-    def temperature(self, init_temp, frac):
-        return float(init_temp) * (1 - frac)
+    def schedule(self, t):
+        return float(t) * 0.9
 
-    def simulatedAnnealing(self, init_temp=1000.0, kmax=1000):
+    def simulatedAnnealing(self, init_temp=100000.0, mk=100):
         # K is our self.steps in our implementation
+        t = init_temp
         current = self.genRootNode()
-        neighbours = current.genNeighbours()
 
-        for self.steps in range(kmax):
-            neighbor = next(neighbours)
-            t = self.temperature(init_temp, float(self.steps + 1) / kmax)
+        while abs(t) >= 0.0001:
+            self.steps += 1
+            neighbors = current.mutate()
+            for m in range(mk):
+                neighbor = next(neighbors)
+                # we choose when they are equal because delta == 0 => e = 1.0
+                if neighbor >= current:
+                    current = neighbor
+                    neighbors = current.mutate()
+                else:
+                    # delta needs to be negative because we're maximizing
+                    delta = neighbor - current
+                    e = exp(delta / t)  # P function
+                    if random() <= e:
+                        current = neighbor
+                        neighbors = current.mutate()
+            # cool down
+            t = self.schedule(t)
 
-            was_chosen = False
-            if current.getValue() < neighbor.getValue():
-                was_chosen = True
-            elif Board.b - neighbor.getCost() >= 0:  # solution is feasible
-                # delta needs to be negative because we're maximizing
-                delta = neighbor.getValue() - current.getValue()
-                e = exp(delta / t)  # P function
-                if random() <= e:
-                    was_chosen = True
-
-            if was_chosen:
-                current = neighbor
-                current.commit()  # update info of new chosen node
-                neighbours = current.genNeighbours()
-            else:  # node wasn't chosen => cleanup
-                neighbor.cleanup()
+            print(
+                "Step:",
+                self.steps,
+                "Budget:",
+                Board.b - current.getCost(),
+                "Val:",
+                current.getValue(),
+            )
 
         return current
 

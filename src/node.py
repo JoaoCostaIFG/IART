@@ -3,7 +3,7 @@
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
-from random import randint, random
+from random import shuffle, random, randint
 
 
 class Node:
@@ -22,19 +22,18 @@ class Node:
         self.backbones = []
         self.graph = Graph(self.board.backbone, [])
 
-    def genNeighbours(self):
-        # ADD operator
-        # prioritize positions that are outside the range of the current routers
-        for pos in self.board.available_pos:
-            if pos not in self.covered:
-                son = Node(self.board, self, pos)
-                yield son
+    def mutateSingle(self):
+        indices = [i for i in range(len(self.routers))]
+        shuffle(indices)
 
-        # remaining positions
-        for pos in self.board.available_pos:
-            if pos in self.covered:
-                son = Node(self.board, self, pos)
-                yield son
+        for i in indices:  # iterate over routers
+            for pos in self.board.getRandomPos():
+                if pos in self.routers:  # no repeated routers
+                    continue
+
+                new_routers = self.routers.copy()
+                new_routers[i] = pos
+                yield Node(self.board, new_routers)
 
     # generate a new mutation (for genetic algorithm)
     def mutate(self):
@@ -124,7 +123,7 @@ class Node:
         return self.val
 
     def getSol(self):
-        return self.routers[0:self.cutof]
+        return self.routers[0 : self.cutof]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -143,6 +142,10 @@ class Node:
 
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
+
+    # delta value
+    def __sub__(self, other):
+        return self.getValue() - other.getValue()
 
     # compares the value of 2 solutions
     def __gt__(self, other):
