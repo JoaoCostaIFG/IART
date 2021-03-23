@@ -27,23 +27,18 @@ class Solver:
         self.board.setBoardInfo(info, cable_range)
 
     def genRootNode(self):
-        node = Node(self.board)
-        node.val = Board.b
-        return node
+        numRouters = floor(Board.b / Board.pr)
+        pseudoSol = []
+
+        for pos in self.board.getRandomPos():
+            if len(pseudoSol) >= numRouters:
+                break
+            pseudoSol.append(pos)
+
+        return Node(self.board, pseudoSol)
 
     def stopCondition(self, current, cells_to_cover):
-        return (
-            len(current.covered) < cells_to_cover
-            and Board.b - current.getCost() > Board.pr
-        )
-
-    def isBetterSol(self, neighbor, current):
-        return neighbor.getValue() > current.getValue()
-
-    # TODO idea
-    # hill climb where acceptance passes through a probability
-    # if we don't find better solutions for a while (e.g.: 100 iters), we choose
-    # the last best
+        return len(current.covered) < cells_to_cover
 
     def hillClimbing(self):
         current = self.genRootNode()  # initial node
@@ -51,26 +46,18 @@ class Solver:
 
         while self.stopCondition(current, cells_to_cover):
             self.steps += 1
-            neighbors = current.genNeighbours()  # neighbor generator
             found_better = False
 
-            for neighbor in neighbors:
-                if self.isBetterSol(neighbor, current):
+            for neighbor in current.mutate():
+                if neighbor > current:
                     found_better = True
-                    neighbor.commit()  # update info of new chosen node
                     current = neighbor
                     break
-                else:
-                    # remove rejected nodes (they won't ever help)
-                    neighbor.cleanup()  # cleanup the unused node
-                    #  self.board.available_pos.remove(neighbor.router)
-            neighbors.close()
 
             if not found_better:
                 return current
 
-            #  if self.steps % 100 == 0:
-            #  print("Step:", self.steps, "Budget:", Board.b - current.getCost())
+            print("Step:", self.steps, "Budget:", Board.b - current.getCost())
 
         return current
 
@@ -219,15 +206,15 @@ def importSolver(filename):
 
 if __name__ == "__main__":
     #  solver = importSolver("../input/simple.in")
-    solver = importSolver("../input/charleston_road.in")
+    solver = importSolver("../input/charleston_road_small.in")
     #  solver = importSolver("../input/rue_de_londres.in")
     #  solver = importSolver("../input/opera.in")
     #  solver = importSolver("../input/lets_go_higher.in")
 
-    #  node = solver.hillClimbing()
+    node = solver.hillClimbing()
     #  node = solver.steepestDescent()
     #  node = solver.simulatedAnnealing()
-    node = solver.geneticAlgorithm()
+    #  node = solver.geneticAlgorithm()
 
     print(solver)
     print(node)

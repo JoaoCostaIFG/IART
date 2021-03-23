@@ -51,28 +51,11 @@ class Board:
             for col in range(coli, colf)
             if self.board[row][col] == "."
         ]
-        # shuffle available positions
+
+    def getRandomPos(self):
         shuffle(self.available_pos)
-
-    # filter from the available positions set the positions that
-    # aren't reachable with our current budget
-    def updateAvailablePos(self, routers, maxdist):
-        new_available_pos = set()
         for pos in self.available_pos:
-            dist = (
-                max(abs(pos[0] - self.backbone[0]), abs(pos[1] - self.backbone[1])) - 1
-            )
-            if dist <= maxdist:
-                new_available_pos.add(pos)
-                continue
-            for router in routers:
-                dist = max(abs(pos[0] - router[0]), abs(pos[1] - router[1])) - 1
-                if dist <= maxdist:
-                    new_available_pos.add(pos)
-                    break
-
-        self.available_pos = new_available_pos
-        return len(self.available_pos) - len(new_available_pos)
+            yield pos
 
     def __str__(self):
         res = "Board {}x{}\nRouter range is {}\nBackbone at {}".format(

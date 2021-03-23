@@ -49,37 +49,44 @@ from src.solver import importSolver
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
-    algorithm = selectAlgorithm()
-    file = selectInputFile()
+    solver = importSolver("input/charleston_road_small.in")
 
-    solver = importSolver(path.join(FILE_PATH, file))
-
-    if algorithm == "Hill Climbing":
-        node = solver.hillClimbing()
-    elif algorithm == "Steepest Descent":
-        node = solver.steepestDescent()
-    elif "Simulated Annealing":
-        node = solver.simulatedAnnealing()
-    elif "Genetic Algorithm":
-        node = solver.geneticAlgorithm()
-
+    node = solver.hillClimbing()
     print(solver)
-    print("\n\nDo you want to preview the map?", end=" ")
-    if getYorN():
-        print(node.__str__(True))
+    print(node.__str__(True))
+    solver.toImage("out.png", 4, node)
 
-    print("\n\nDo you want to export to png?", end=" ")
-    if getYorN():
-        print("Type the name of the image to export:", end=" ")
-        image = input()
-        if image[-4:-2] != ".png":  # append '.png' to the file name if not present
-            image += ".png"
-        solver.toImage(image, 4, node)
+    #  algorithm = selectAlgorithm()
+    #  file = selectInputFile()
 
-    print("\n\nDo you want to export the solution to a file?", end=" ")
-    if getYorN():
-        print("Type the name of the file to export:", end=" ")
-        filename = input()
-        if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
-            filename += ".txt"
-        node.toFile(filename)
+    #  solver = importSolver(path.join(FILE_PATH, file))
+
+    #  if algorithm == "Hill Climbing":
+    #  node = solver.hillClimbing()
+    #  elif algorithm == "Steepest Descent":
+    #  node = solver.steepestDescent()
+    #  elif "Simulated Annealing":
+    #  node = solver.simulatedAnnealing()
+    #  elif "Genetic Algorithm":
+    #  node = solver.geneticAlgorithm()
+
+    #  print(solver)
+    #  print("\n\nDo you want to preview the map?", end=" ")
+    #  if getYorN():
+    #  print(node.__str__(True))
+
+    #  print("\n\nDo you want to export to png?", end=" ")
+    #  if getYorN():
+    #  print("Type the name of the image to export:", end=" ")
+    #  image = input()
+    #  if image[-4:-2] != ".png":  # append '.png' to the file name if not present
+    #  image += ".png"
+    #  solver.toImage(image, 4, node)
+
+    #  print("\n\nDo you want to export the solution to a file?", end=" ")
+    #  if getYorN():
+    #  print("Type the name of the file to export:", end=" ")
+    #  filename = input()
+    #  if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
+    #  filename += ".txt"
+    #  node.toFile(filename)
