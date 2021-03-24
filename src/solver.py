@@ -37,10 +37,11 @@ class Solver:
 
         return Node(self.board, pseudoSol)
 
-    def hillClimbing(self, max_iter=200):
+    def hillClimbing(self, max_iter=400):
         current = self.genRootNode()  # initial node
 
-        while self.steps <= max_iter:
+        #  while self.steps <= max_iter:
+        while True:
             self.steps += 1
             found_better = False
 
@@ -77,7 +78,8 @@ class Solver:
     def steepestDescent(self, max_iter=50):
         current = self.genRootNode()  # initial node
 
-        while self.steps <= max_iter:
+        # while self.steps <= max_iter:
+        while True:
             self.steps += 1
             best_neighbor = self.steepestDescentMax(current)
             if best_neighbor <= current:
@@ -100,7 +102,7 @@ class Solver:
     def schedule(self, t):
         return float(t) * 0.9
 
-    def simulatedAnnealing(self, init_temp=100000.0, mk=100):
+    def simulatedAnnealing(self, init_temp=100000.0, mk=300):
         # K is our self.steps in our implementation
         t = init_temp
         current = self.genRootNode()
@@ -109,7 +111,7 @@ class Solver:
             self.steps += 1
             neighbors = current.mutate()
             for m in range(mk):
-                neighbor = next(neighbors)
+                neighbor = next(neighbors)  # TODO this can throw
                 # we choose when they are equal because delta == 0 => e = 1.0
                 if neighbor >= current:
                     current = neighbor

@@ -104,7 +104,7 @@ class Graph:
         for s, t, w in self.result:
             ret += w  # current evaluation node weight
 
-        to_visit = {0}  # start visit on root
+        to_visit = [0]  # start visit on root
         visited = set()
         while len(to_visit) != 0:
             next_node = to_visit.pop()
@@ -113,10 +113,10 @@ class Graph:
             for s, t, w in self.result:
                 if s == next_node and t not in visited:
                     visited_someone = True
-                    to_visit.add(t)
+                    to_visit.append(t)
                 elif t == next_node and s not in visited:
                     visited_someone = True
-                    to_visit.add(s)
+                    to_visit.append(s)
             if visited_someone:
                 ret += 1
 
@@ -137,7 +137,6 @@ class Graph:
         return ret
 
 
-# around 300 random points test
 if __name__ == "__main__":
     g = Graph((0, 0), [(1, 1), (5, 5), (9, 3)])
     g.kruskal()

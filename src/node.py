@@ -3,7 +3,7 @@
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
-from random import shuffle, random, randint
+from random import shuffle
 
 
 class Node:
@@ -22,44 +22,55 @@ class Node:
         self.backbones = []
         self.graph = Graph(self.board.backbone, [])
 
-    def mutateSingle(self):
-        indices = [i for i in range(len(self.routers))]
+    def mutate(self):
+        indices = [i for i in range(len(self.routers) * 8)]
         shuffle(indices)
 
-        for i in indices:  # iterate over routers
-            for pos in self.board.getRandomPos():
-                if pos in self.routers:  # no repeated routers
-                    continue
+        # Directions
+        #
+        #    7  0  1
+        #     \ | /
+        # 6 -- o  -- 2
+        #    / | \
+        #   5  4  3
+        #
+        for i in indices:  # iterate move indices
+            router_ind = i // 8
+            router = self.routers[router_ind]
+            move = i % 8
+            delta_r = delta_c = 0
+            if move == 0:
+                delta_r = -1
+            elif move == 1:
+                delta_r = -1
+                delta_c = 1
+            elif move == 2:
+                delta_c = 1
+            elif move == 3:
+                delta_r = 1
+                delta_c = 1
+            elif move == 4:
+                delta_r = 1
+            elif move == 5:
+                delta_r = 1
+                delta_c = -1
+            elif move == 6:
+                delta_c = -1
+            elif move == 7:
+                delta_r = -1
+                delta_c = -1
 
-                new_routers = self.routers.copy()
-                new_routers[i] = pos
-                yield Node(self.board, new_routers)
-
-    # generate a new mutation (for genetic algorithm)
-    def mutate(self):
-        cov_found = 0
-        for pos in self.board.getRandomPos():
-            if pos in self.routers:  # no repeated routers
+            new_pos = (router[0] + delta_r, router[1] + delta_c)
+            # only keep new pos if it isn't duplicated and is available
+            if new_pos in self.routers or new_pos not in self.board.available_pos:
                 continue
 
-            chance = random()
-
-            if pos in self.covered:
-                if chance <= 0.1 or cov_found <= len(self.covered):
-                    i = randint(0, len(self.routers) - 1)
-                    new_routers = self.routers.copy()
-                    new_routers[i] = pos
-                    yield Node(self.board, new_routers)
-            else:
-                cov_found += 1
-                if chance <= 0.9:
-                    i = randint(0, len(self.routers) - 1)
-                    new_routers = self.routers.copy()
-                    new_routers[i] = pos
-                    yield Node(self.board, new_routers)
+            new_routers = self.routers.copy()
+            new_routers[router_ind] = new_pos
+            yield Node(self.board, new_routers)
 
     # reproduce two solutions (for genetic algorithm)
-    def reproduce(self, node):
+    def crossover(self, node):
         child = Node(self.board)  # We assume that node1 and node2 are in the same board
         for i in range(0, len(self.routers), 2):  # even
             child.routers.append(self.routers[i])
