@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+from os import pardir
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
-from random import shuffle
+from random import shuffle, random
 
 
 class Solution:
@@ -71,18 +72,28 @@ class Solution:
 
     # reproduce two solutions (for genetic algorithm)
     def crossover(self, sol):
-        child = Solution(
-            self.board
-        )  # We assume that sol1 and sol2 are in the same board
-        for i in range(0, len(self.routers), 2):  # even
-            child.routers.append(self.routers[i])
-        for i in range(1, len(sol.routers), 2):  # odd
-            child.routers.append(sol.routers[i])
+        new_routers = []
+        parent1, parent2 = self, sol
+        if random() < 0.5:
+            routers1, routers2 = parent2.routers, parent1.routers
+        else:
+            routers1, routers2 = parent1.routers, parent2.routers
 
-        child.need_calcBackbone = True
-        child.getValue(True, True)
+        parent1.getValue()
+        parent2.getValue()
+        cutof = min(parent1.cutof, parent2.cutof) // 2
 
-        return child
+        # new_routers = routers1[:cutofmin] + routers2[cutofmin:cutofmax] + routers1[cutofmax:]
+        new_routers = routers1[:cutof] + routers2[cutof:]
+        available_set = set(routers1 + routers2) - set(new_routers)
+        curr_set = set()
+        for i in range(len(new_routers)):
+            if new_routers[i] not in curr_set:
+                curr_set.add(new_routers[i])
+            else:  # Repeated
+                new_routers[i] = available_set.pop()
+
+        return Solution(self.board, new_routers)
 
     # get the cost of a solution
     # the cost is given by (R * Pr + Bb * Pb), where:

@@ -160,36 +160,26 @@ class Solver:
         return current
 
     def generatePopulation(self, nPop):
-        maxBudgetRouters = floor(Board.b / Board.pr)
-        maxRouters = min(len(self.board.available_pos), maxBudgetRouters)
-
         res = []
         for i in range(nPop):
-            sol = Solution(self.board)
-            NRouters = randint(0, maxRouters)
-            gennedRouters = choices(self.board.available_pos, k=NRouters)
-            sol.routers = gennedRouters
-            sol.graph.vertices = gennedRouters  # IMP routers and vertices are the same
-            sol.need_calcBackbone = True
-            sol.getValue(True, True)
-            # yield sol
-            res.append(sol)
+            res.append(self.genInitialSol())
 
         return res
 
-    def geneticAlgorithm(self, nPop=10, it=10, mutateProb=0.2):
+    def geneticAlgorithm(self, nPop=30, it=300, mutateProb=0.2):
         population = self.generatePopulation(nPop)
         weights = [sol.getValue() for sol in population]
 
         for i in range(it):  # TODO Maybe change to time constraint?
+            print(weights)
             new_population = []
             new_weights = []
             for j in range(len(population)):
-                sol1 = choices(population, weights=weights).pop()
-                sol2 = choices(population, weights=weights).pop()
-                child = sol1.reproduce(sol2)
+                sol1 = choices(population, weights=weights)[0]
+                sol2 = choices(population, weights=weights)[0]
+                child = sol1.crossover(sol2)
                 if random() < mutateProb:
-                    child.mutate()
+                    child = next(child.mutate())
                 new_population.append(child)
                 new_weights.append(child.getValue())
             population = new_population
