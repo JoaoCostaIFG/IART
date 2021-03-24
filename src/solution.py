@@ -71,7 +71,9 @@ class Solution:
 
     # reproduce two solutions (for genetic algorithm)
     def crossover(self, sol):
-        child = Solution(self.board)  # We assume that sol1 and sol2 are in the same board
+        child = Solution(
+            self.board
+        )  # We assume that sol1 and sol2 are in the same board
         for i in range(0, len(self.routers), 2):  # even
             child.routers.append(self.routers[i])
         for i in range(1, len(sol.routers), 2):  # odd
@@ -103,8 +105,6 @@ class Solution:
         if not self.need_calc:
             return self.val
 
-        # TODO router list
-
         for router in self.routers:
             self.graph.addVertex(router)
             # +1 to cutof because of the new router
@@ -120,6 +120,8 @@ class Solution:
             new_val = (len(self.covered) + len(router_cov)) * 1000 + (
                 Board.b - new_cost
             )
+
+            # TODO if statement below is left commented, the code can be optimized
             if new_val < self.val:  # no more routers pls => stop
                 self.graph.popVertex()
                 break
@@ -137,7 +139,7 @@ class Solution:
         return self.val
 
     def getSol(self):
-        return self.routers[0:self.cutof]
+        return self.routers[0 : self.cutof]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -228,14 +230,12 @@ class Solution:
 
     # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
-        res = (
-            "Score: {}\nCells covered/Total cells: {}/{}\nRouters placed:{}\nCost: {}".format(
-                self.getValue(),
-                len(self.covered),
-                len(self.board.available_pos),
-                self.cutof,
-                self.cost,
-            )
+        res = "Score: {}\nCells covered/Total cells: {}/{}\nRouters placed:{}\nCost: {}".format(
+            self.getValue(),
+            len(self.covered),
+            len(self.board.available_pos),
+            self.cutof,
+            self.cost,
         )
 
         if draw_in_terminal:
