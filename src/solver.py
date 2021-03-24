@@ -166,17 +166,19 @@ class Solver:
 
         return res
 
-    def geneticAlgorithm(self, nPop=30, it=300, mutateProb=0.2):
+    def geneticAlgorithm(self, nPop=100, it=300, mutateProb=0.1):
         population = self.generatePopulation(nPop)
         weights = [sol.getValue() for sol in population]
 
-        for i in range(it):  # TODO Maybe change to time constraint?
-            print(weights)
-            new_population = []
-            new_weights = []
-            for j in range(len(population)):
-                sol1 = choices(population, weights=weights)[0]
-                sol2 = choices(population, weights=weights)[0]
+        for self.steps in range(it):  # TODO Maybe change to time constraint?
+            # save the previous best (elitism)
+            prev_pop_best = max(population, key=lambda sol: sol.getValue())
+            new_population = [prev_pop_best]
+            new_weights = [prev_pop_best.getValue()]
+            while len(new_population) < len(population):
+                sol1, sol2 = choices(population, weights=weights, k=2)
+                if sol1 == sol2:  # don't allow children with one self
+                    continue
                 child = sol1.crossover(sol2)
                 if random() < mutateProb:
                     child = next(child.mutate())
@@ -184,6 +186,9 @@ class Solver:
                 new_weights.append(child.getValue())
             population = new_population
             weights = new_weights
+
+            print(self.steps)
+            print(max(population, key=lambda sol: sol.getValue()).__str__(True))
 
         return max(population, key=lambda sol: sol.getValue())
 
