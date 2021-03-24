@@ -48,15 +48,15 @@ def selectAlgorithm():
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
-    solver = importSolver("input/charleston_road.in")
-    #  solver = importSolver("input/charleston_road_small.in")
+    #  solver = importSolver("input/charleston_road.in")
+    solver = importSolver("input/charleston_road_small.in")
 
-    #  node = solver.hillClimbing()
-    #  node = solver.steepestDescent()
-    node = solver.simulatedAnnealing()
+    #  sol = solver.hillClimbing()
+    #  sol = solver.steepestDescent()
+    sol = solver.simulatedAnnealing()
     print(solver)
-    print(node.__str__(True))
-    solver.toImage("out.png", 4, node)
+    print(sol.__str__(True))
+    solver.toImage("out.png", 4, sol)
 
     #  algorithm = selectAlgorithm()
     #  file = selectInputFile()
@@ -64,18 +64,18 @@ if __name__ == "__main__":
     #  solver = importSolver(path.join(FILE_PATH, file))
 
     #  if algorithm == "Hill Climbing":
-    #  node = solver.hillClimbing()
+    #  sol = solver.hillClimbing()
     #  elif algorithm == "Steepest Descent":
-    #  node = solver.steepestDescent()
+    #  sol = solver.steepestDescent()
     #  elif "Simulated Annealing":
-    #  node = solver.simulatedAnnealing()
+    #  sol = solver.simulatedAnnealing()
     #  elif "Genetic Algorithm":
-    #  node = solver.geneticAlgorithm()
+    #  sol = solver.geneticAlgorithm()
 
     #  print(solver)
     #  print("\n\nDo you want to preview the map?", end=" ")
     #  if getYorN():
-    #  print(node.__str__(True))
+    #  print(sol.__str__(True))
 
     #  print("\n\nDo you want to export to png?", end=" ")
     #  if getYorN():
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     #  image = input()
     #  if image[-4:-2] != ".png":  # append '.png' to the file name if not present
     #  image += ".png"
-    #  solver.toImage(image, 4, node)
+    #  solver.toImage(image, 4, sol)
 
     #  print("\n\nDo you want to export the solution to a file?", end=" ")
     #  if getYorN():
@@ -91,4 +91,4 @@ if __name__ == "__main__":
     #  filename = input()
     #  if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
     #  filename += ".txt"
-    #  node.toFile(filename)
+    #  sol.toFile(filename)
