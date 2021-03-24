@@ -7,8 +7,8 @@ from src.board import Board
 from random import shuffle, random
 
 
-class Node:
-    # pass a parent node (if any) and a new router that will be added to the solution
+class Solution:
+    # pass a parent sol (if any) and a new router that will be added to the solution
     def __init__(self, board, routers=[]):
         self.board = board
         self.cutof = 0  # number of routers included in solution
@@ -63,12 +63,12 @@ class Node:
 
             new_pos = (router[0] + delta_r, router[1] + delta_c)
             # only keep new pos if it isn't duplicated and is available
-            if new_pos in self.routers or new_pos not in self.board.available_pos:
+            if new_pos in self.routers or self.board.getCell(new_pos) == "#":
                 continue
 
             new_routers = self.routers.copy()
             new_routers[router_ind] = new_pos
-            yield Node(self.board, new_routers)
+            yield Solution(self.board, new_routers)
 
     # reproduce two solutions (for genetic algorithm)
     def crossover(self, node):
@@ -110,7 +110,7 @@ class Node:
 
     # calculates the value of a solution
     # If cost is higher than the budget, B, the value of the solution is 0.
-    # Otherwise, the value of a node follows the formula C * 1000 + (B - Cost),
+    # Otherwise, the value of a sol follows the formula C * 1000 + (B - Cost),
     # where C is the numbered of cells covered by at least one router.
     def getValue(self):
         if not self.need_calc:
@@ -127,15 +127,18 @@ class Node:
             if new_cost > Board.b:  # no budget for this => stop
                 self.graph.popVertex()
                 break
-            # calculate the new value using the coverage
-            cov = self.covered.union(self.board.getRouterCovered(router))
-            new_val = len(cov) * 1000 + (Board.b - new_cost)
+            # calculate the new value using the coverage of the router
+            # only counting the new covered spaces
+            router_cov = self.board.getRouterCovered(router) - self.covered
+            new_val = (len(self.covered) + len(router_cov)) * 1000 + (
+                Board.b - new_cost
+            )
             if new_val < self.val:  # no more routers pls => stop
                 self.graph.popVertex()
                 break
 
             self.cutof += 1
-            self.covered = cov
+            self.covered.update(router_cov)
             self.cost = new_cost
             self.val = new_val
 
@@ -147,7 +150,7 @@ class Node:
         return self.val
 
     def getSol(self):
-        return self.routers[0 : self.cutof]
+        return self.routers[0:self.cutof]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -238,11 +241,18 @@ class Node:
 
     # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
-        res = "Value is {}. There are {} cells covered by {} routers. The budget spent was {}\n".format(
-            self.getValue(), len(self.covered), self.cutof, self.cost
+        res = (
+            "Score: {}\nCells covered/Total cells: {}/{}\nRouters placed:{}\nCost: {}".format(
+                self.getValue(),
+                len(self.covered),
+                len(self.board.available_pos),
+                self.cutof,
+                self.cost,
+            )
         )
 
         if draw_in_terminal:
+            res += "\n"
             if self.need_calcBackbone:
                 self.calcBackbone()
 
