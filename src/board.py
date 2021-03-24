@@ -59,6 +59,9 @@ class Board:
         for pos in available_pos_list:
             yield pos
 
+    def getCell(self, pos):
+        return self[pos[0]][pos[1]]
+
     def __getitem__(self, key):
         return self.board[key]
 

@@ -5,6 +5,7 @@ from src.board import Board
 from src.node import Node
 from math import exp, floor
 from random import random, choices, randint
+from statistics import pstdev
 
 
 class Solver:
@@ -97,17 +98,29 @@ class Solver:
 
         return current
 
+    # returns the standard deviation of the value of population_size (default 400)
+    # initial solutions/states.
+    # this is used to obtain the intial temperature to use for a problem
+    def calculateInitialTemp(self, population_size=400):
+        intial_values = []
+        for i in range(population_size):
+            node = self.genRootNode()
+            intial_values.append(node.getValue())
+        return pstdev(intial_values)
+
     # returns the current temperature of the system based on the
     # initial temperature the fraction of the iterations performed
     def schedule(self, t):
-        return float(t) * 0.9
+        return float(t) * 0.90
 
-    def simulatedAnnealing(self, init_temp=100000.0, mk=300):
-        # K is our self.steps in our implementation
-        t = init_temp
+    def simulatedAnnealing(self, mk=300):
+        print("Calculating the initial temperature.")
+        t = self.calculateInitialTemp()
+        print("Initial temperature is", t)
+
         current = self.genRootNode()
 
-        while abs(t) >= 0.0001:
+        while abs(t) >= 0.001:
             self.steps += 1
             neighbors = current.mutate()
             for m in range(mk):
@@ -129,11 +142,14 @@ class Solver:
             print(
                 "Step:",
                 self.steps,
+                "Temperature",
+                t,
                 "Budget:",
                 Board.b - current.getCost(),
                 "Val:",
                 current.getValue(),
             )
+            print(current.__str__(True))
 
         return current
 

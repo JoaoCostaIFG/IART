@@ -62,7 +62,7 @@ class Node:
 
             new_pos = (router[0] + delta_r, router[1] + delta_c)
             # only keep new pos if it isn't duplicated and is available
-            if new_pos in self.routers or new_pos not in self.board.available_pos:
+            if new_pos in self.routers or self.board.getCell(new_pos) == "#":
                 continue
 
             new_routers = self.routers.copy()
@@ -115,14 +115,14 @@ class Node:
                 self.graph.popVertex()
                 break
             # calculate the new value using the coverage
-            cov = self.covered.union(self.board.getRouterCovered(router))
-            new_val = len(cov) * 1000 + (Board.b - new_cost)
+            router_cov = self.board.getRouterCovered(router)
+            new_val = (len(self.covered) + len(router_cov - self.covered)) * 1000 + (Board.b - new_cost)
             if new_val < self.val:  # no more routers pls => stop
                 self.graph.popVertex()
                 break
 
             self.cutof += 1
-            self.covered = cov
+            self.covered.update(router_cov)
             self.cost = new_cost
             self.val = new_val
 
@@ -134,7 +134,7 @@ class Node:
         return self.val
 
     def getSol(self):
-        return self.routers[0 : self.cutof]
+        return self.routers[0:self.cutof]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
