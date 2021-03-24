@@ -48,14 +48,15 @@ def selectAlgorithm():
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
-    solver = importSolver("input/charleston_road_small.in")
+    solver = importSolver("input/charleston_road.in")
 
     #  node = solver.hillClimbing()
     #  node = solver.steepestDescent()
-    node = solver.simulatedAnnealing()
+    #  node = solver.simulatedAnnealing()
+    node = solver.geneticAlgorithm()
     print(solver)
     print(node.__str__(True))
-    solver.toImage("out.png", 4, node)
+    #  solver.toImage("out.png", 4, node)
 
     #  algorithm = selectAlgorithm()
     #  file = selectInputFile()
