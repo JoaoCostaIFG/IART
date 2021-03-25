@@ -11,11 +11,11 @@ class Solution:
     # pass a parent sol (if any) and a new router that will be added to the solution
     def __init__(self, board, routers=[]):
         self.board = board
-        self.cutof = 0  # number of routers included in solution
         self.val = Board.b
         self.cost = 0
         self.covered = set()
         self.routers = routers
+        self.chosen_routers = []
 
         self.need_calc = True  # is the root => value 0
         self.need_calcBackbone = True
@@ -81,7 +81,9 @@ class Solution:
 
         parent1.getValue()
         parent2.getValue()
-        cutof = min(parent1.cutof, parent2.cutof) // 2
+        # cutof = min(parent1.cutof, parent2.cutof) // 2
+        cutof = 1 # TODO
+        print("DONT FORGET")
 
         # new_routers = routers1[:cutofmin] + routers2[cutofmin:cutofmax] + routers1[cutofmax:]
         new_routers = routers1[:cutof] + routers2[cutof:]
@@ -120,7 +122,7 @@ class Solution:
             self.graph.addVertex(router)
             # +1 to cutof because of the new router
             new_cost = (
-                self.graph.getBackboneLen() * Board.pb + (self.cutof + 1) * Board.pr
+                self.graph.getBackboneLen() * Board.pb + (len(self.getSol()) + 1) * Board.pr
             )
             if new_cost > Board.b:  # no budget for this => stop
                 self.graph.popVertex()
@@ -135,9 +137,9 @@ class Solution:
             # TODO if statement below is left commented, the code can be optimized
             if new_val < self.val:  # no more routers pls => stop
                 self.graph.popVertex()
-                break
+                continue
 
-            self.cutof += 1
+            self.chosen_routers.append(router)
             self.covered.update(router_cov)
             self.cost = new_cost
             self.val = new_val
@@ -150,7 +152,7 @@ class Solution:
         return self.val
 
     def getSol(self):
-        return self.routers[0 : self.cutof]
+        return self.chosen_routers
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -160,12 +162,12 @@ class Solution:
             if r1 == 0:
                 router1 = self.board.backbone
             else:
-                router1 = self.routers[r1 - 1]
+                router1 = self.getSol()[r1 - 1]
 
             if r2 == 0:
                 router2 = self.board.backbone
             else:
-                router2 = self.routers[r2 - 1]
+                router2 = self.getSol()[r2 - 1]
 
             coords = tuple(getCoordsBetween(router1, router2))
             self.backbones.update(coords)
@@ -206,7 +208,7 @@ class Solution:
             f.write(str(len(self.backbones)) + "\n")
             for r, c in self.backbones:
                 f.write(str(r) + " " + str(c) + "\n")
-            f.write(str(self.cutof) + "\n")
+            f.write(len(self.getSol()) + "\n")
             for r, c in self.getSol():
                 f.write(str(r) + " " + str(c) + "\n")
 
@@ -245,7 +247,7 @@ class Solution:
             self.getValue(),
             len(self.covered),
             len(self.board.available_pos),
-            self.cutof,
+            len(self.getSol()),
             self.cost,
         )
 
