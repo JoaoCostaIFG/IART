@@ -35,6 +35,7 @@ class Solution:
         #    / | \
         #   5  4  3
         #
+        # each router is allowed to move in each of these directions until an empty space if found
         for i in indices:  # iterate move indices
             router_ind = i // 8
             router = self.routers[router_ind]
@@ -252,15 +253,15 @@ class Solution:
 
     # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
-        res = "Score: {}\nCells covered/Total cells: {}/{} (-{})\nRouters placed:{}\nCost/Budget: {}/{} (-{})".format(
+        res = "Score: {}\nCells covered/Total cells: {}/{} ({})\nRouters placed: {}\nCost/Budget: {}/{} ({})".format(
             self.getValue(),
             len(self.covered),
             len(self.board.available_pos),
-            len(self.board.available_pos) - len(self.covered),
+            len(self.covered) - len(self.board.available_pos),  # negative value
             self.cutof,
             self.cost,
             Board.b,
-            Board.b - self.cost,
+            Board.b - self.cost,  # positive value
         )
 
         if draw_in_terminal:

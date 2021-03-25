@@ -113,20 +113,17 @@ class Solver:
         print("Calculating the initial temperature.")
         init_temp = self.calculateInitialTemp()
         t = init_temp
-        iter_per_temp = self.max_router_num // 2
+        iter_per_temp = self.max_router_num
         print(
             "Initial temperature is {}. Doing {} iteration(s) per temperature.".format(
                 t, iter_per_temp
             )
         )
 
-        prev_result = 0
-        stale_cnt = 0
-        reheats = 0
         current = self.genInitialSol()
         best = current
 
-        while abs(t) >= 0.01:
+        while abs(t) >= 0.1:
             self.steps += 1
             neighbors = current.mutate()
             # for each temperature iterate max_router_num times
@@ -149,21 +146,9 @@ class Solver:
             # cool down
             t = self.schedule(t)
 
-            # if the solutions start getting stale, we reheat the environment
-            if abs(prev_result - current.getValue()) <= 10:
-                stale_cnt += 1
-            else:
-                stale_cnt = 0
-            if stale_cnt >= 4:
-                print("Reheating")
-                reheats += 1
-                t += init_temp * 0.01
-            prev_result = current.getValue()
-
             print("Temperature:", t, end=" - ")
             self.logIteration(current)
 
-        print("Reheats:", reheats)
         return best
 
     def generatePopulation(self, nPop):
