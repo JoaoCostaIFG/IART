@@ -4,6 +4,10 @@ from random import shuffle
 
 
 class Board:
+    EmptySquare = "."
+    VoidSquare = "-"
+    WallSquare = "#"
+
     pb = 0
     pr = 0
     b = 0
@@ -36,7 +40,7 @@ class Board:
         colf = min(self.w, self.backbone[1] + wall_range + 1)
         for row in range(rowi, rowf):
             for col in range(coli, colf):
-                if self.board[row][col] == "#":
+                if self.board[row][col] == Board.WallSquare:
                     self.walls.add((row, col))
 
         cable_range = round(cable_range)
@@ -50,7 +54,7 @@ class Board:
             (row, col)
             for row in range(rowi, rowf)
             for col in range(coli, colf)
-            if self.board[row][col] == "."
+            if self.board[row][col] == Board.EmptySquare
         }
 
     def getRandomPos(self):
@@ -59,8 +63,14 @@ class Board:
         for pos in available_pos_list:
             yield pos
 
-    def getCell(self, pos):
-        return self[pos[0]][pos[1]]
+    def isCellInsideBoard(self, cell):
+        return cell[0] > 0 and cell[0] < self.h and cell[1] > 0 and cell[1] < self.w
+
+    def getCell(self, cell):
+        return self[cell[0]][cell[1]]
+
+    def isEmptyCell(self, cell):
+        return self.getCell(cell) == Board.EmptySquare
 
     def __getitem__(self, key):
         return self.board[key]
@@ -78,7 +88,7 @@ class Board:
         colf = min(self.w, router[1] + self.r + 1)
         for row in range(rowi, rowf):
             for col in range(coli, colf):
-                if self[row][col] != ".":  # check if is available pos
+                if self[row][col] != Board.EmptySquare:  # check if is available pos
                     continue
 
                 has_wall = False
@@ -113,9 +123,9 @@ class Board:
             for c in range(self.w):
                 if (r, c) == self.backbone:
                     next_pixel = (0x30, 0x0, 0x17)
-                elif self.board[r][c] == ".":
+                elif self.board[r][c] == Board.EmptySquare:
                     next_pixel = (0x14, 0x69, 0xC7)
-                elif self.board[r][c] == "#":
+                elif self.board[r][c] == Board.WallSquare:
                     next_pixel = (0xFF, 0xE1, 0x00)
                 else:
                     next_pixel = (0x17, 0x17, 0x17)

@@ -61,13 +61,24 @@ class Solution:
                 delta_r = -1
                 delta_c = -1
 
-            new_pos = (router[0] + delta_r, router[1] + delta_c)
-            # only keep new pos if it isn't duplicated and is available
-            if new_pos in self.routers or self.board.getCell(new_pos) == "#":
+            # find first empty space in that direction
+            new_pos = [router[0] + delta_r, router[1] + delta_c]
+            while self.board.isCellInsideBoard(new_pos) and not self.board.isEmptyCell(
+                new_pos
+            ):
+                new_pos[0] += delta_r
+                new_pos[1] += delta_c
+
+            # only keep new pos if it isn't duplicated and is available (inside the board and empty space)
+            if (
+                new_pos in self.routers
+                or not self.board.isCellInsideBoard(new_pos)
+                or not self.board.isEmptyCell(new_pos)
+            ):
                 continue
 
             new_routers = self.routers.copy()
-            new_routers[router_ind] = new_pos
+            new_routers[router_ind] = tuple(new_pos)
             yield Solution(self.board, new_routers)
 
     # reproduce two solutions (for genetic algorithm)
@@ -241,31 +252,38 @@ class Solution:
 
     # if the argument 'draw_in_terminal' is True, the solution is drawn in the terminal
     def __str__(self, draw_in_terminal=False):
-        res = "Score: {}\nCells covered/Total cells: {}/{}\nRouters placed:{}\nCost: {}".format(
+        res = "Score: {}\nCells covered/Total cells: {}/{} (-{})\nRouters placed:{}\nCost/Budget: {}/{} (-{})".format(
             self.getValue(),
             len(self.covered),
             len(self.board.available_pos),
+            len(self.board.available_pos) - len(self.covered),
             self.cutof,
             self.cost,
+            Board.b,
+            Board.b - self.cost,
         )
 
         if draw_in_terminal:
+            res += "\n\n" + self.drawInTerminal()
+
+        return res
+
+    def drawInTerminal(self):
+        res = ""
+        if self.need_calcBackbone:
+            self.calcBackbone()
+
+        for x in range(self.board.h):  # For each row
+            for y in range(self.board.w):  # For each cell
+                if (x, y) == self.board.backbone:
+                    res += "B"
+                elif (x, y) in self.getSol():
+                    res += "R"
+                elif (x, y) in self.backbones:
+                    res += "b"
+                elif (x, y) in self.covered:
+                    res += ":"
+                else:
+                    res += self.board.board[x][y]
             res += "\n"
-            if self.need_calcBackbone:
-                self.calcBackbone()
-
-            for x in range(self.board.h):  # For each row
-                for y in range(self.board.w):  # For each cell
-                    if (x, y) == self.board.backbone:
-                        res += "B"
-                    elif (x, y) in self.getSol():
-                        res += "R"
-                    elif (x, y) in self.backbones:
-                        res += "b"
-                    elif (x, y) in self.covered:
-                        res += ":"
-                    else:
-                        res += self.board.board[x][y]
-                res += "\n"
-
         return res

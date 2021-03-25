@@ -4,7 +4,7 @@ import src.png as png
 from src.board import Board
 from src.solution import Solution
 from math import exp, floor
-from random import random, choices, randint
+from random import random, choices
 from statistics import pstdev
 
 
@@ -38,6 +38,18 @@ class Solver:
 
         return Solution(self.board, pseudoSol)
 
+    def logIteration(self, currentSol=None):
+        print(
+            "Step: {} - Cost/Budget: {}/{} - Score: {}".format(
+                self.steps, currentSol.getCost(), Board.b, currentSol.getValue()
+            )
+        )
+
+        if currentSol and self.steps % 10 == 0:
+            print("--------------------------------------------------------------------------------")
+            print(currentSol.__str__(True))
+            print("--------------------------------------------------------------------------------")
+
     def hillClimbing(self):
         current = self.genInitialSol()  # initial sol
 
@@ -54,15 +66,7 @@ class Solver:
 
             if not found_better:
                 return current
-
-            print(
-                "Step:",
-                self.steps,
-                "Budget:",
-                Board.b - current.getCost(),
-                "Val:",
-                current.getValue(),
-            )
+            self.logIteration(current)
 
         return current
 
@@ -82,19 +86,11 @@ class Solver:
         # while self.steps <= max_iter:
         while True:
             self.steps += 1
-            best_neighbor = self.steepestDescentMax(current)
+            best_neighbor = max(current.mutate())
             if best_neighbor <= current:
                 return current
             current = best_neighbor
-
-            print(
-                "Step:",
-                self.steps,
-                "Budget:",
-                Board.b - current.getCost(),
-                "Val:",
-                current.getValue(),
-            )
+            self.logIteration(current)
 
         return current
 
@@ -115,15 +111,20 @@ class Solver:
 
     def simulatedAnnealing(self):
         print("Calculating the initial temperature.")
-        t = self.calculateInitialTemp()
-        iter_per_temp = self.max_router_num * 2
+        init_temp = self.calculateInitialTemp()
+        t = init_temp
+        iter_per_temp = self.max_router_num // 2
         print(
             "Initial temperature is {}. Doing {} iteration(s) per temperature.".format(
                 t, iter_per_temp
             )
         )
 
+        prev_result = 0
+        stale_cnt = 0
+        reheats = 0
         current = self.genInitialSol()
+        best = current
 
         while abs(t) >= 0.01:
             self.steps += 1
@@ -142,22 +143,28 @@ class Solver:
                     if random() <= e:
                         current = neighbor
                         neighbors = current.mutate()
+                # save best solution we got so far
+                if current > best:
+                    best = current
             # cool down
             t = self.schedule(t)
 
-            print(
-                "Step:",
-                self.steps,
-                "Temperature",
-                t,
-                "Budget:",
-                Board.b - current.getCost(),
-                "Val:",
-                current.getValue(),
-            )
-            print(current.__str__(True))
+            # if the solutions start getting stale, we reheat the environment
+            if abs(prev_result - current.getValue()) <= 10:
+                stale_cnt += 1
+            else:
+                stale_cnt = 0
+            if stale_cnt >= 4:
+                print("Reheating")
+                reheats += 1
+                t += init_temp * 0.01
+            prev_result = current.getValue()
 
-        return current
+            print("Temperature:", t, end=" - ")
+            self.logIteration(current)
+
+        print("Reheats:", reheats)
+        return best
 
     def generatePopulation(self, nPop):
         res = []
@@ -187,8 +194,7 @@ class Solver:
             population = new_population
             weights = new_weights
 
-            print(self.steps)
-            print(max(population, key=lambda sol: sol.getValue()).__str__(True))
+            self.logIteration(max(population, key=lambda sol: sol.getValue()))
 
         return max(population, key=lambda sol: sol.getValue())
 
