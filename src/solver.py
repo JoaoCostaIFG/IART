@@ -64,8 +64,6 @@ class Solver:
                 current.getValue(),
             )
 
-            print(current.__str__(True))
-
         return current
 
     def steepestDescentMax(self, sol):
