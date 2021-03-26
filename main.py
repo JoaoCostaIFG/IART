@@ -53,8 +53,8 @@ if __name__ == "__main__":
 
     #  sol = solver.hillClimbing()
     #  sol = solver.steepestDescent()
-    sol = solver.simulatedAnnealing()
-    #  sol = solver.geneticAlgorithm()
+    #  sol = solver.simulatedAnnealing()
+    sol = solver.geneticAlgorithm()
     print(solver)
     print(sol.__str__(True))
     #  solver.toImage("out.png", 4, sol)

@@ -46,9 +46,7 @@ class Solver:
         )
 
         if currentSol and self.steps % 10 == 0:
-            print("--------------------------------------------------------------------------------")
-            print(currentSol.__str__(True))
-            print("--------------------------------------------------------------------------------")
+            print(currentSol.__str__(True), end="\n\n")
 
     def hillClimbing(self):
         current = self.genInitialSol()  # initial sol
@@ -109,9 +107,9 @@ class Solver:
     def schedule(self, t):
         return float(t) * 0.90
 
-    def simulatedAnnealing(self):
+    def simulatedAnnealing(self, min_temp=0.1, random_restart_chance=0.1):
         print("Calculating the initial temperature.")
-        init_temp = self.calculateInitialTemp()
+        init_temp = self.calculateInitialTemp() // (4 / 3)
         t = init_temp
         iter_per_temp = self.max_router_num
         print(
@@ -122,8 +120,8 @@ class Solver:
 
         current = self.genInitialSol()
         best = current
-
-        while abs(t) >= 0.1:
+        best_temp = t
+        while True:
             self.steps += 1
             neighbors = current.mutate()
             # for each temperature iterate max_router_num times
@@ -143,11 +141,28 @@ class Solver:
                 # save best solution we got so far
                 if current > best:
                     best = current
+                    best_temp = t
             # cool down
             t = self.schedule(t)
 
+            # random restart
+            if random() < random_restart_chance:
+                print("Restarting")
+                current = best
+                t = best_temp
+
             print("Temperature:", t, end=" - ")
             self.logIteration(current)
+
+            # stop condition
+            if abs(t) <= min_temp:  # this is the final iteration
+                # if we had a better solution, go back and try again
+                if current.getValue() < best.getValue():
+                    print("Restarting")
+                    current = best
+                    t = best_temp
+                else:
+                    break
 
         return best
 
@@ -158,7 +173,7 @@ class Solver:
 
         return res
 
-    def geneticAlgorithm(self, nPop=100, it=300, mutateProb=0.1):
+    def geneticAlgorithm(self, nPop=100, it=300, mutateProb=0.5):
         population = self.generatePopulation(nPop)
         weights = [sol.getValue() for sol in population]
 

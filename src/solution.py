@@ -4,7 +4,7 @@ from os import pardir
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
-from random import shuffle, random
+from random import shuffle, random, randint
 
 
 class Solution:
@@ -36,6 +36,7 @@ class Solution:
         #   5  4  3
         #
         # each router is allowed to move in each of these directions until an empty space if found
+        #
         for i in indices:  # iterate move indices
             router_ind = i // 8
             router = self.routers[router_ind]
@@ -85,25 +86,46 @@ class Solution:
     # reproduce two solutions (for genetic algorithm)
     def crossover(self, sol):
         new_routers = []
-        parent1, parent2 = self, sol
         if random() < 0.5:
-            routers1, routers2 = parent2.routers, parent1.routers
+            parent1, parent2 = self, sol
         else:
-            routers1, routers2 = parent1.routers, parent2.routers
+            parent1, parent2 = sol, self
 
-        parent1.getValue()
-        parent2.getValue()
-        cutof = min(parent1.cutof, parent2.cutof) // 2
+        # solutions of both routers
+        sol1 = parent1.getSol()
+        sol2 = parent2.getSol()
 
-        # new_routers = routers1[:cutofmin] + routers2[cutofmin:cutofmax] + routers1[cutofmax:]
-        new_routers = routers1[:cutof] + routers2[cutof:]
-        available_set = set(routers1 + routers2) - set(new_routers)
-        curr_set = set()
-        for i in range(len(new_routers)):
-            if new_routers[i] not in curr_set:
-                curr_set.add(new_routers[i])
-            else:  # Repeated
-                new_routers[i] = available_set.pop()
+        # random order list of routers inside cutof of both solutions
+        new_routers = sol1.copy()
+        for r in sol2:
+            if r not in new_routers:
+                new_routers.append(r)
+        shuffle(new_routers)
+
+        i = 0
+        cromossome_len = len(parent1.routers)
+        while len(new_routers) < cromossome_len:
+            r1 = parent1.routers[parent1.cutof + i]
+            r2 = parent2.routers[parent1.cutof + i]
+            if r1 not in new_routers:
+                new_routers.append(r1)
+            # verify len again because the previous append might have changed it
+            if r2 not in new_routers and len(new_routers) < cromossome_len:
+                new_routers.append(r2)
+            i += 1
+
+        # garantee that parents have done all the needed calculations
+        #  cutof = min(parent1.cutof, parent2.cutof) // 2
+
+        #  # new_routers = routers1[:cutofmin] + routers2[cutofmin:cutofmax] + routers1[cutofmax:]
+        #  new_routers = routers1[:cutof] + routers2[cutof:]
+        #  available_set = set(routers1 + routers2) - set(new_routers)
+        #  curr_set = set()
+        #  for i in range(len(new_routers)):
+        #  if new_routers[i] not in curr_set:
+        #  curr_set.add(new_routers[i])
+        #  else:  # Repeated
+        #  new_routers[i] = available_set.pop()
 
         return Solution(self.board, new_routers)
 
