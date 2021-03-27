@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from random import shuffle
+from random import choice, shuffle
 
 
 class Board:
@@ -50,17 +50,20 @@ class Board:
         # +1 because python range's interval is open on the right hand side
         rowf = min(self.h, self.backbone[0] + cable_range + 1)
         colf = min(self.w, self.backbone[1] + cable_range + 1)
-        self.available_pos = {
+        self.available_pos = [
             (row, col)
             for row in range(rowi, rowf)
             for col in range(coli, colf)
             if self.board[row][col] == Board.EmptySquare
-        }
+        ]
+
+    def getRandomPosOnce(self):
+        shuffle(self.available_pos)
+        return choice(self.available_pos)
 
     def getRandomPos(self):
-        available_pos_list = list(self.available_pos)
-        shuffle(available_pos_list)
-        for pos in available_pos_list:
+        shuffle(self.available_pos)
+        for pos in self.available_pos:
             yield pos
 
     def isCellInsideBoard(self, cell):

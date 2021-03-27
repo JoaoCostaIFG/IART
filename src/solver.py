@@ -48,14 +48,17 @@ class Solver:
         if currentSol and self.steps % 10 == 0:
             print(currentSol.__str__(True), end="\n\n")
 
-    def hillClimbing(self):
-        current = self.genInitialSol()  # initial sol
+    def hillClimbing(self, current=None):
+        print("Stochastic hillclimbing")
+        if not current:
+            current = self.genInitialSol()  # initial sol
 
         #  while self.steps <= max_iter:
         while True:
             self.steps += 1
             found_better = False
 
+            i = 0
             for neighbor in current.mutate():
                 if neighbor > current:
                     found_better = True
@@ -78,8 +81,10 @@ class Solver:
 
         return best_neighbor
 
-    def steepestDescent(self):
-        current = self.genInitialSol()  # initial sol
+    def steepestDescent(self, current=None):
+        print("Steepest Descent hillclimbing")
+        if not current:
+            current = self.genInitialSol()  # initial sol
 
         # while self.steps <= max_iter:
         while True:
@@ -107,7 +112,12 @@ class Solver:
     def schedule(self, t):
         return float(t) * 0.90
 
-    def simulatedAnnealing(self, min_temp=0.1, random_restart_chance=0.1):
+    def simulatedAnnealing(self, current=None, min_temp=0.1, random_restart_chance=0.1):
+        print(
+            "Simulated Annealing. min_temp: {}. random restart chance: {}".format(
+                min_temp, random_restart_chance
+            )
+        )
         print("Calculating the initial temperature.")
         init_temp = self.calculateInitialTemp() // (4 / 3)
         t = init_temp
@@ -118,7 +128,8 @@ class Solver:
             )
         )
 
-        current = self.genInitialSol()
+        if not current:
+            current = self.genInitialSol()
         best = current
         best_temp = t
         while True:
@@ -173,7 +184,12 @@ class Solver:
 
         return res
 
-    def geneticAlgorithm(self, nPop=100, it=300, mutateProb=0.5):
+    def geneticAlgorithm(self, nPop=100, it=100, mutateProb=0.1):
+        print(
+            "Genetic algorithm. Population size: {}. Iterations: {}. Mutation probability: {}.".format(
+                nPop, it, mutateProb
+            )
+        )
         population = self.generatePopulation(nPop)
         weights = [sol.getValue() for sol in population]
 

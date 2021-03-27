@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from os import pardir
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
@@ -85,6 +84,66 @@ class Solution:
 
     # reproduce two solutions (for genetic algorithm)
     def crossover(self, sol):
+        # calculate rectangle
+        rect_size = [
+            randint(self.board.h // 40, self.board.h // 5),
+            randint(self.board.w // 40, self.board.w // 5),
+        ]
+        rect_center = self.board.getRandomPosOnce()
+        rect_corner_tl = [
+            max(0, rect_center[0] - (rect_size[0] // 2)),
+            max(0, rect_center[1] - (rect_size[1] // 2)),
+        ]
+        rect_corner_br = [
+            min(self.board.h, rect_corner_tl[0] + rect_size[0]),
+            min(self.board.w, rect_corner_tl[1] + rect_size[1]),
+        ]
+
+        def insideSquare(r):
+            return (
+                r[0] >= rect_corner_tl[0]
+                and r[0] <= rect_corner_br[0]
+                and r[1] >= rect_corner_tl[1]
+                and r[1] <= rect_corner_br[1]
+            )
+
+        def outsideSquare(r):
+            return (
+                r[0] < rect_corner_tl[0]
+                or r[0] > rect_corner_br[0]
+                or r[1] < rect_corner_tl[1]
+                or r[1] > rect_corner_br[1]
+            )
+
+        if random() < 0.5:
+            parent1, parent2 = self, sol
+        else:
+            parent1, parent2 = sol, self
+
+        # solutions of both routers
+        sol1 = parent1.getSol()
+        sol2 = parent2.getSol()
+
+        # list of routers inside square in parent 1 and outside square in parent 2
+        new_routers = list(filter(lambda r: insideSquare(r), sol1)) + list(
+            filter(lambda r: outsideSquare(r), sol2)
+        )
+
+        i = 0
+        cromossome_len = len(parent1.routers)
+        while len(new_routers) < cromossome_len:
+            r1 = parent1.routers[i]
+            r2 = parent2.routers[i]
+            if r1 not in new_routers:
+                new_routers.append(r1)
+            # verify len again because the previous append might have changed it
+            if r2 not in new_routers and len(new_routers) < cromossome_len:
+                new_routers.append(r2)
+            i += 1
+
+        return Solution(self.board, new_routers)
+
+    def crossover2(self, sol):
         new_routers = []
         if random() < 0.5:
             parent1, parent2 = self, sol
@@ -113,19 +172,6 @@ class Solution:
             if r2 not in new_routers and len(new_routers) < cromossome_len:
                 new_routers.append(r2)
             i += 1
-
-        # garantee that parents have done all the needed calculations
-        #  cutof = min(parent1.cutof, parent2.cutof) // 2
-
-        #  # new_routers = routers1[:cutofmin] + routers2[cutofmin:cutofmax] + routers1[cutofmax:]
-        #  new_routers = routers1[:cutof] + routers2[cutof:]
-        #  available_set = set(routers1 + routers2) - set(new_routers)
-        #  curr_set = set()
-        #  for i in range(len(new_routers)):
-        #  if new_routers[i] not in curr_set:
-        #  curr_set.add(new_routers[i])
-        #  else:  # Repeated
-        #  new_routers[i] = available_set.pop()
 
         return Solution(self.board, new_routers)
 
