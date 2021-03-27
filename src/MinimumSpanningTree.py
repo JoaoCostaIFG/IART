@@ -20,14 +20,12 @@ class Graph:
 
         # sort all the edges in non-decreasing order of their weight.
         # root is always node 0
-        self.graph = sorted(
-            [
-                (i, j, self.calcWeigth(self[i], self[j]))
-                for i in range(len(self))
-                for j in range(i + 1, len(self))
-            ],
-            key=itemgetter(2),
-        )
+        self.graph = [
+            (i, j, self.calcWeigth(self[i], self[j]))
+            for i in range(len(self))
+            for j in range(i + 1, len(self))
+        ]
+        self.graph.sort(key=itemgetter(2))
 
     # find set of an element i (uses path compression technique)
     def find(self, parent, i):
@@ -84,11 +82,10 @@ class Graph:
         return -1
 
     def addVertex(self, v):
-        self.graph = sorted(
-            self.result
-            + [(len(self), i, self.calcWeigth(v, self[i])) for i in range(len(self))],
-            key=itemgetter(2),
-        )
+        self.graph = self.result + [
+            (len(self), i, self.calcWeigth(v, self[i])) for i in range(len(self))
+        ]
+        self.graph.sort(key=itemgetter(2))
 
         self.vertices.append(v)
 
@@ -138,6 +135,9 @@ class Graph:
 
 
 if __name__ == "__main__":
-    g = Graph((0, 0), [(1, 1), (5, 5), (9, 3)])
+    g = Graph(
+        (0, 0),
+        [(66, 41), (43, 24), (75, 79), (56, 37)],
+    )
     g.kruskal()
     print(g)
