@@ -17,6 +17,15 @@ def annealingParse(line):
     score = int(contents[-1].replace("\n", ""))
     return (step, temperature, cost, score)
 
+def geneticParse(line):
+    contents = line.split(" ")
+    print(contents)
+    temperature = float(contents[1])
+    step = int(contents[4])
+    cost = int(contents[7].split("/")[0])
+    score = int(contents[-1].replace("\n", ""))
+    return (step, temperature, cost, score)
+
 
 def parse(FIELDS, parseFunc, file):
     filename = path.join("results", file)
@@ -54,11 +63,20 @@ def plot(data, colors):
     #plt.yticks(np.arange(min(z), max(z), max(z)/80))
     plt.show()
 
+# HillClimbing
 res1 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh.txt")
 res2 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh2.txt")
 res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh3.txt")
-colors = {"cost" : ["orange", "blue", "green"], "score" : ["orange", "blue", "green"]}
-# res = parse(["steps", "temperature", "cost", "score"], annealingParse, "an.txt")
-# colors = {"temperature": "red", "cost" : "blue", "score" : "green"}
-# print(res)
+
+# Genetic
+# res1 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "gn.txt")
+# res2 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "gn2.txt")
+# res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "gn3.txt")
+
+# Annealing
+# res1 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an.txt")
+# res2 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an2.txt")
+# res3 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an3.txt")
+
+colors = {"cost" : ["orange", "blue", "green"], "score" : ["orange", "blue", "green"], "temperature" : ["orange", "blue", "green"]}
 plot((res1, res2, res3), colors)
