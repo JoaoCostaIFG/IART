@@ -64,9 +64,9 @@ def plot(data, colors):
     plt.show()
 
 # HillClimbing
-res1 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh.txt")
-res2 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh2.txt")
-res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh3.txt")
+# res1 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh.txt")
+# res2 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh2.txt")
+# res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh3.txt")
 
 # Genetic
 # res1 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "gn.txt")
@@ -74,9 +74,9 @@ res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "sh3.txt")
 # res3 = parse(["steps", "cost", "score"], stocasticHillclimbingParse, "gn3.txt")
 
 # Annealing
-# res1 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an.txt")
-# res2 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an2.txt")
-# res3 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an3.txt")
+res1 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an.txt")
+res2 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an2.txt")
+res3 = parse(["steps", "temperature", "cost", "score"], annealingParse, "an3.txt")
 
 colors = {"cost" : ["orange", "blue", "green"], "score" : ["orange", "blue", "green"], "temperature" : ["orange", "blue", "green"]}
 plot((res1, res2, res3), colors)
