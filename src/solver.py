@@ -119,7 +119,7 @@ class Solver:
     def schedule(self, t):
         return float(t) * 0.90
 
-    def simulatedAnnealing(self, current=None, min_temp=0.1, random_restart_chance=0.1):
+    def simulatedAnnealing(self, current=None, min_temp=0.1, random_restart_chance=0.05):
         print(
             "Simulated Annealing. min_temp: {}. random restart chance: {}".format(
                 min_temp, random_restart_chance

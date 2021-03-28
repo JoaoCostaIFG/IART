@@ -3,7 +3,7 @@
 from src.MinimumSpanningTree import Graph
 from src.utils import getCoordsBetween
 from src.board import Board
-from random import shuffle, random, randint
+from random import shuffle, random, randrange
 
 
 class Solution:
@@ -22,6 +22,7 @@ class Solution:
         self.backbones = []
         self.graph = Graph(self.board.backbone, [])
 
+    # returns a generator for the neighborhood of this Solution
     def mutate(self):
         indices = [i for i in range(len(self.routers) * 8)]
         shuffle(indices)
@@ -41,24 +42,24 @@ class Solution:
             router = self.routers[router_ind]
             move = i % 8
             delta_r = delta_c = 0
-            if move == 0:
+            if move == 0:  # North
                 delta_r = -1
-            elif move == 1:
+            elif move == 1:  # North-East
                 delta_r = -1
                 delta_c = 1
-            elif move == 2:
+            elif move == 2:  # East
                 delta_c = 1
-            elif move == 3:
+            elif move == 3:  # South-East
                 delta_r = 1
                 delta_c = 1
-            elif move == 4:
+            elif move == 4:  # South
                 delta_r = 1
-            elif move == 5:
+            elif move == 5:  # South-West
                 delta_r = 1
                 delta_c = -1
-            elif move == 6:
+            elif move == 6:  # West
                 delta_c = -1
-            elif move == 7:
+            elif move == 7:  # North-West
                 delta_r = -1
                 delta_c = -1
 
@@ -83,11 +84,12 @@ class Solution:
             yield Solution(self.board, new_routers)
 
     # reproduce two solutions (for genetic algorithm)
+    # using squares
     def crossover(self, sol):
-        # calculate rectangle
+        # calculate rectangle that will separate te vertices
         rect_size = [
-            randint(self.board.h // 40, self.board.h // 5),
-            randint(self.board.w // 40, self.board.w // 5),
+            randrange(self.board.h // 40, self.board.h // 5),
+            randrange(self.board.w // 40, self.board.w // 5),
         ]
         rect_center = self.board.getRandomPosOnce()
         rect_corner_tl = [
@@ -99,6 +101,7 @@ class Solution:
             min(self.board.w, rect_corner_tl[1] + rect_size[1]),
         ]
 
+        # checks if cell is inside the square calculated above
         def insideSquare(r):
             return (
                 r[0] >= rect_corner_tl[0]
@@ -107,6 +110,7 @@ class Solution:
                 and r[1] <= rect_corner_br[1]
             )
 
+        # checks if cell is outside the square calculated above
         def outsideSquare(r):
             return (
                 r[0] < rect_corner_tl[0]
@@ -115,6 +119,7 @@ class Solution:
                 or r[1] > rect_corner_br[1]
             )
 
+        # randomly attribute an order to the parents
         if random() < 0.5:
             parent1, parent2 = self, sol
         else:
@@ -129,21 +134,43 @@ class Solution:
             filter(lambda r: outsideSquare(r), sol2)
         )
 
-        i = 0
         cromossome_len = len(parent1.routers)
-        while len(new_routers) < cromossome_len:
-            r1 = parent1.routers[i]
-            r2 = parent2.routers[i]
-            if r1 not in new_routers:
-                new_routers.append(r1)
-            # verify len again because the previous append might have changed it
-            if r2 not in new_routers and len(new_routers) < cromossome_len:
-                new_routers.append(r2)
-            i += 1
+        if len(new_routers) > cromossome_len:
+            # pop extra routers (need to mainting the cromossome length)
+            new_routers = new_routers[:cromossome_len]
+        else:
+            # pad the cromossome with routers from the parents in order to have all
+            # the cromossomes be the same size
+            i = 0
+            while len(new_routers) < cromossome_len:
+                r1 = parent1.routers[i]
+                r2 = parent2.routers[i]
+                if r1 not in new_routers:
+                    new_routers.append(r1)
+                # verify len again because the previous append might have changed it
+                if r2 not in new_routers and len(new_routers) < cromossome_len:
+                    new_routers.append(r2)
+                i += 1
 
         return Solution(self.board, new_routers)
 
+    # reproduce two solutions (for genetic algorithm)
+    # using single point crossover
     def crossover2(self, sol):
+        if random() < 0.5:
+            parent1, parent2 = self, sol
+        else:
+            parent1, parent2 = sol, self
+
+        # single point crossover
+        point = randrange(0, len(parent1.routers))
+
+        new_routers = parent1.routers[0:point] + parent2.routers[point:]
+        return Solution(self.board, new_routers)
+
+    # reproduce two solutions (for genetic algorithm)
+    # using random interleave of parents
+    def crossover3(self, sol):
         new_routers = []
         if random() < 0.5:
             parent1, parent2 = self, sol
@@ -192,7 +219,7 @@ class Solution:
     # If cost is higher than the budget, B, the value of the solution is 0.
     # Otherwise, the value of a sol follows the formula C * 1000 + (B - Cost),
     # where C is the numbered of cells covered by at least one router.
-    def getValue(self):
+    def getValue(self, stop_on_val=True):
         if not self.need_calc:
             return self.val
 
@@ -212,8 +239,13 @@ class Solution:
                 Board.b - new_cost
             )
 
-            # TODO if statement below is left commented, the code can be optimized
-            if new_val < self.val:  # no more routers pls => stop
+            # IMPORTANT if the statement below is left commented, the code can
+            # be optimized in other ways, e.g.: inserting an initial batch of routers
+            # for the first kruskal
+
+            # We trim the solution when we find a bad router for performance reasons
+            # this also allows the algortihms to run without trying to brute-force things
+            if stop_on_val and new_val < self.val:  # no more routers pls => stop
                 self.graph.popVertex()
                 break
 
@@ -229,6 +261,7 @@ class Solution:
 
         return self.val
 
+    # return the array of routers that is part of the solution
     def getSol(self):
         return self.routers[0 : self.cutof]
 

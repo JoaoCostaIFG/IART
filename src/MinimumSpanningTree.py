@@ -50,6 +50,7 @@ class Graph:
             parent[yroot] = xroot
             rank[xroot] += 1
 
+    # calculate the minimum spanning tree
     def kruskal(self):
         self.prev_result = self.result
         self.result = []
@@ -75,12 +76,7 @@ class Graph:
                 self.result.append((u, v, w))
                 self.union(parent, rank, x, y)
 
-    def getInd(self, v):
-        for i in range(len(self)):
-            if self[i] == v:
-                return i
-        return -1
-
+    # add a vertex to the vertex
     def addVertex(self, v):
         self.graph = self.result + [
             (len(self), i, self.calcWeigth(v, self[i])) for i in range(len(self))
@@ -89,11 +85,14 @@ class Graph:
 
         self.vertices.append(v)
 
+    # pop the last vertex from the graph
     def popVertex(self):
         self.result = self.prev_result
         if len(self.vertices) > 0:
             self.vertices.pop()
 
+    # calculates the minimum spanning tree and use the result to
+    # calculate the backbones needed to connect everything
     def getBackboneLen(self):
         self.kruskal()
 
