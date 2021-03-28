@@ -1,0 +1,230 @@
+Simulated Annealing. min_temp: 0.1. random restart chance: 0.1
+Calculating the initial temperature.
+Initial temperature is 2327994.0. Doing 299 iteration(s) per temperature.
+Temperature: 2095194.6 - Step: 1 - Cost/Budget: 2070/29907 - Score: 4573837
+Temperature: 1885675.1400000001 - Step: 2 - Cost/Budget: 2066/29907 - Score: 4505841
+Temperature: 1697107.6260000002 - Step: 3 - Cost/Budget: 2063/29907 - Score: 4505844
+Temperature: 1527396.8634000001 - Step: 4 - Cost/Budget: 4804/29907 - Score: 9325103
+Temperature: 1374657.1770600001 - Step: 5 - Cost/Budget: 4797/29907 - Score: 9551110
+Temperature: 1237191.4593540002 - Step: 6 - Cost/Budget: 6185/29907 - Score: 11980722
+Temperature: 1113472.3134186002 - Step: 7 - Cost/Budget: 6185/29907 - Score: 12170722
+Temperature: 1002125.0820767402 - Step: 8 - Cost/Budget: 6188/29907 - Score: 12050719
+Temperature: 901912.5738690662 - Step: 9 - Cost/Budget: 6721/29907 - Score: 12927186
+Temperature: 811721.3164821595 - Step: 10 - Cost/Budget: 7691/29907 - Score: 13874216
+Temperature: 730549.1848339436 - Step: 11 - Cost/Budget: 8113/29907 - Score: 14697794
+Restarting
+Temperature: 730549.1848339436 - Step: 12 - Cost/Budget: 8111/29907 - Score: 14712796
+Temperature: 657494.2663505493 - Step: 13 - Cost/Budget: 8111/29907 - Score: 14604796
+Temperature: 591744.8397154944 - Step: 14 - Cost/Budget: 8738/29907 - Score: 15419169
+Restarting
+Temperature: 591744.8397154944 - Step: 15 - Cost/Budget: 8738/29907 - Score: 15582169
+Temperature: 532570.355743945 - Step: 16 - Cost/Budget: 8630/29907 - Score: 15545277
+Temperature: 479313.3201695505 - Step: 17 - Cost/Budget: 8628/29907 - Score: 15339279
+Temperature: 431381.98815259547 - Step: 18 - Cost/Budget: 8628/29907 - Score: 15501279
+Temperature: 388243.7893373359 - Step: 19 - Cost/Budget: 8008/29907 - Score: 14865899
+Temperature: 349419.41040360235 - Step: 20 - Cost/Budget: 8620/29907 - Score: 15497287
+Temperature: 314477.4693632421 - Step: 21 - Cost/Budget: 8613/29907 - Score: 15386294
+Temperature: 283029.72242691787 - Step: 22 - Cost/Budget: 8623/29907 - Score: 15587284
+Temperature: 254726.75018422608 - Step: 23 - Cost/Budget: 8633/29907 - Score: 15602274
+Restarting
+Temperature: 254726.75018422608 - Step: 24 - Cost/Budget: 8627/29907 - Score: 15745280
+Temperature: 229254.0751658035 - Step: 25 - Cost/Budget: 8621/29907 - Score: 15767286
+Temperature: 206328.66764922315 - Step: 26 - Cost/Budget: 8623/29907 - Score: 15750284
+Restarting
+Temperature: 206328.66764922315 - Step: 27 - Cost/Budget: 8619/29907 - Score: 15878288
+Temperature: 185695.80088430084 - Step: 28 - Cost/Budget: 8625/29907 - Score: 15879282
+Temperature: 167126.22079587076 - Step: 29 - Cost/Budget: 8625/29907 - Score: 15745282
+Temperature: 150413.59871628368 - Step: 30 - Cost/Budget: 8333/29907 - Score: 15614574
+Temperature: 135372.2388446553 - Step: 31 - Cost/Budget: 8333/29907 - Score: 15742574
+Temperature: 121835.01496018979 - Step: 32 - Cost/Budget: 8644/29907 - Score: 15881263
+Temperature: 109651.51346417081 - Step: 33 - Cost/Budget: 8640/29907 - Score: 15812267
+Temperature: 98686.36211775373 - Step: 34 - Cost/Budget: 8638/29907 - Score: 15860269
+Temperature: 88817.72590597835 - Step: 35 - Cost/Budget: 8642/29907 - Score: 15800265
+Restarting
+Temperature: 121835.01496018979 - Step: 36 - Cost/Budget: 8646/29907 - Score: 15983261
+Temperature: 109651.51346417081 - Step: 37 - Cost/Budget: 8658/29907 - Score: 16139249
+Restarting
+Temperature: 109651.51346417081 - Step: 38 - Cost/Budget: 8659/29907 - Score: 16174248
+Restarting
+Temperature: 109651.51346417081 - Step: 39 - Cost/Budget: 8659/29907 - Score: 16301248
+Temperature: 98686.36211775373 - Step: 40 - Cost/Budget: 8661/29907 - Score: 16330246
+Temperature: 88817.72590597835 - Step: 41 - Cost/Budget: 8661/29907 - Score: 16305246
+Temperature: 79935.95331538052 - Step: 42 - Cost/Budget: 8656/29907 - Score: 16265251
+Temperature: 71942.35798384248 - Step: 43 - Cost/Budget: 8660/29907 - Score: 16140247
+Temperature: 64748.12218545823 - Step: 44 - Cost/Budget: 8666/29907 - Score: 16333241
+Temperature: 58273.30996691241 - Step: 45 - Cost/Budget: 8975/29907 - Score: 16377932
+Temperature: 52445.97897022117 - Step: 46 - Cost/Budget: 8675/29907 - Score: 16414232
+Temperature: 47201.38107319905 - Step: 47 - Cost/Budget: 8988/29907 - Score: 16418919
+Temperature: 42481.24296587915 - Step: 48 - Cost/Budget: 8681/29907 - Score: 16491226
+Temperature: 38233.11866929124 - Step: 49 - Cost/Budget: 8688/29907 - Score: 16794219
+Temperature: 34409.806802362116 - Step: 50 - Cost/Budget: 8693/29907 - Score: 16840214
+Temperature: 30968.826122125905 - Step: 51 - Cost/Budget: 8703/29907 - Score: 16914204
+Temperature: 27871.943509913315 - Step: 52 - Cost/Budget: 8704/29907 - Score: 17147203
+Temperature: 25084.749158921983 - Step: 53 - Cost/Budget: 8706/29907 - Score: 17204201
+Temperature: 22576.274243029784 - Step: 54 - Cost/Budget: 8705/29907 - Score: 17339202
+Temperature: 20318.646818726807 - Step: 55 - Cost/Budget: 8704/29907 - Score: 17421203
+Temperature: 18286.782136854126 - Step: 56 - Cost/Budget: 8997/29907 - Score: 17533910
+Restarting
+Temperature: 18286.782136854126 - Step: 57 - Cost/Budget: 9016/29907 - Score: 17592891
+Temperature: 16458.103923168714 - Step: 58 - Cost/Budget: 9428/29907 - Score: 17923479
+Temperature: 14812.293530851843 - Step: 59 - Cost/Budget: 9626/29907 - Score: 18102281
+Temperature: 13331.064177766659 - Step: 60 - Cost/Budget: 9633/29907 - Score: 18174274
+Temperature: 11997.957759989993 - Step: 61 - Cost/Budget: 9741/29907 - Score: 18359166
+Temperature: 10798.161983990994 - Step: 62 - Cost/Budget: 9755/29907 - Score: 18541152
+Temperature: 9718.345785591895 - Step: 63 - Cost/Budget: 10362/29907 - Score: 18916545
+Temperature: 8746.511207032705 - Step: 64 - Cost/Budget: 10374/29907 - Score: 19152533
+Restarting
+Temperature: 8746.511207032705 - Step: 65 - Cost/Budget: 10372/29907 - Score: 19364535
+Temperature: 7871.860086329435 - Step: 66 - Cost/Budget: 10382/29907 - Score: 19500525
+Temperature: 7084.674077696492 - Step: 67 - Cost/Budget: 10385/29907 - Score: 19615522
+Restarting
+Temperature: 7084.674077696492 - Step: 68 - Cost/Budget: 10392/29907 - Score: 19687515
+Temperature: 6376.206669926843 - Step: 69 - Cost/Budget: 10394/29907 - Score: 19778513
+Temperature: 5738.586002934158 - Step: 70 - Cost/Budget: 10406/29907 - Score: 19840501
+Temperature: 5164.727402640743 - Step: 71 - Cost/Budget: 10417/29907 - Score: 19981490
+Temperature: 4648.254662376669 - Step: 72 - Cost/Budget: 10414/29907 - Score: 20017493
+Temperature: 4183.429196139003 - Step: 73 - Cost/Budget: 10419/29907 - Score: 20071488
+Temperature: 3765.0862765251027 - Step: 74 - Cost/Budget: 10422/29907 - Score: 20208485
+Temperature: 3388.5776488725924 - Step: 75 - Cost/Budget: 10722/29907 - Score: 20319185
+Temperature: 3049.719883985333 - Step: 76 - Cost/Budget: 10721/29907 - Score: 20385186
+Temperature: 2744.7478955868 - Step: 77 - Cost/Budget: 10829/29907 - Score: 20462078
+Temperature: 2470.2731060281203 - Step: 78 - Cost/Budget: 10847/29907 - Score: 20528060
+Temperature: 2223.245795425308 - Step: 79 - Cost/Budget: 10852/29907 - Score: 20610055
+Temperature: 2000.9212158827775 - Step: 80 - Cost/Budget: 10858/29907 - Score: 20666049
+Temperature: 1800.8290942944998 - Step: 81 - Cost/Budget: 10872/29907 - Score: 20733035
+Temperature: 1620.7461848650498 - Step: 82 - Cost/Budget: 10870/29907 - Score: 20802037
+Restarting
+Temperature: 1620.7461848650498 - Step: 83 - Cost/Budget: 10972/29907 - Score: 20846935
+Temperature: 1458.6715663785449 - Step: 84 - Cost/Budget: 10976/29907 - Score: 20908931
+Temperature: 1312.8044097406905 - Step: 85 - Cost/Budget: 10989/29907 - Score: 20939918
+Temperature: 1181.5239687666215 - Step: 86 - Cost/Budget: 10986/29907 - Score: 20979921
+Temperature: 1063.3715718899593 - Step: 87 - Cost/Budget: 10980/29907 - Score: 20989927
+Temperature: 957.0344147009635 - Step: 88 - Cost/Budget: 10983/29907 - Score: 21021924
+Temperature: 861.3309732308671 - Step: 89 - Cost/Budget: 10988/29907 - Score: 21104919
+Temperature: 775.1978759077805 - Step: 90 - Cost/Budget: 10980/29907 - Score: 21123927
+Temperature: 697.6780883170024 - Step: 91 - Cost/Budget: 10981/29907 - Score: 21130926
+Temperature: 627.9102794853022 - Step: 92 - Cost/Budget: 10966/29907 - Score: 21174941
+Temperature: 565.119251536772 - Step: 93 - Cost/Budget: 10962/29907 - Score: 21199945
+Restarting
+Temperature: 565.119251536772 - Step: 94 - Cost/Budget: 10963/29907 - Score: 21224944
+Temperature: 508.60732638309486 - Step: 95 - Cost/Budget: 10969/29907 - Score: 21260938
+Restarting
+Temperature: 508.60732638309486 - Step: 96 - Cost/Budget: 10972/29907 - Score: 21277935
+Temperature: 457.7465937447854 - Step: 97 - Cost/Budget: 10967/29907 - Score: 21291940
+Temperature: 411.9719343703069 - Step: 98 - Cost/Budget: 10969/29907 - Score: 21297938
+Temperature: 370.7747409332762 - Step: 99 - Cost/Budget: 10967/29907 - Score: 21343940
+Temperature: 333.69726683994855 - Step: 100 - Cost/Budget: 10978/29907 - Score: 21369929
+Temperature: 300.3275401559537 - Step: 101 - Cost/Budget: 10964/29907 - Score: 21393943
+Temperature: 270.2947861403584 - Step: 102 - Cost/Budget: 10969/29907 - Score: 21402938
+Temperature: 243.26530752632254 - Step: 103 - Cost/Budget: 10971/29907 - Score: 21417936
+Temperature: 218.9387767736903 - Step: 104 - Cost/Budget: 10972/29907 - Score: 21457935
+Temperature: 197.04489909632127 - Step: 105 - Cost/Budget: 10975/29907 - Score: 21496932
+Restarting
+Temperature: 197.04489909632127 - Step: 106 - Cost/Budget: 11067/29907 - Score: 21528840
+Temperature: 177.34040918668916 - Step: 107 - Cost/Budget: 11068/29907 - Score: 21572839
+Temperature: 159.60636826802025 - Step: 108 - Cost/Budget: 10965/29907 - Score: 21601942
+Temperature: 143.64573144121823 - Step: 109 - Cost/Budget: 10962/29907 - Score: 21617945
+Temperature: 129.28115829709643 - Step: 110 - Cost/Budget: 10960/29907 - Score: 21647947
+Temperature: 116.35304246738679 - Step: 111 - Cost/Budget: 10974/29907 - Score: 21672933
+Temperature: 104.71773822064812 - Step: 112 - Cost/Budget: 10971/29907 - Score: 21703936
+Temperature: 94.24596439858331 - Step: 113 - Cost/Budget: 10977/29907 - Score: 21705930
+Temperature: 84.82136795872498 - Step: 114 - Cost/Budget: 10978/29907 - Score: 21725929
+Temperature: 76.33923116285249 - Step: 115 - Cost/Budget: 10969/29907 - Score: 21743938
+Temperature: 68.70530804656724 - Step: 116 - Cost/Budget: 10981/29907 - Score: 21767926
+Temperature: 61.834777241910515 - Step: 117 - Cost/Budget: 10989/29907 - Score: 21825918
+Temperature: 55.651299517719465 - Step: 118 - Cost/Budget: 10989/29907 - Score: 21827918
+Temperature: 50.08616956594752 - Step: 119 - Cost/Budget: 10993/29907 - Score: 21840914
+Temperature: 45.07755260935277 - Step: 120 - Cost/Budget: 10996/29907 - Score: 21842911
+Temperature: 40.569797348417495 - Step: 121 - Cost/Budget: 10997/29907 - Score: 21866910
+Temperature: 36.51281761357575 - Step: 122 - Cost/Budget: 10994/29907 - Score: 21868913
+Temperature: 32.861535852218175 - Step: 123 - Cost/Budget: 10995/29907 - Score: 21875912
+Temperature: 29.575382266996357 - Step: 124 - Cost/Budget: 11002/29907 - Score: 21875905
+Temperature: 26.61784404029672 - Step: 125 - Cost/Budget: 10997/29907 - Score: 21878910
+Temperature: 23.95605963626705 - Step: 126 - Cost/Budget: 11001/29907 - Score: 21879906
+Temperature: 21.560453672640346 - Step: 127 - Cost/Budget: 11009/29907 - Score: 21880898
+Temperature: 19.40440830537631 - Step: 128 - Cost/Budget: 11002/29907 - Score: 21881905
+Restarting
+Temperature: 19.40440830537631 - Step: 129 - Cost/Budget: 11000/29907 - Score: 21887907
+Temperature: 17.46396747483868 - Step: 130 - Cost/Budget: 11002/29907 - Score: 21897905
+Temperature: 15.717570727354811 - Step: 131 - Cost/Budget: 10994/29907 - Score: 21900913
+Temperature: 14.14581365461933 - Step: 132 - Cost/Budget: 10995/29907 - Score: 21902912
+Temperature: 12.731232289157397 - Step: 133 - Cost/Budget: 11196/29907 - Score: 21905711
+Temperature: 11.458109060241657 - Step: 134 - Cost/Budget: 11206/29907 - Score: 21907701
+Temperature: 10.312298154217492 - Step: 135 - Cost/Budget: 11198/29907 - Score: 21908709
+Temperature: 9.281068338795743 - Step: 136 - Cost/Budget: 11188/29907 - Score: 21908719
+Temperature: 8.352961504916168 - Step: 137 - Cost/Budget: 11175/29907 - Score: 21912732
+Temperature: 7.517665354424551 - Step: 138 - Cost/Budget: 11182/29907 - Score: 21914725
+Temperature: 6.765898818982096 - Step: 139 - Cost/Budget: 11176/29907 - Score: 21914731
+Temperature: 6.089308937083887 - Step: 140 - Cost/Budget: 11162/29907 - Score: 21915745
+Restarting
+Temperature: 6.089308937083887 - Step: 141 - Cost/Budget: 11157/29907 - Score: 21916750
+Temperature: 5.480378043375499 - Step: 142 - Cost/Budget: 11160/29907 - Score: 21921747
+Temperature: 4.932340239037949 - Step: 143 - Cost/Budget: 11153/29907 - Score: 21921754
+Restarting
+Temperature: 4.932340239037949 - Step: 144 - Cost/Budget: 11150/29907 - Score: 21921757
+Temperature: 4.439106215134155 - Step: 145 - Cost/Budget: 11152/29907 - Score: 21925755
+Temperature: 3.9951955936207395 - Step: 146 - Cost/Budget: 11165/29907 - Score: 21926742
+Temperature: 3.5956760342586658 - Step: 147 - Cost/Budget: 11159/29907 - Score: 21926748
+Temperature: 3.2361084308327994 - Step: 148 - Cost/Budget: 11143/29907 - Score: 21926764
+Temperature: 2.9124975877495194 - Step: 149 - Cost/Budget: 11142/29907 - Score: 21927765
+Temperature: 2.6212478289745675 - Step: 150 - Cost/Budget: 11144/29907 - Score: 21927763
+Temperature: 2.359123046077111 - Step: 151 - Cost/Budget: 11138/29907 - Score: 21927769
+Temperature: 2.1232107414694 - Step: 152 - Cost/Budget: 11147/29907 - Score: 21927760
+Temperature: 1.91088966732246 - Step: 153 - Cost/Budget: 11137/29907 - Score: 21927770
+Temperature: 1.719800700590214 - Step: 154 - Cost/Budget: 11127/29907 - Score: 21927780
+Temperature: 1.5478206305311928 - Step: 155 - Cost/Budget: 11124/29907 - Score: 21927783
+Temperature: 1.3930385674780736 - Step: 156 - Cost/Budget: 11127/29907 - Score: 21927780
+Temperature: 1.2537347107302663 - Step: 157 - Cost/Budget: 11119/29907 - Score: 21928788
+Temperature: 1.1283612396572398 - Step: 158 - Cost/Budget: 11119/29907 - Score: 21928788
+Temperature: 1.015525115691516 - Step: 159 - Cost/Budget: 11115/29907 - Score: 21928792
+Temperature: 0.9139726041223644 - Step: 160 - Cost/Budget: 11114/29907 - Score: 21928793
+Temperature: 0.822575343710128 - Step: 161 - Cost/Budget: 11100/29907 - Score: 21928807
+Temperature: 0.7403178093391152 - Step: 162 - Cost/Budget: 11097/29907 - Score: 21928810
+Temperature: 0.6662860284052037 - Step: 163 - Cost/Budget: 11090/29907 - Score: 21928817
+Temperature: 0.5996574255646834 - Step: 164 - Cost/Budget: 11086/29907 - Score: 21929821
+Restarting
+Temperature: 0.5996574255646834 - Step: 165 - Cost/Budget: 11077/29907 - Score: 21929830
+Restarting
+Temperature: 0.5996574255646834 - Step: 166 - Cost/Budget: 11065/29907 - Score: 21929842
+Temperature: 0.539691683008215 - Step: 167 - Cost/Budget: 11055/29907 - Score: 21929852
+Temperature: 0.4857225147073935 - Step: 168 - Cost/Budget: 11049/29907 - Score: 21929858
+Temperature: 0.4371502632366542 - Step: 169 - Cost/Budget: 11043/29907 - Score: 21929864
+Restarting
+Temperature: 0.4371502632366542 - Step: 170 - Cost/Budget: 11035/29907 - Score: 21929872
+Restarting
+Temperature: 0.4371502632366542 - Step: 171 - Cost/Budget: 11029/29907 - Score: 21929878
+Temperature: 0.39343523691298876 - Step: 172 - Cost/Budget: 11028/29907 - Score: 21929879
+Restarting
+Temperature: 0.39343523691298876 - Step: 173 - Cost/Budget: 11025/29907 - Score: 21929882
+Restarting
+Temperature: 0.39343523691298876 - Step: 174 - Cost/Budget: 11026/29907 - Score: 21930881
+Temperature: 0.3540917132216899 - Step: 175 - Cost/Budget: 11022/29907 - Score: 21930885
+Temperature: 0.31868254189952094 - Step: 176 - Cost/Budget: 11019/29907 - Score: 21930888
+Temperature: 0.28681428770956885 - Step: 177 - Cost/Budget: 11014/29907 - Score: 21932893
+Restarting
+Temperature: 0.28681428770956885 - Step: 178 - Cost/Budget: 11010/29907 - Score: 21932897
+Restarting
+Temperature: 0.28681428770956885 - Step: 179 - Cost/Budget: 11008/29907 - Score: 21932899
+Temperature: 0.258132858938612 - Step: 180 - Cost/Budget: 11003/29907 - Score: 21932904
+Temperature: 0.2323195730447508 - Step: 181 - Cost/Budget: 11002/29907 - Score: 21933905
+Temperature: 0.2090876157402757 - Step: 182 - Cost/Budget: 10998/29907 - Score: 21933909
+Restarting
+Temperature: 0.2090876157402757 - Step: 183 - Cost/Budget: 10997/29907 - Score: 21933910
+Temperature: 0.18817885416624813 - Step: 184 - Cost/Budget: 10995/29907 - Score: 21933912
+Temperature: 0.16936096874962334 - Step: 185 - Cost/Budget: 10989/29907 - Score: 21933918
+Temperature: 0.152424871874661 - Step: 186 - Cost/Budget: 10988/29907 - Score: 21933919
+Temperature: 0.1371823846871949 - Step: 187 - Cost/Budget: 10984/29907 - Score: 21933923
+Temperature: 0.12346414621847542 - Step: 188 - Cost/Budget: 10983/29907 - Score: 21933924
+Temperature: 0.11111773159662787 - Step: 189 - Cost/Budget: 10982/29907 - Score: 21933925
+Restarting
+Temperature: 0.11111773159662787 - Step: 190 - Cost/Budget: 10979/29907 - Score: 21933928
+Temperature: 0.10000595843696508 - Step: 191 - Cost/Budget: 10977/29907 - Score: 21933930
+Temperature: 0.09000536259326858 - Step: 192 - Cost/Budget: 10976/29907 - Score: 21933931
+Took: 522.6602845191956
+Board 240x180
+Router range is 10
+Backbone at (120, 90)
+Router price: 100
+Backbone price: 1
+Max budget: 29907
+Steps taken: 192

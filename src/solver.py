@@ -6,6 +6,7 @@ from src.solution import Solution
 from math import exp, floor
 from random import random, choices
 from statistics import pstdev
+from time import time
 
 
 class Solver:
@@ -45,11 +46,15 @@ class Solver:
             )
         )
 
-        if currentSol and self.steps % 10 == 0:
-            print(currentSol.__str__(True), end="\n\n")
+        #  if currentSol and self.steps % 10 == 0:
+        #  print(currentSol.__str__(True), end="\n\n")
+
+    def startTimer(self):
+        self.start_time = time()
 
     def hillClimbing(self, current=None):
         print("Stochastic hillclimbing")
+        self.startTimer()
         if not current:
             current = self.genInitialSol()  # initial sol
 
@@ -57,8 +62,6 @@ class Solver:
         while True:
             self.steps += 1
             found_better = False
-
-            i = 0
             for neighbor in current.mutate():
                 if neighbor > current:
                     found_better = True
@@ -66,9 +69,11 @@ class Solver:
                     break
 
             if not found_better:
+                print("Took:", time() - self.start_time)
                 return current
             self.logIteration(current)
 
+        print("Took:", time() - self.start_time)
         return current
 
     def steepestDescentMax(self, sol):
@@ -83,6 +88,7 @@ class Solver:
 
     def steepestDescent(self, current=None):
         print("Steepest Descent hillclimbing")
+        self.startTimer()
         if not current:
             current = self.genInitialSol()  # initial sol
 
@@ -95,6 +101,7 @@ class Solver:
             current = best_neighbor
             self.logIteration(current)
 
+        print("Took:", time() - self.start_time)
         return current
 
     # returns the standard deviation of the value of population_size (default 400)
@@ -119,6 +126,7 @@ class Solver:
             )
         )
         print("Calculating the initial temperature.")
+        self.startTimer()
         init_temp = self.calculateInitialTemp() // (4 / 3)
         t = init_temp
         iter_per_temp = self.max_router_num
@@ -175,6 +183,7 @@ class Solver:
                 else:
                     break
 
+        print("Took:", time() - self.start_time)
         return best
 
     def generatePopulation(self, nPop):
@@ -190,6 +199,7 @@ class Solver:
                 nPop, it, mutateProb
             )
         )
+        self.startTimer()
         population = self.generatePopulation(nPop)
         weights = [sol.getValue() for sol in population]
 
@@ -212,6 +222,7 @@ class Solver:
 
             self.logIteration(max(population, key=lambda sol: sol.getValue()))
 
+        print("Took:", time() - self.start_time)
         return max(population, key=lambda sol: sol.getValue())
 
     # scale is how many pixels the side of one 1 board cell takes in the output image

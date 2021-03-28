@@ -48,48 +48,37 @@ def selectAlgorithm():
 FILE_PATH = path.join(".", "input")
 
 if __name__ == "__main__":
-    solver = importSolver("input/charleston_road.in")
-    #  solver = importSolver("input/charleston_road_small.in")
+    algorithm = selectAlgorithm()
+    file = selectInputFile()
 
-    #  sol = solver.hillClimbing()
-    #  sol = solver.steepestDescent()
-    #  sol = solver.simulatedAnnealing()
-    sol = solver.geneticAlgorithm()
+    solver = importSolver(path.join(FILE_PATH, file))
+
+    if algorithm == "Hill Climbing":
+        sol = solver.hillClimbing()
+    elif algorithm == "Steepest Descent":
+        sol = solver.steepestDescent()
+    elif "Simulated Annealing":
+        sol = solver.simulatedAnnealing()
+    elif "Genetic Algorithm":
+        sol = solver.geneticAlgorithm()
+
     print(solver)
-    print(sol.__str__(True))
-    #  solver.toImage("out.png", 4, sol)
+    print("\n\nDo you want to preview the map?", end=" ")
+    if getYorN():
+        print(sol.__str__(True))
 
-    #  algorithm = selectAlgorithm()
-    #  file = selectInputFile()
+    print("\n\nDo you want to export to png?", end=" ")
+    if getYorN():
+        print("Type the name of the image to export:", end=" ")
+        image = input()
+        if image[-4:-2] != ".png":  # append '.png' to the file name if not present
+            image += ".png"
+        solver.toImage(image, 4, sol)
 
-    #  solver = importSolver(path.join(FILE_PATH, file))
-
-    #  if algorithm == "Hill Climbing":
-    #  sol = solver.hillClimbing()
-    #  elif algorithm == "Steepest Descent":
-    #  sol = solver.steepestDescent()
-    #  elif "Simulated Annealing":
-    #  sol = solver.simulatedAnnealing()
-    #  elif "Genetic Algorithm":
-    #  sol = solver.geneticAlgorithm()
-
-    #  print(solver)
-    #  print("\n\nDo you want to preview the map?", end=" ")
-    #  if getYorN():
-    #  print(sol.__str__(True))
-
-    #  print("\n\nDo you want to export to png?", end=" ")
-    #  if getYorN():
-    #  print("Type the name of the image to export:", end=" ")
-    #  image = input()
-    #  if image[-4:-2] != ".png":  # append '.png' to the file name if not present
-    #  image += ".png"
-    #  solver.toImage(image, 4, sol)
-
-    #  print("\n\nDo you want to export the solution to a file?", end=" ")
-    #  if getYorN():
-    #  print("Type the name of the file to export:", end=" ")
-    #  filename = input()
-    #  if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
-    #  filename += ".txt"
-    #  sol.toFile(filename)
+    print("\n\nDo you want to export the solution to a file?", end=" ")
+    if getYorN():
+        print("Type the name of the file to export:", end=" ")
+        filename = input()
+        if filename[-4:-2] != ".txt":  # append '.txt' to the file name if not present
+            filename += ".txt"
+        sol.toFile(filename)
