@@ -27,6 +27,8 @@ class Board:
         self.backbone = (br, bc)
 
     # save the board information in more convenient structures
+    # only set as available positions the squares that can be (theoretically)
+    # reached by routers
     def setBoardInfo(self, info, cable_range):
         self.board = info
 
@@ -57,21 +59,26 @@ class Board:
             if self.board[row][col] == Board.EmptySquare
         ]
 
+    # returns a random available position from the board
     def getRandomPosOnce(self):
         shuffle(self.available_pos)
         return choice(self.available_pos)
-
+    
+    # returns a random generator for al lthe available positions on the board
     def getRandomPos(self):
         shuffle(self.available_pos)
         for pos in self.available_pos:
             yield pos
 
+    # checks if the given cell is inside the board
     def isCellInsideBoard(self, cell):
         return cell[0] > 0 and cell[0] < self.h and cell[1] > 0 and cell[1] < self.w
 
+    # gets the cell symbol at the position
     def getCell(self, cell):
         return self[cell[0]][cell[1]]
 
+    # chekcs if the cell is empty (available)
     def isEmptyCell(self, cell):
         return self.getCell(cell) == Board.EmptySquare
 
@@ -94,6 +101,7 @@ class Board:
                 if self[row][col] != Board.EmptySquare:  # check if is available pos
                     continue
 
+                # checks for walls on the square formed by the router anc the cell
                 has_wall = False
                 top = min(row, router[0])
                 bot = max(row, router[0])
