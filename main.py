@@ -57,9 +57,9 @@ if __name__ == "__main__":
         sol = solver.hillClimbing()
     elif algorithm == "Steepest Descent":
         sol = solver.steepestDescent()
-    elif "Simulated Annealing":
+    elif algorithm == "Simulated Annealing":
         sol = solver.simulatedAnnealing()
-    elif "Genetic Algorithm":
+    elif algorithm == "Genetic Algorithm":
         sol = solver.geneticAlgorithm()
 
     print(solver)
