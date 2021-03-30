@@ -46,8 +46,8 @@ class Solver:
             )
         )
 
-        #  if currentSol and self.steps % 10 == 0:
-        #  print(currentSol.__str__(True), end="\n\n")
+        if currentSol and self.steps % 10 == 0:
+            print(currentSol.__str__(True), end="\n\n")
 
     def startTimer(self):
         self.start_time = time()
@@ -119,7 +119,7 @@ class Solver:
     def schedule(self, t):
         return float(t) * 0.90
 
-    def simulatedAnnealing(self, current=None, min_temp=0.1, random_restart_chance=0.05):
+    def simulatedAnnealing(self, current=None, min_temp=0.1, random_restart_chance=0.1):
         print(
             "Simulated Annealing. min_temp: {}. random restart chance: {}".format(
                 min_temp, random_restart_chance
@@ -130,6 +130,7 @@ class Solver:
         init_temp = self.calculateInitialTemp() // (4 / 3)
         t = init_temp
         iter_per_temp = self.max_router_num
+        #  iter_per_temp = 300
         print(
             "Initial temperature is {}. Doing {} iteration(s) per temperature.".format(
                 t, iter_per_temp
