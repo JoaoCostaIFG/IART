@@ -46,8 +46,8 @@ class Solver:
             )
         )
 
-        if currentSol and self.steps % 10 == 0:
-            print(currentSol.__str__(True), end="\n\n")
+        #  if currentSol and self.steps % 10 == 0:
+            #  print(currentSol.__str__(True), end="\n\n")
 
     def startTimer(self):
         self.start_time = time()

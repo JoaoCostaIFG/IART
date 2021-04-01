@@ -1,0 +1,110 @@
+Finished importing map
+Genetic algorithm. Population size: 100. Iterations: 100. Mutation probability: 0.1.
+Step: 0 - Cost/Budget: 20850/21634 - Score: 36348784
+Step: 1 - Cost/Budget: 21617/21634 - Score: 37299017
+Step: 2 - Cost/Budget: 21611/21634 - Score: 37913023
+Step: 4 - Cost/Budget: 21611/21634 - Score: 37913023
+Step: 5 - Cost/Budget: 21606/21634 - Score: 37981028
+Step: 6 - Cost/Budget: 21606/21634 - Score: 37981028
+Step: 7 - Cost/Budget: 21606/21634 - Score: 37981028
+Step: 8 - Cost/Budget: 21606/21634 - Score: 37981028
+Step: 9 - Cost/Budget: 21599/21634 - Score: 38051035
+Step: 10 - Cost/Budget: 21599/21634 - Score: 38051035
+Step: 11 - Cost/Budget: 21598/21634 - Score: 38051036
+Step: 12 - Cost/Budget: 21617/21634 - Score: 38379017
+Step: 13 - Cost/Budget: 21617/21634 - Score: 38379017
+Step: 14 - Cost/Budget: 21617/21634 - Score: 38379017
+Step: 15 - Cost/Budget: 21612/21634 - Score: 38387022
+Step: 16 - Cost/Budget: 21611/21634 - Score: 38781023
+Step: 17 - Cost/Budget: 21611/21634 - Score: 38781023
+Step: 18 - Cost/Budget: 21629/21634 - Score: 39220005
+Step: 19 - Cost/Budget: 21629/21634 - Score: 39220005
+Step: 20 - Cost/Budget: 21634/21634 - Score: 39259000
+Step: 21 - Cost/Budget: 21539/21634 - Score: 39322095
+Step: 22 - Cost/Budget: 21539/21634 - Score: 39322095
+Step: 23 - Cost/Budget: 21546/21634 - Score: 39383088
+Step: 24 - Cost/Budget: 21552/21634 - Score: 39395082
+Step: 25 - Cost/Budget: 21634/21634 - Score: 39506000
+Step: 26 - Cost/Budget: 21634/21634 - Score: 39506000
+Step: 27 - Cost/Budget: 21540/21634 - Score: 39730094
+Step: 28 - Cost/Budget: 21540/21634 - Score: 39730094
+Step: 29 - Cost/Budget: 21540/21634 - Score: 39730094
+Step: 30 - Cost/Budget: 21547/21634 - Score: 39815087
+Step: 31 - Cost/Budget: 21624/21634 - Score: 39873010
+Step: 32 - Cost/Budget: 21624/21634 - Score: 39873010
+Step: 33 - Cost/Budget: 21629/21634 - Score: 40025005
+Step: 34 - Cost/Budget: 21629/21634 - Score: 40025005
+Step: 35 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 36 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 37 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 38 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 39 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 40 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 41 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 42 - Cost/Budget: 21629/21634 - Score: 40036005
+Step: 43 - Cost/Budget: 21621/21634 - Score: 40071013
+Step: 44 - Cost/Budget: 21621/21634 - Score: 40071013
+Step: 45 - Cost/Budget: 21626/21634 - Score: 40254008
+Step: 46 - Cost/Budget: 21626/21634 - Score: 40254008
+Step: 47 - Cost/Budget: 21631/21634 - Score: 40287003
+Step: 48 - Cost/Budget: 21629/21634 - Score: 40334005
+Step: 49 - Cost/Budget: 21629/21634 - Score: 40334005
+Step: 50 - Cost/Budget: 21543/21634 - Score: 40428091
+Step: 51 - Cost/Budget: 21543/21634 - Score: 40428091
+Step: 52 - Cost/Budget: 21542/21634 - Score: 40464092
+Step: 53 - Cost/Budget: 21551/21634 - Score: 40539083
+Step: 54 - Cost/Budget: 21551/21634 - Score: 40539083
+Step: 55 - Cost/Budget: 21551/21634 - Score: 40539083
+Step: 56 - Cost/Budget: 21553/21634 - Score: 40670081
+Step: 57 - Cost/Budget: 21553/21634 - Score: 40670081
+Step: 58 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 59 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 60 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 61 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 62 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 63 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 64 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 65 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 66 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 67 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 68 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 69 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 70 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 71 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 72 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 73 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 74 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 75 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 76 - Cost/Budget: 21548/21634 - Score: 40670086
+Step: 77 - Cost/Budget: 21549/21634 - Score: 40671085
+Step: 78 - Cost/Budget: 21549/21634 - Score: 40671085
+Step: 79 - Cost/Budget: 21561/21634 - Score: 40839073
+Step: 80 - Cost/Budget: 21561/21634 - Score: 40839073
+Step: 81 - Cost/Budget: 21560/21634 - Score: 40973074
+Step: 82 - Cost/Budget: 21571/21634 - Score: 40998063
+Step: 83 - Cost/Budget: 21571/21634 - Score: 40998063
+Step: 84 - Cost/Budget: 21571/21634 - Score: 40998063
+Step: 85 - Cost/Budget: 21571/21634 - Score: 40998063
+Step: 86 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 87 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 88 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 89 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 90 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 91 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 92 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 93 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 94 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 95 - Cost/Budget: 21574/21634 - Score: 41077060
+Step: 96 - Cost/Budget: 21568/21634 - Score: 41263066
+Step: 97 - Cost/Budget: 21568/21634 - Score: 41263066
+Step: 98 - Cost/Budget: 21568/21634 - Score: 41263066
+Step: 99 - Cost/Budget: 21568/21634 - Score: 41263066
+Took: 504.5261869430542
+Board 559x404
+Router range is 10
+Backbone at (279, 202)
+Router price: 100
+Backbone price: 1
+Max budget: 21634
+Steps taken: 99
+
