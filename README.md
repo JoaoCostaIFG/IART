@@ -2,9 +2,9 @@
 
 ## Running
 
-To run the code execute the [main python script](./main.py). This script launches
-an interactive menu that will let you choose a file from the input, and the
-algorithm to run.
+To run the code execute the [main python script](python3 main.py). This script
+launches an interactive menu that will let you choose a file from the input, and
+the algorithm to run.
 
 At the end of the run, the results will optionally be displayed in the terminal:
 draw the solution in the terminal, output the solution as a png file, and save
@@ -53,10 +53,10 @@ These dependencies come with the repository and don't need to be pre-installed.
 - If a router is placed at [a, b], the cell [x, y] is covered if:
   - |a - x| <= R,
   - |b - y| <= R,
-  - there is no wall [w, v] where min(a, x) <= w <= max(a, x) &&
-    min(b, y) <= v <= max(b, y)
-  - described as: there are no walls in the smallest enclosing rectangle
-    of [a, b] and [x, y]
+  - there is no wall [w, v] where min(a, x) <= w <= max(a, x) && min(b, y) <= v
+    <= max(b, y)
+  - described as: there are no walls in the smallest enclosing rectangle of [a,
+    b] and [x, y]
 
 ```txt
 R = 3
@@ -97,7 +97,8 @@ R = 3
   - (0 <= **br** < H) - row of the initial cell connected to the backbone
   - (0 <= **bc** < W) - column of the initial cell connected to the backbone
 - Next **H** lines
-  - **W** characters specifying the type of each cell (**'#'**, **'.'**, **'-'**)
+  - **W** characters specifying the type of each cell (**'#'**, **'.'**,
+    **'-'**)
 
 ## Output files description
 

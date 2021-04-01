@@ -10,7 +10,7 @@ class Solution:
     # pass a parent sol (if any) and a new router that will be added to the solution
     def __init__(self, board, routers=[]):
         self.board = board
-        self.cutof = 0  # number of routers included in solution
+        self.cutoff = 0  # number of routers included in solution
         self.val = Board.b
         self.cost = 0
         self.covered = set()
@@ -181,7 +181,7 @@ class Solution:
         sol1 = parent1.getSol()
         sol2 = parent2.getSol()
 
-        # random order list of routers inside cutof of both solutions
+        # random order list of routers inside cutoff of both solutions
         new_routers = sol1.copy()
         for r in sol2:
             if r not in new_routers:
@@ -191,8 +191,8 @@ class Solution:
         i = 0
         cromossome_len = len(parent1.routers)
         while len(new_routers) < cromossome_len:
-            r1 = parent1.routers[parent1.cutof + i]
-            r2 = parent2.routers[parent1.cutof + i]
+            r1 = parent1.routers[parent1.cutoff + i]
+            r2 = parent2.routers[parent1.cutoff + i]
             if r1 not in new_routers:
                 new_routers.append(r1)
             # verify len again because the previous append might have changed it
@@ -225,9 +225,9 @@ class Solution:
 
         for router in self.routers:
             self.graph.addVertex(router)
-            # +1 to cutof because of the new router
+            # +1 to cutoff because of the new router
             new_cost = (
-                self.graph.getBackboneLen() * Board.pb + (self.cutof + 1) * Board.pr
+                self.graph.getBackboneLen() * Board.pb + (self.cutoff + 1) * Board.pr
             )
             if new_cost > Board.b:  # no budget for this => stop
                 self.graph.popVertex()
@@ -249,7 +249,7 @@ class Solution:
                 self.graph.popVertex()
                 break
 
-            self.cutof += 1
+            self.cutoff += 1
             self.covered.update(router_cov)
             self.cost = new_cost
             self.val = new_val
@@ -263,7 +263,7 @@ class Solution:
 
     # return the array of routers that is part of the solution
     def getSol(self):
-        return self.routers[0 : self.cutof]
+        return self.routers[0 : self.cutoff]
 
     # calculates the positions of the backbones based on the minimum spanning tree
     def calcBackbone(self):
@@ -319,7 +319,7 @@ class Solution:
             f.write(str(len(self.backbones)) + "\n")
             for r, c in self.backbones:
                 f.write(str(r) + " " + str(c) + "\n")
-            f.write(str(self.cutof) + "\n")
+            f.write(str(self.cutoff) + "\n")
             for r, c in self.getSol():
                 f.write(str(r) + " " + str(c) + "\n")
 
@@ -359,7 +359,7 @@ class Solution:
             len(self.covered),
             len(self.board.available_pos),
             len(self.covered) - len(self.board.available_pos),  # negative value
-            self.cutof,
+            self.cutoff,
             self.cost,
             Board.b,
             Board.b - self.cost,  # positive value

@@ -1,0 +1,102 @@
+Step: 0 - Cost/Budget: 61415/94860 - Score: 81636445
+Step: 1 - Cost/Budget: 71967/94860 - Score: 89648893
+Step: 2 - Cost/Budget: 77438/94860 - Score: 94636422
+Step: 3 - Cost/Budget: 78697/94860 - Score: 95836163
+Step: 4 - Cost/Budget: 82803/94860 - Score: 99484057
+Step: 5 - Cost/Budget: 86589/94860 - Score: 101246271
+Step: 6 - Cost/Budget: 85847/94860 - Score: 102348013
+Step: 7 - Cost/Budget: 89018/94860 - Score: 103441842
+Step: 8 - Cost/Budget: 91809/94860 - Score: 107086051
+Step: 9 - Cost/Budget: 92782/94860 - Score: 108422078
+Step: 10 - Cost/Budget: 94768/94860 - Score: 109284092
+Step: 11 - Cost/Budget: 94768/94860 - Score: 109284092
+Step: 12 - Cost/Budget: 94237/94860 - Score: 109442623
+Step: 13 - Cost/Budget: 94847/94860 - Score: 109631013
+Step: 14 - Cost/Budget: 94847/94860 - Score: 109631013
+Step: 15 - Cost/Budget: 94847/94860 - Score: 109631013
+Step: 16 - Cost/Budget: 94847/94860 - Score: 109631013
+Step: 17 - Cost/Budget: 94776/94860 - Score: 110007084
+Step: 18 - Cost/Budget: 94776/94860 - Score: 110007084
+Step: 19 - Cost/Budget: 94781/94860 - Score: 110095079
+Step: 20 - Cost/Budget: 94784/94860 - Score: 110439076
+Step: 21 - Cost/Budget: 94784/94860 - Score: 110439076
+Step: 22 - Cost/Budget: 94784/94860 - Score: 110439076
+Step: 23 - Cost/Budget: 94795/94860 - Score: 110583065
+Step: 24 - Cost/Budget: 94795/94860 - Score: 110583065
+Step: 25 - Cost/Budget: 94845/94860 - Score: 110584015
+Step: 26 - Cost/Budget: 94849/94860 - Score: 111031011
+Step: 27 - Cost/Budget: 94849/94860 - Score: 111031011
+Step: 28 - Cost/Budget: 94849/94860 - Score: 111031011
+Step: 29 - Cost/Budget: 94846/94860 - Score: 111812014
+Step: 30 - Cost/Budget: 94846/94860 - Score: 111812014
+Step: 31 - Cost/Budget: 94846/94860 - Score: 111812014
+Step: 32 - Cost/Budget: 94848/94860 - Score: 111871012
+Step: 33 - Cost/Budget: 94848/94860 - Score: 111871012
+Step: 34 - Cost/Budget: 94841/94860 - Score: 111990019
+Step: 35 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 36 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 37 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 38 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 39 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 40 - Cost/Budget: 94860/94860 - Score: 112237000
+Step: 41 - Cost/Budget: 94772/94860 - Score: 112245088
+Step: 42 - Cost/Budget: 94772/94860 - Score: 112245088
+Step: 43 - Cost/Budget: 94799/94860 - Score: 112442061
+Step: 44 - Cost/Budget: 94843/94860 - Score: 112518017
+Step: 45 - Cost/Budget: 94844/94860 - Score: 112560016
+Step: 46 - Cost/Budget: 94844/94860 - Score: 112560016
+Step: 47 - Cost/Budget: 94847/94860 - Score: 112742013
+Step: 48 - Cost/Budget: 94847/94860 - Score: 112839013
+Step: 49 - Cost/Budget: 94847/94860 - Score: 112839013
+Step: 50 - Cost/Budget: 94847/94860 - Score: 112841013
+Step: 51 - Cost/Budget: 94847/94860 - Score: 112841013
+Step: 52 - Cost/Budget: 94847/94860 - Score: 113047013
+Step: 53 - Cost/Budget: 94846/94860 - Score: 113187014
+Step: 54 - Cost/Budget: 94846/94860 - Score: 113187014
+Step: 55 - Cost/Budget: 94851/94860 - Score: 113189009
+Step: 56 - Cost/Budget: 94847/94860 - Score: 113198013
+Step: 57 - Cost/Budget: 94853/94860 - Score: 113207007
+Step: 58 - Cost/Budget: 94853/94860 - Score: 113207007
+Step: 59 - Cost/Budget: 94858/94860 - Score: 113326002
+Step: 60 - Cost/Budget: 94855/94860 - Score: 113398005
+Step: 61 - Cost/Budget: 94855/94860 - Score: 113398005
+Step: 62 - Cost/Budget: 94788/94860 - Score: 113519072
+Step: 63 - Cost/Budget: 94788/94860 - Score: 113519072
+
+Step: 71 - Cost/Budget: 94834/94860 - Score: 113810026
+Step: 72 - Cost/Budget: 94834/94860 - Score: 113810026
+Step: 73 - Cost/Budget: 94834/94860 - Score: 113810026
+Step: 74 - Cost/Budget: 94834/94860 - Score: 113810026
+Step: 75 - Cost/Budget: 94834/94860 - Score: 113810026
+Step: 76 - Cost/Budget: 94816/94860 - Score: 113880044
+Step: 77 - Cost/Budget: 94816/94860 - Score: 113880044
+Step: 78 - Cost/Budget: 94815/94860 - Score: 113880045
+Step: 79 - Cost/Budget: 94806/94860 - Score: 113996054
+Step: 80 - Cost/Budget: 94843/94860 - Score: 114094017
+Step: 81 - Cost/Budget: 94843/94860 - Score: 114094017
+Step: 82 - Cost/Budget: 94845/94860 - Score: 114135015
+Step: 83 - Cost/Budget: 94817/94860 - Score: 114178043
+Step: 84 - Cost/Budget: 94817/94860 - Score: 114178043
+Step: 85 - Cost/Budget: 94831/94860 - Score: 114375029
+Step: 86 - Cost/Budget: 94827/94860 - Score: 114389033
+Step: 87 - Cost/Budget: 94834/94860 - Score: 114398026
+Step: 88 - Cost/Budget: 94839/94860 - Score: 114466021
+Step: 89 - Cost/Budget: 94839/94860 - Score: 114466021
+Step: 90 - Cost/Budget: 94839/94860 - Score: 114466021
+Step: 91 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 92 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 93 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 94 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 95 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 96 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 97 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 98 - Cost/Budget: 94849/94860 - Score: 114546011
+Step: 99 - Cost/Budget: 94852/94860 - Score: 114620008
+Took: 14489.514260292053
+Board 667x540
+Router range is 7
+Backbone at (333, 270)
+Router price: 100
+Backbone price: 1
+Max budget: 94860
+Steps taken: 99
