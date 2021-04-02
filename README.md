@@ -1,4 +1,4 @@
-# IART
+# IART G03 - MIEIC, FEUP 2020/2021
 
 ## Running
 
