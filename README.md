@@ -2,13 +2,16 @@
 
 ## Running
 
-To run the code execute the [main python script](python3 main.py). This script
-launches an interactive menu that will let you choose a file from the input, and
-the algorithm to run.
+To run the code, execute the [main python script](./main.py). This script
+launches an interactive menu that will let you choose an input file from the
+[input directory](./input), and which algorithm to run.
 
-At the end of the run, the results will optionally be displayed in the terminal:
-draw the solution in the terminal, output the solution as a png file, and save
-the results file according the specification.
+At the end of the run, the results will, optionally, be displayed in the
+terminal. You can:
+
+- draw the solution in the terminal
+- output the solution as a _png_ file
+- and save the results file according to the HashCode's specification.
 
 ### Example run
 
@@ -38,7 +41,7 @@ These dependencies come with the repository and don't need to be pre-installed.
 
 ### Building
 
-- **H** rows and **W** collumns
+- **H** rows and **W** columns
 - Coords [r, c], starting at 0
 - [0, 0] is the upper left corner of the grid
 - wall is **'#'**
