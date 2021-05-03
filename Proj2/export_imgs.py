@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import junix
 
 filepath = "Proj2_Bean_IART.ipynb"
