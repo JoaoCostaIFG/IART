@@ -1,8 +1,35 @@
-# Dry Beans Classification
+# Dry Beans Classification - FEUP IART G03, 2021
 
 Dataset/problem source [here](https://www.kaggle.com/impapan/dry-beans-dataset).
 
-## About this dataset
+## Authors
+
+- Ana Inês Oliveira de Barros, up201806593@edu.fe.up.pt
+- João de Jesus Costa, up201806560@edu.fe.up.pt
+- João Lucas Silva Martins, up201806436@edu.fe.up.pt
+
+## Software used
+
+**Development environment**: Jupyter 4.6.3-2
+
+**Python implementation**: CPython 3.9.4
+
+**Python modules**:
+
+- matplotlib 3.4.1-2
+- numpy 1.20.2-1
+- pandas 1.2.3-1
+- scikit-learn 0.24.1-1
+- imblearn 0.7.0-1
+- scipy 1.6.3-1
+- seaborn 0.11.1-1
+
+## How to run
+
+Install the python modules listed above and either Jupyter or Jupyter-lab.
+Afterwards, open the notebook file: `Proj2_Bean_IART.ipynb` in Jupyter.
+
+## About the dataset used
 
 Seven different types of dry beans were used in this research, taking into
 account the features such as form, shape, type, and structure by the market
@@ -14,7 +41,7 @@ camera. Bean images obtained by computer vision system were subjected to
 segmentation and feature extraction stages, and a total of 16 features; 12
 dimensions and 4 shape forms, were obtained from the grains.
 
-## Attribute information
+### Attribute information
 
 1. Area (`A`): The area of a bean zone and the number of pixels within its
    boundaries.
@@ -42,7 +69,7 @@ dimensions and 4 shape forms, were obtained from the grains.
 16. ShapeFactor4 (`SF4`)
 17. Class (Seker, Barbunya, Bombay, Cali, Dermosan, Horoz and Sira)
 
-## Credits
+### Dataset credits
 
 KOKLU, M. and OZKAN, I.A., (2020), “Multiclass Classification of Dry Beans Using
 Computer Vision and Machine Learning Techniques.” Computers and Electronics in
