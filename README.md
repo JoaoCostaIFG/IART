@@ -1,7 +1,7 @@
 # FEUP IART 2021
 
 This repository includes the projects my group made, some practical classes'
-exercises, the theoretical classes' exercises, and some of the precious years'
+exercises, the theoretical classes' slides, and some of the previous years'
 exams.
 
 ## 1st Project
