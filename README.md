@@ -29,5 +29,5 @@ We 3 collaborated to make these projects.
 
 ## License
 
-Unless stated otherwise, the code in this repository is licensed under a GPL
+Unless stated otherwise, the code in this repository is licensed under a MIT
 license.
